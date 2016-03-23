@@ -1,0 +1,48 @@
+﻿.header-red {
+    color: red;
+}
+
+.header-blue {
+    color: #4FA4EF;
+}
+
+.main-content {
+    padding-top: 90px;
+}
+
+p.footer-text {
+    padding: 20px 25px;
+    margin: 0;
+}
+
+.home-text {
+    font-size: 60px;
+    color: black;
+    margin: 10px 0; 
+}
+
+/** Bootstram redefine styles START**/
+
+.navbar {
+    background-color: black
+}
+
+.navbar-brand {
+    font-size: 28px;
+}
+
+.navbar-inverse .navbar-brand{
+    font-size: 28px;
+    color: #ccc;
+}
+
+#footer {
+    background-color: black;
+}
+
+#footer .container {
+    text-align: right;
+    color: #ccc;
+}
+
+/** Bootstram redefine styles END**/
