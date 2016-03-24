@@ -7,13 +7,13 @@ namespace OnlinerTracker.Security.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class InitialMigration : IMigrationMetadata
+    public sealed partial class InintialMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InintialMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201603231043540_InitialMigration"; }
+            get { return "201603241757314_InintialMigration"; }
         }
         
         string IMigrationMetadata.Source

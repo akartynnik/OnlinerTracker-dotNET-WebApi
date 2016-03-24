@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Security.Claims;
-using System.Threading.Tasks;
-
-namespace OnlinerTracker.Security
-{
+﻿namespace OnlinerTracker.Security
+{/*
     public class ApplicationUser: IdentityUser
+        
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
@@ -14,5 +10,5 @@ namespace OnlinerTracker.Security
             // Add custom user claims here
             return userIdentity;
         }
-    }
+    }*/
 }

@@ -7,9 +7,9 @@ app.config(function ($routeProvider) {
         templateUrl: "/app/views/home.html"
     });
 
-    $routeProvider.when("/login", {
-        controller: "loginController",
-        templateUrl: "/app/views/login.html"
+    $routeProvider.when("/signin", {
+        controller: "signinController",
+        templateUrl: "/app/views/signin.html"
     });
 
     $routeProvider.when("/signup", {
@@ -22,7 +22,17 @@ app.config(function ($routeProvider) {
         templateUrl: "/app/views/orders.html"
     });
 
+    $routeProvider.when("/associate", {
+        controller: "associateController",
+        templateUrl: "/app/views/associate.html"
+    });
+
     $routeProvider.otherwise({ redirectTo: "/home" });
+});
+
+app.constant('ngAuthSettings', {
+    apiServiceBaseUri: 'http://localhost:52304/',
+    clientId: 'onlinerTrackerWebUI'
 });
 
 app.config(function ($httpProvider) {

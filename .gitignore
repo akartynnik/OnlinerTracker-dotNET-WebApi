@@ -1,5 +1,7 @@
 OnlinerTracker.Api/obj
 OnlinerTracker.Api/bin
+OnlinerTracker.Core/obj
+OnlinerTracker.Core/bin
 OnlinerTracker.Data/obj
 OnlinerTracker.Data/bin
 OnlinerTracker.Data.Context/obj

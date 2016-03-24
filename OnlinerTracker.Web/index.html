@@ -22,7 +22,7 @@
                     <li data-ng-hide="!authentication.isAuth"><a href="#">Hi, {{authentication.userName}}</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a href="#/orders">My Products</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Sign Out</a></li>
-                    <li data-ng-hide="authentication.isAuth"> <a href="#/login">Sign In</a></li>
+                    <li data-ng-hide="authentication.isAuth"> <a href="#/signin">Sign In</a></li>
                     <li data-ng-hide="authentication.isAuth"> <a href="#/signup">Sign Up</a></li>
                 </ul>
             </div>
@@ -53,7 +53,8 @@
     <!-- Load controllers -->
     <script src="app/controllers/indexController.js"></script>
     <script src="app/controllers/homeController.js"></script>
-    <script src="app/controllers/loginController.js"></script>
+    <script src="app/controllers/signinController.js"></script>
+    <script src="app/controllers/associateController.js"></script>
     <script src="app/controllers/signupController.js"></script>
     <script src="app/controllers/ordersController.js"></script>
 </body>

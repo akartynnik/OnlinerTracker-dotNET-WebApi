@@ -1,17 +1,7 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using System;
-using System.Configuration;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
-
-namespace OnlinerTracker.Security
+﻿namespace OnlinerTracker.Security
 {
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-
+    /*
     public class EmailService : IIdentityMessageService
     {
         public async Task SendAsync(IdentityMessage message)
@@ -59,7 +49,7 @@ namespace OnlinerTracker.Security
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<SecurityDbContext>()));
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<SecurityContext>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -82,5 +72,5 @@ namespace OnlinerTracker.Security
             }
             return manager;
         }
-    }
+    }*/
 }

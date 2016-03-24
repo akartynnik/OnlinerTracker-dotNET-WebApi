@@ -3,10 +3,37 @@ namespace OnlinerTracker.Security.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialMigration : DbMigration
+    public partial class InintialMigration : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.Clients",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Secret = c.String(nullable: false),
+                        Name = c.String(nullable: false, maxLength: 100),
+                        ApplicationType = c.Int(nullable: false),
+                        Active = c.Boolean(nullable: false),
+                        RefreshTokenLifeTime = c.Int(nullable: false),
+                        AllowedOrigin = c.String(maxLength: 100),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.RefreshTokens",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Subject = c.String(nullable: false, maxLength: 50),
+                        ClientId = c.String(nullable: false, maxLength: 50),
+                        IssuedUtc = c.DateTime(nullable: false),
+                        ExpiresUtc = c.DateTime(nullable: false),
+                        ProtectedTicket = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
             CreateTable(
                 "dbo.AspNetRoles",
                 c => new
@@ -35,8 +62,6 @@ namespace OnlinerTracker.Security.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
-                        FirstName = c.String(),
-                        LastName = c.String(),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
@@ -77,43 +102,27 @@ namespace OnlinerTracker.Security.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
             
-            CreateTable(
-                "dbo.Products",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false, identity: true),
-                        UserId = c.Guid(nullable: false),
-                        Name = c.String(nullable: false, maxLength: 500),
-                        ApplicationUser_Id = c.String(maxLength: 128),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
-                .Index(t => t.UserId, unique: true)
-                .Index(t => t.ApplicationUser_Id);
-            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Products", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropIndex("dbo.Products", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.Products", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropTable("dbo.Products");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.RefreshTokens");
+            DropTable("dbo.Clients");
         }
     }
 }

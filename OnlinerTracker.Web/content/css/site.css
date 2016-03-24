@@ -46,3 +46,13 @@ p.footer-text {
 }
 
 /** Bootstram redefine styles END**/
+
+.form-login {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.form-login input, 
+.form-login button{
+    margin-bottom: 10px;
+}
