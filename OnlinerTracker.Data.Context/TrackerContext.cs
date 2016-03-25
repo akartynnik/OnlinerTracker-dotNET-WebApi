@@ -5,9 +5,9 @@ namespace OnlinerTracker.Data.Context
 {
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [Export]
-    public class OnlinerTrackerContext : DbContext
+    public class TrackerContext : DbContext
     {
-        public OnlinerTrackerContext() : base("DataConnection")
+        public TrackerContext() : base("DataConnection")
         {
         }
         public DbSet<Product> Products { get; set; }

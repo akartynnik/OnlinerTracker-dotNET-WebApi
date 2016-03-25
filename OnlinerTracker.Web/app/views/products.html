@@ -1,0 +1,41 @@
+﻿
+
+<div class="row">
+    <h2>List of products</h2>
+    <hr/>
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+    <div class="col-md-8">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>User</th>
+                <th>Tracked</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="product in products">
+                <td>
+                    {{ product.id }}
+                </td>
+                <td>
+                    {{ product.description }}
+                </td>
+                <td>
+                    {{ product.userName }}
+                </td>
+                <td>
+                    <input type="checkbox" data-ng-model="product.isTracked" disabled="disabled">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+</div>

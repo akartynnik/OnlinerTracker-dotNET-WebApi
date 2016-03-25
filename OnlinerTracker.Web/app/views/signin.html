@@ -1,23 +1,13 @@
-﻿<form class="form-login" role="form" style="width: 800px;">
-
-    <div class="col-md-6">
-        <h2 class="form-login-heading">Sign In</h2>
-        <input type="text" class="form-control" placeholder="Username" data-ng-model="loginData.userName" required autofocus>
-        <input type="password" class="form-control" placeholder="Password" data-ng-model="loginData.password" required>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" data-ng-model="loginData.useRefreshTokens"><strong> Use Refresh Tokens</strong>
-            </label>
-        </div>
-        <button class="btn btn-md btn-info btn-block" type="submit" data-ng-click="login()">Go inside</button>
-        <div data-ng-hide="message == ''" class="alert alert-danger">
-            {{message}}
-        </div>
-    </div>
-    <div class="col-md-6">
-        <h2 class="form-login-heading">Social Logins</h2>
-        <p>Also you can login using one of the social logins bleow</p>
-        <button class="btn btn-large btn-facebook btn-block" type="button" data-ng-click="authExternalProvider('Twitter')"><i class="fa fa-facebook"></i>Sign In with Twitter</button>
-        <button class="btn btn-large btn-google-plus btn-block" type="button" data-ng-click="authExternalProvider('Google')"><i class="fa fa-google-plus"></i> Sign In with Google+</button>
-    </div>
-</form>
+﻿<div class="form-login">
+    <h2 class="form-login-heading">Sign in</h2>
+    <hr />
+    <button class="btn btn-large btn-facebook btn-block" type="button" data-ng-click="authExternalProvider('Twitter')">
+        Sign In with Twitter
+    </button>
+    <button class="btn btn-large btn-google-plus btn-block" type="button" data-ng-click="authExternalProvider('Google')">
+        Sign In with Google+
+    </button>
+    <button class="btn btn-large btn-google-plus btn-block" type="button" data-ng-click="authExternalProvider('Vkontakte')">
+        Sign In with VK
+    </button>
+</div>

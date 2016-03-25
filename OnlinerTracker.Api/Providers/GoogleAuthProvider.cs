@@ -14,6 +14,7 @@ namespace OnlinerTracker.Api.Providers
         public Task Authenticated(GoogleOAuth2AuthenticatedContext context)
         {
             context.Identity.AddClaim(new Claim("ExternalAccessToken", context.AccessToken));
+            context.Identity.AddClaim(new Claim("UserId", context.Id));
             return Task.FromResult<object>(null);
         }
 

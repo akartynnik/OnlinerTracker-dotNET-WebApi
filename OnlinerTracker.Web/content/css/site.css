@@ -1,4 +1,11 @@
-﻿.header-red {
+﻿a:active, 
+a:focus,
+button:active, 
+button:focus {
+    outline: none !important;
+}
+
+.header-red {
     color: red;
 }
 
@@ -15,10 +22,27 @@ p.footer-text {
     margin: 0;
 }
 
-.home-text {
-    font-size: 60px;
-    color: black;
-    margin: 10px 0; 
+.form-login {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.form-login input, 
+.form-login button{
+    margin-bottom: 10px;
+}
+
+.form-login button{
+    transition: 0.2s;
+}
+
+.form-login button:focus{
+    color: #3e3f3a;
+}
+
+.form-login button:hover{
+    color: white;
+    background-color: green;
 }
 
 /** Bootstram redefine styles START**/
@@ -45,14 +69,10 @@ p.footer-text {
     color: #ccc;
 }
 
+.navbar-inverse .navbar-nav > li > a {
+    font-size: 12px;
+    color: #93C645;
+}
+
 /** Bootstram redefine styles END**/
 
-.form-login {
-    width: 400px;
-    margin: 0 auto;
-}
-
-.form-login input, 
-.form-login button{
-    margin-bottom: 10px;
-}

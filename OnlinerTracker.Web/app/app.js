@@ -12,14 +12,9 @@ app.config(function ($routeProvider) {
         templateUrl: "/app/views/signin.html"
     });
 
-    $routeProvider.when("/signup", {
-        controller: "signupController",
-        templateUrl: "/app/views/signup.html"
-    });
-
-    $routeProvider.when("/orders", {
-        controller: "ordersController",
-        templateUrl: "/app/views/orders.html"
+    $routeProvider.when("/products", {
+        controller: "productsController",
+        templateUrl: "/app/views/products.html"
     });
 
     $routeProvider.when("/associate", {

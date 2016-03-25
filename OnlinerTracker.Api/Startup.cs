@@ -1,51 +1,52 @@
-﻿using Microsoft.Owin;
+﻿using KatanaContrib.Security.VK;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Microsoft.Owin.Security.Twitter;
 using OnlinerTracker.Api.Providers;
 using Owin;
-using System;
+using System.Collections.Generic;
 using System.Web.Http;
-using Microsoft.Owin.Security;
 
 [assembly: OwinStartup(typeof(OnlinerTracker.Api.Startup))]
 namespace OnlinerTracker.Api
 {
     public class Startup
     {
+        #region Properties
+
+        public static OAuthAuthorizationServerOptions OAuthServerOptions { get; private set; }
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
         public static TwitterAuthenticationOptions TwitterAuthOptions { get; private set; }
         public static GoogleOAuth2AuthenticationOptions GoogleAuthOptions { get; private set; }
+        public static VkAuthenticationOptions VkontakteAuthOptions { get; private set; }
+
+        #endregion
 
         public void Configuration(IAppBuilder app)
         {
-            HttpConfiguration config = new HttpConfiguration();
-
             ConfigureOAuth(app);
 
+            var config = new HttpConfiguration();
             WebApiConfig.Register(config);
+
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.UseWebApi(config);
         }
 
         public void ConfigureOAuth(IAppBuilder app)
-        {//use a cookie to temporarily store information about a user logging in with a third party login provider
+        {
+            //use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(Microsoft.AspNet.Identity.DefaultAuthenticationTypes.ExternalCookie);
-            OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
-            OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
-            {
 
-                AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(10),
-                Provider = new SimpleAuthorizationServerProvider(),
-                RefreshTokenProvider = new SimpleRefreshTokenProvider()
-            };
-            // Token Generation
-            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            //Bearer authentication init
+            OAuthBearerOptions = new OAuthBearerAuthenticationOptions();
             app.UseOAuthBearerAuthentication(OAuthBearerOptions);
 
-            //Configure Google External Login
+
+            #region Google authentication configurations
+
             GoogleAuthOptions = new GoogleOAuth2AuthenticationOptions()
             {
                 ClientId = "662974838096-ea4had89gn6gr6edt7pkfm2drrjrjhcj.apps.googleusercontent.com",
@@ -54,7 +55,10 @@ namespace OnlinerTracker.Api
             };
             app.UseGoogleAuthentication(GoogleAuthOptions);
 
-            //Configure Twitter External Login
+            #endregion
+
+            #region Twitter authentication configurations
+
             TwitterAuthOptions = new TwitterAuthenticationOptions()
             {
                 ConsumerKey = "am9fD3Y9QxyP3dcfz0ISQqNdY",
@@ -71,6 +75,21 @@ namespace OnlinerTracker.Api
                     })
             };
             app.UseTwitterAuthentication(TwitterAuthOptions);
+
+            #endregion
+
+            #region Vkontakte authentication configurations
+
+            VkontakteAuthOptions = new VkAuthenticationOptions()
+            {
+                ClientId = "5376110 ",
+                ClientSecret = "kr90V9tuYKQgV0ksxqku",
+                Scope = new List<string>() { "email" },
+                Provider = new VkontakteAuthProvider()
+            };
+            app.UseVkontakteAuthentication(VkontakteAuthOptions);
+
+            #endregion
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace OnlinerTracker.Core
 {
-    public class Helper
+    public class HashGenerator
     {
         public static string GetHash(string input)
         {

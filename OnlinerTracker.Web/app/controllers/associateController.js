@@ -16,7 +16,7 @@ app.controller('associateController', ['$scope', '$location','$timeout','authSer
         authService.registerExternal($scope.registerData).then(function (response) {
 
             $scope.savedSuccessfully = true;
-            $scope.message = "User has been registered successfully, you will be redicted to orders page in 5 seconds.";
+            $scope.message = "You have been registered successfully! Now you can view products binded to you.";
             startTimer();
 
         },
@@ -28,12 +28,4 @@ app.controller('associateController', ['$scope', '$location','$timeout','authSer
               $scope.message = "Failed to register user due to:" + errors.join(' ');
           });
     };
-
-    var startTimer = function () {
-        var timer = $timeout(function () {
-            $timeout.cancel(timer);
-            $location.path('/orders');
-        }, 5000);
-    }
-
 }]);

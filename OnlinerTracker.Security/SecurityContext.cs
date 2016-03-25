@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using OnlinerTracker.Data;
+using OnlinerTracker.Data.SecurityModels;
 using System.Data.Entity;
 
 namespace OnlinerTracker.Security
@@ -9,8 +9,8 @@ namespace OnlinerTracker.Security
         public SecurityContext()
             : base("SecurityConnection")
         {
+            Database.SetInitializer(new SecurityInitializer());
         }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
