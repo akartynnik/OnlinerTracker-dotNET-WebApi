@@ -45,6 +45,59 @@ p.footer-text {
     background-color: green;
 }
 
+
+.search-container {
+    position: relative;
+    height: 46px;
+    margin-bottom: 20px;
+}
+
+.search-input-box {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+.search-input-box input{
+    border-radius: 0px;
+}
+
+.finded-products {
+    position: relative;
+    top: 46px;
+    width: 100%;
+    z-index: 1000;
+    max-height: 500px;
+    overflow: auto;
+    background-color: #eee;
+}
+
+.finded-products .finded-product{
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    height: 60px;
+    cursor: pointer;
+}
+
+.finded-products .finded-product:hover{
+    background-color: #ddd;
+}
+
+.finded-products .finded-product:last-child{
+    border-bottom: none;
+}
+
+.finded-products .finded-product .finded-product-img-box {
+    width: 60px;
+    display: inline-block;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.finded-products .finded-product .finded-product-img-box img{
+    max-width: 60px;
+    max-height: 40px;
+}
 /** Bootstram redefine styles START**/
 
 .navbar {
