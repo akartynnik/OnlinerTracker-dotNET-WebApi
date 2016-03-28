@@ -14,7 +14,13 @@ namespace OnlinerTracker.Data
         public Guid UserId { get; set; }
 
         [Required]
+        public string OnlinerId { get; set; }
+
+        [Required]
         [MaxLength(500)]
         public string Name { get; set; }
+
+        [Required]
+        public decimal Cost { get; set; }
     }
 }

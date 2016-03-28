@@ -1,4 +1,4 @@
-﻿var app = angular.module('AngularAuthApp', ['ngRoute', 'LocalStorageModule', 'angular-loading-bar']);
+﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar']);
 
 app.config(function ($routeProvider) {
 
@@ -7,22 +7,27 @@ app.config(function ($routeProvider) {
         templateUrl: "/app/views/home.html"
     });
 
-    $routeProvider.when("/login", {
-        controller: "loginController",
-        templateUrl: "/app/views/login.html"
+    $routeProvider.when("/signin", {
+        controller: "signinController",
+        templateUrl: "/app/views/signin.html"
     });
 
-    $routeProvider.when("/signup", {
-        controller: "signupController",
-        templateUrl: "/app/views/signup.html"
+    $routeProvider.when("/products", {
+        controller: "productsController",
+        templateUrl: "/app/views/products.html"
     });
 
-    $routeProvider.when("/orders", {
-        controller: "ordersController",
-        templateUrl: "/app/views/orders.html"
+    $routeProvider.when("/associate", {
+        controller: "associateController",
+        templateUrl: "/app/views/associate.html"
     });
 
     $routeProvider.otherwise({ redirectTo: "/home" });
+});
+
+app.constant('ngAuthSettings', {
+    apiServiceBaseUri: 'http://localhost:52304/',
+    clientId: 'onlinerTrackerWebUI'
 });
 
 app.config(function ($httpProvider) {

@@ -50,12 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201603231044291_AddedProductTable.cs" />
-    <Compile Include="Migrations\201603231044291_AddedProductTable.Designer.cs">
-      <DependentUpon>201603231044291_AddedProductTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="OnlinerTrackerContext.cs" />
+    <Compile Include="TrackerContextConfig.cs" />
+    <Compile Include="TrackerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,11 +63,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603231044291_AddedProductTable.resx">
-      <DependentUpon>201603231044291_AddedProductTable.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
