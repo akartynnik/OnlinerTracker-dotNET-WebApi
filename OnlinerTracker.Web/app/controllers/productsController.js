@@ -22,7 +22,7 @@ app.controller('productsController', ['$scope', '$http', 'productsService', func
                 query: $scope.searchQuery
             }
         }).success(function (response) {
-            console.log(response);
+            //console.log(response);
             $scope.getedProducts = response.products;
         });
     }

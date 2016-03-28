@@ -12,6 +12,12 @@
                         <img src="http:{{ product.images.header }}" />
                     </div>
                     <span data-ng-bind-html="product.name"></span>
+                    <div class="price">
+                        <span>{{ product.prices.min | moneySeparatorAdd }} руб.</span>
+                    </div>
+                    <div class="follow-me">
+                        <button class="follow-me-button btn-primary">Follow me</button>
+                    </div>
                 </div>
             </div>
         </div>

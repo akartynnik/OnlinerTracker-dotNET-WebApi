@@ -98,6 +98,39 @@ p.footer-text {
     max-width: 60px;
     max-height: 40px;
 }
+
+.finded-products .finded-product .follow-me-button {
+    visibility: hidden;
+}
+
+.finded-products .finded-product:hover .follow-me-button {
+    visibility: visible;
+}
+
+.finded-product .follow-me-button {
+    border-radius: 5px;
+    padding: 8px 16px;
+    width: 200px;
+}
+
+.btn-right {
+    float: right;
+}
+
+.finded-product .follow-me {
+    text-align: center;
+    width: 220px;
+    overflow: hidden;
+    display: inline-block;
+    float: right;
+}
+
+.finded-product .price {
+    float: right;
+    width: 140px;
+    overflow: hidden;
+    text-align: right;
+}
 /** Bootstram redefine styles START**/
 
 .navbar {
