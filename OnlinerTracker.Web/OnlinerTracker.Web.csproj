@@ -94,7 +94,6 @@
     <Content Include="content\css\bootstrap.min.css" />
     <Content Include="content\css\loading-bar.css" />
     <Content Include="content\css\site.css" />
-    <Content Include="content\images\home-cat.jpg" />
     <Content Include="index.html" />
     <Content Include="scripts\angular-local-storage.min.js" />
     <Content Include="scripts\authComplete.js" />
@@ -106,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="content\fonts\" />
+    <Folder Include="content\images\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

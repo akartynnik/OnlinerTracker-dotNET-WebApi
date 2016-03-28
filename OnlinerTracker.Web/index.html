@@ -19,10 +19,11 @@
             </div>
             <div class="collapse navbar-collapse" data-collapse="!navbarExpanded">
                 <ul class="nav navbar-nav navbar-right">
-                    <li data-ng-hide="!authentication.isAuth"><a href="#">Hi, {{authentication.userName}}</a></li>
-                    <li data-ng-hide="!authentication.isAuth"><a href="#/products">My Products</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a style="color: #4FA4EF; font-size: 10px;">Hi, {{authentication.userName}}</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/home') }" href="#">Search</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/products') }" href="#/products">My Products</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Sign Out</a></li>
-                    <li data-ng-hide="authentication.isAuth"> <a href="#/signin">Sign In</a></li>
+                    <li data-ng-hide="authentication.isAuth"> <a ng-class="{ active: isActive('/signin') }" href="#/signin">Sign In</a></li>
                 </ul>
             </div>
         </div>

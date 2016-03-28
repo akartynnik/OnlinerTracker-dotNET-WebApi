@@ -39,6 +39,12 @@ namespace OnlinerTracker.Security
             return user;
         }
 
+        public async Task<IdentityUser> FindUserAsync(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            return user;
+        }
+
         public async Task<IdentityResult> CreateUserAsync(IdentityUser user)
         {
             var result = await _userManager.CreateAsync(user);

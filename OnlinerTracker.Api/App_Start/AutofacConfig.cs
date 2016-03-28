@@ -18,6 +18,7 @@ namespace OnlinerTracker.Api
             #region Dependensies
 
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>();
+            builder.RegisterType<ProductService>().As<IProductService>();
 
             #endregion
 

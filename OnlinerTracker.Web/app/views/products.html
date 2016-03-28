@@ -1,27 +1,12 @@
 ﻿<div class="row">
-    <h2>List of products</h2>
-    <hr/>
-    <div class="search-container">
-        <div class="search-input-box">
-            <input type="text" data-ng-model="searchQuery" data-ng-keyup="fetchdata()" placeholder="Type product here..." class="form-control"/>
-        </div>
-        <div class="finded-products">
-            <div data-ng-repeat="product in getedProducts" class="finded-product">
-                <div>
-                    <div class="finded-product-img-box">
-                        <img src="http:{{ product.images.header }}" />
-                    </div>
-                    <span data-ng-bind-html="product.name"></span>
-                    <div class="price">
-                        <span>{{ product.prices.min | moneySeparatorAdd }} руб.</span>
-                    </div>
-                    <div class="follow-me">
-                        <button class="follow-me-button btn-primary">Follow me</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="alert {{alertClassName}}" ng-show="showAlert">
+        <button type="button" class="close" data-ng-click="switchBool('showAlert')">×</button>
+        <span data-ng-bind-html="textAlert"></span>
     </div>
+
+    <h2>List of products tracked me</h2>
+    <hr/>
+
     <div class="col-md-2">
         &nbsp;
     </div>

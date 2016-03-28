@@ -1,6 +1,5 @@
 ﻿using Autofac.Integration.WebApi;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using OnlinerTracker.Api.Results;
@@ -12,6 +11,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace OnlinerTracker.Api.Controllers
 {

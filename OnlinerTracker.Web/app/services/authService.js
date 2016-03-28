@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('authService', ['$http', '$q', 'localStorageService', 'ngAuthSettings', function ($http, $q, localStorageService, ngAuthSettings) {
+app.factory('authService', ['$http', '$q', 'localStorageService', 'ngAuthSettings', '$location', function ($http, $q, localStorageService, ngAuthSettings, $location) {
 
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
     var authServiceFactory = {};
@@ -33,6 +33,7 @@ app.factory('authService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
         _authentication.isAuth = false;
         _authentication.userName = "";
         _authentication.useRefreshTokens = false;
+        $location.path('/signin');
 
     };
 

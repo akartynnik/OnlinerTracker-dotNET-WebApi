@@ -131,6 +131,10 @@ p.footer-text {
     overflow: hidden;
     text-align: right;
 }
+
+.navbar-nav li a.active{
+    color: white !important;
+}
 /** Bootstram redefine styles START**/
 
 .navbar {

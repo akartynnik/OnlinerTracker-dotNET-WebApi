@@ -9,5 +9,10 @@ namespace OnlinerTracker.Data.Context
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
         }
+
+        protected override void Seed(TrackerContext context)
+        {
+
+        }
     }
 }
