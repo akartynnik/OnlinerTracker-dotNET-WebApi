@@ -7,6 +7,7 @@ using Microsoft.Owin.Security.Twitter;
 using OnlinerTracker.Api.Providers;
 using Owin;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web.Http;
 
 [assembly: OwinStartup(typeof(OnlinerTracker.Api.Startup))]
@@ -15,8 +16,7 @@ namespace OnlinerTracker.Api
     public class Startup
     {
         #region Properties
-
-        public static OAuthAuthorizationServerOptions OAuthServerOptions { get; private set; }
+        
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
         public static TwitterAuthenticationOptions TwitterAuthOptions { get; private set; }
         public static GoogleOAuth2AuthenticationOptions GoogleAuthOptions { get; private set; }
@@ -30,6 +30,7 @@ namespace OnlinerTracker.Api
 
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
+            AutofacConfig.Register(config);
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.UseWebApi(config);
@@ -49,8 +50,8 @@ namespace OnlinerTracker.Api
 
             GoogleAuthOptions = new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "662974838096-ea4had89gn6gr6edt7pkfm2drrjrjhcj.apps.googleusercontent.com",
-                ClientSecret = "HuzdYDwm-RTXFoFSRyKqQxb5",
+                ClientId = ConfigurationManager.AppSettings["authConfig:GoogleClientId"],
+                ClientSecret = ConfigurationManager.AppSettings["authConfig:GoogleClientSecret"],
                 Provider = new GoogleAuthProvider()
             };
             app.UseGoogleAuthentication(GoogleAuthOptions);
@@ -61,8 +62,8 @@ namespace OnlinerTracker.Api
 
             TwitterAuthOptions = new TwitterAuthenticationOptions()
             {
-                ConsumerKey = "am9fD3Y9QxyP3dcfz0ISQqNdY",
-                ConsumerSecret = "xzBMldGkrt5rZq9EByE6LmGASx7sCDId58Dx7RSV4i8hpD2sdS",
+                ConsumerKey = ConfigurationManager.AppSettings["authConfig:TwitterConsumerKey"],
+                ConsumerSecret = ConfigurationManager.AppSettings["authConfig:TwitterConsumerSecret"],
                 Provider = new TwitterAuthProvider(),
                 BackchannelCertificateValidator = new CertificateSubjectKeyIdentifierValidator(new[]
                     {
@@ -82,8 +83,8 @@ namespace OnlinerTracker.Api
 
             VkontakteAuthOptions = new VkAuthenticationOptions()
             {
-                ClientId = "5376110 ",
-                ClientSecret = "kr90V9tuYKQgV0ksxqku",
+                ClientId = ConfigurationManager.AppSettings["authConfig:VkontakteClientId"],
+                ClientSecret = ConfigurationManager.AppSettings["authConfig:VkontakteClientSecret"],
                 Scope = new List<string>() { "email" },
                 Provider = new VkontakteAuthProvider()
             };
