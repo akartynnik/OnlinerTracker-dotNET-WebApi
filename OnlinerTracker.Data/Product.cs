@@ -10,11 +10,11 @@ namespace OnlinerTracker.Data
         public Guid Id { get; set; }
 
         [Required]
-        [Index("IX_UserId")]
+        [Index("IX_OnlinerIdAndUserId", 0, IsUnique = true)]
         public Guid UserId { get; set; }
 
         [Required]
-        [Index("IX_OnlinerId", IsUnique = true)]
+        [Index("IX_OnlinerIdAndUserId", 1, IsUnique = true)]
         [MaxLength(50)]
         public string OnlinerId { get; set; }
 

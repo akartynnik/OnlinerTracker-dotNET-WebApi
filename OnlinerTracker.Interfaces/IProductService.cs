@@ -1,4 +1,5 @@
 ﻿using OnlinerTracker.Data;
+using System;
 
 namespace OnlinerTracker.Interfaces
 {
@@ -6,6 +7,6 @@ namespace OnlinerTracker.Interfaces
     {
         void Insert(Product product);
 
-        Product GetByOnlinerId(string onlinerId);
+        Product Get(string onlinerId, Guid userId);
     }
 }

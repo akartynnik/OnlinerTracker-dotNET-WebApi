@@ -30,11 +30,11 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Follow(Product product)
         {
-            if (_productService.GetByOnlinerId(product.OnlinerId) != null)
-                return Ok("Duplicate");
-            product.Id = Guid.NewGuid();
             var user = await _securityRepo.FindUserAsync(User.Identity.Name);
+            product.Id = Guid.NewGuid();
             product.UserId = Guid.Parse(user.Id);
+            if (_productService.Get(product.OnlinerId, product.UserId) != null)
+                return Ok("Duplicate");
             _productService.Insert(product);
             return Ok("OK");
         }

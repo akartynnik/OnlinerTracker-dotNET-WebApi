@@ -1,6 +1,7 @@
 ﻿using OnlinerTracker.Data;
 using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
+using System;
 using System.Linq;
 
 namespace OnlinerTracker.Services
@@ -19,9 +20,9 @@ namespace OnlinerTracker.Services
             _context.SaveChanges();
         }
 
-        public Product GetByOnlinerId(string onlinerId)
+        public Product Get(string onlinerId, Guid userId)
         {
-            return _context.Products.FirstOrDefault(u => u.OnlinerId == onlinerId);
+            return _context.Products.FirstOrDefault(u => u.OnlinerId == onlinerId && u.UserId == userId);
         }
     }
 }
