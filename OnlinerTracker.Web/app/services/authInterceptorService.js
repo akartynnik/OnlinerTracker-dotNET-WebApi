@@ -11,18 +11,16 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localSto
         if (authData) {
             config.headers.Authorization = 'Bearer ' + authData.token;
         }
+        if (!authData && $location.path() !== '/signin' && $location.path() !== '/associate') {
+            $location.path('/signin');
+        }
         return config;
     }
 
     var _responseError = function (rejection) {
         var deferred = $q.defer();
-        var authData = localStorageService.get('authorizationData');
         var authService = $injector.get('authService');
-        if (rejection.status === 401 && authData.useRefreshTokens) {
-            authService.refreshToken().then(function (response) {
-                _retryHttpRequest(rejection.config, deferred);
-            });
-        } else if (rejection.status === 401 && !authData.useRefreshTokens) {
+        if (rejection.status === 401) {
             authService.logOut();
             $location.path('/signin');
             return $q.reject(rejection);
@@ -30,15 +28,6 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localSto
             deferred.reject(rejection);
         }
         return deferred.promise;
-    }
-
-    var _retryHttpRequest = function (config, deferred) {
-        $http = $http || $injector.get('$http');
-        $http(config).then(function (response) {
-            deferred.resolve(response);
-        }, function (response) {
-            deferred.reject(response);
-        });
     }
 
     authInterceptorServiceFactory.request = _request;

@@ -7,9 +7,11 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
     $scope.showAlert = false;
     $scope.alertClassName = "alert-success";
 
-    if (!authService.authentication.isAuth) {
-        $location.path('/signin');
-    }
+    /*
+        if (!authService.authentication.isAuth) {
+            $location.path('/signin');
+        }
+    */
 
     $scope.fetchdata = function () {
         if ($scope.searchQuery.length < 2) {
