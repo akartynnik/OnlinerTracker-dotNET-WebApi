@@ -1,4 +1,5 @@
-﻿using OnlinerTracker.Data;
+﻿using OnlinerTracker.Api.Models;
+using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Security;
 using System;
@@ -8,7 +9,7 @@ using System.Web.Http;
 namespace OnlinerTracker.Api.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Products")]
+    [RoutePrefix("api/Product")]
     public class ProductsController : ApiController
     {
         private IProductService _productService;
@@ -19,14 +20,16 @@ namespace OnlinerTracker.Api.Controllers
             _productService = productService;
             _securityRepo = new SecurityRepository();
         }
-        [Route("")]
+
+        [Route("GetAll", Name = "Get all products for current user")]
         [HttpGet]
-        public IHttpActionResult Get()
+        public async Task<IHttpActionResult> Get()
         {
-            return Ok();
+            var user = await _securityRepo.FindUserAsync(User.Identity.Name);
+            return Ok(_productService.GetAll(Guid.Parse(user.Id)));
         }
         
-        [Route("Follow", Name = "Follow Product")]
+        [Route("Follow", Name = "Follow product")]
         [HttpPost]
         public async Task<IHttpActionResult> Follow(Product product)
         {
@@ -34,18 +37,27 @@ namespace OnlinerTracker.Api.Controllers
             product.Id = Guid.NewGuid();
             product.UserId = Guid.Parse(user.Id);
             product.Tracking = true;
-            if (_productService.Get(product.OnlinerId, product.UserId) != null)
+            if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 return Ok("Duplicate");
             _productService.Insert(product);
             return Ok("OK");
         }
-        
-        [Route("")]
+
+        [Route("ChangeTrackingStatus", Name = "Change tracking status")]
         [HttpPost]
-        public IHttpActionResult Update()
+        public IHttpActionResult ChangeTrackingStatus(Product product)
         {
-            return Ok();
+            _productService.Update(product);
+            return Ok("OK");
         }
 
+
+        [Route("remove", Name = "Remove product")]
+        [HttpPost]
+        public IHttpActionResult Remove(RemoveObj obj)
+        {
+            _productService.Delete(obj.Id);
+            return Ok("OK");
+        }
     }
 }

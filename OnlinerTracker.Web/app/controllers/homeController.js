@@ -1,17 +1,12 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', 'authService', '$location', function ($scope, $http, productsService, ngAuthSettings, authService, $location) {
+app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', '$timeout', function ($scope, $http, productsService, ngAuthSettings, $timeout) {
 
     $scope.products = [];
     $scope.responser = [];
     $scope.textAlert = "";
     $scope.showAlert = false;
     $scope.alertClassName = "alert-success";
-
-    /*
-        if (!authService.authentication.isAuth) {
-            $location.path('/signin');
-        }
-    */
+    var promise;
 
     $scope.fetchdata = function () {
         if ($scope.searchQuery.length < 2) {
@@ -25,41 +20,39 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
                 query: $scope.searchQuery
             }
         }).success(function (response) {
-            //console.log(response);
             $scope.getedProducts = response.products;
         });
     }
 
     $scope.followProduct = function (product) {
+        //stop alerts timer
+        $timeout.cancel(promise);
+        //send request
         $http({
-            url: ngAuthSettings.apiServiceBaseUri + 'api/products/follow',
+            url: ngAuthSettings.apiServiceBaseUri + 'api/product/follow',
             method: 'post',
-            data: '{"OnlinerId":' + product.id + ',"Name":"' + product.full_name + '","ImageUrl":"' + product.images.header + '", "Description":"' + product.description + '"}'
+            data: '{"OnlinerId":' + product.id + ',"Name":"' + product.full_name + '","ImageUrl":"' + product.images.header + '", "Description":"' + product.description.replace(/"/g, "&quot;") + '"}'
         }).success(function (response) {
             console.log(response);
             if (response == "\"OK\"") {
                 $scope.showAlert = true;
                 $scope.alertClassName = "alert-success";
                 $scope.textAlert = '<b>' + product.name + "</b> now is tracked!";
-                $scope.switchBool = function (value) {
-                    $scope[value] = !$scope[value];
-                };
             }
             if (response == "\"Duplicate\"") {
                 $scope.showAlert = true;
                 $scope.alertClassName = "alert-warning";
                 $scope.textAlert = "This product is already being tracked!";
-                $scope.switchBool = function (value) {
-                    $scope[value] = !$scope[value];
-                };
             }
+            promise = $timeout(function () { $scope.showAlert = false; }, 3000);
         }).error(function (msg) {
             $scope.showAlert = true;
             $scope.alertClassName = "alert-danger";
             $scope.textAlert = 'ERROR!';
-            $scope.switchBool = function (value) {
-                $scope[value] = !$scope[value];
-            };
         });
+    }
+
+    $scope.closeAlert = function () {
+        $scope.showAlert = false;
     }
 }]);

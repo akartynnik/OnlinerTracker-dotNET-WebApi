@@ -5,13 +5,11 @@ app.factory('productsService', ['$http', '$q', '$location', 'ngAuthSettings', fu
 
     var _getProducts = function () {
 
-        return $http.get(serviceBase + 'api/products').then(function (results) {
+        return $http.get(serviceBase + 'api/product/getAll').then(function (results) {
             return results;
         });
     };
 
     productsServiceFactory.getProducts = _getProducts;
-
     return productsServiceFactory;
-
 }]);
