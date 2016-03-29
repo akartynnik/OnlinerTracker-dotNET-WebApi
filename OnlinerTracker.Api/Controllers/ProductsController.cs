@@ -33,6 +33,7 @@ namespace OnlinerTracker.Api.Controllers
             var user = await _securityRepo.FindUserAsync(User.Identity.Name);
             product.Id = Guid.NewGuid();
             product.UserId = Guid.Parse(user.Id);
+            product.Tracking = true;
             if (_productService.Get(product.OnlinerId, product.UserId) != null)
                 return Ok("Duplicate");
             _productService.Insert(product);
