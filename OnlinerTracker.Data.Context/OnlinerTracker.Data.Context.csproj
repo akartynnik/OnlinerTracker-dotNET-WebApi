@@ -50,10 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TrackerInitializer.cs" />
     <Compile Include="TrackerContextConfig.cs" />
     <Compile Include="TrackerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackerInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OnlinerTracker.Data\OnlinerTracker.Data.csproj">
