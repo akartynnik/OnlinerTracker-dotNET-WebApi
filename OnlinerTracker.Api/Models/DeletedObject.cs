@@ -2,7 +2,7 @@
 
 namespace OnlinerTracker.Api.Models
 {
-    public class RemoveObj
+    public class DeletedObject
     {
         public Guid Id { get; set; }
     }

@@ -11,13 +11,12 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace OnlinerTracker.Api.Controllers
 {
     [AutofacControllerConfiguration]
     [RoutePrefix("api/Account")]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         #region Fields and Properties
 
@@ -110,7 +109,7 @@ namespace OnlinerTracker.Api.Controllers
                 return BadRequest("External user is not registered");
 
             //generate access token response
-            var accessTokenResponse = _authService.GenerateLocalAccessTokenResponse(user.UserName, Startup.OAuthBearerOptions);
+            var accessTokenResponse = _authService.GenerateLocalAccessTokenResponse(user.UserName, user.Id, Startup.OAuthBearerOptions);
             return Ok(accessTokenResponse);
         }
 
@@ -130,7 +129,7 @@ namespace OnlinerTracker.Api.Controllers
             if (hasRegistered)
                 return BadRequest("External user is already registered");
 
-            user = new IdentityUser() { UserName = model.UserName };
+            user = new ApplicationUser() { UserName = model.UserName, Id = Guid.NewGuid().ToString()};
             var result = await _repo.CreateUserAsync(user);
             if (!result.Succeeded)
                 return GetErrorResult(result);
@@ -146,13 +145,14 @@ namespace OnlinerTracker.Api.Controllers
                 return GetErrorResult(result);
 
             //generate access token response
-            var accessTokenResponse = _authService.GenerateLocalAccessTokenResponse(model.UserName, Startup.OAuthBearerOptions);
+            var accessTokenResponse = _authService.GenerateLocalAccessTokenResponse(user.UserName, user.Id, Startup.OAuthBearerOptions);
             return Ok(accessTokenResponse);
         }
        
         #endregion
 
         #region Additional methods
+
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {
             if (result == null)

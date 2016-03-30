@@ -79,6 +79,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,6 +89,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationUser.cs" />
+    <Compile Include="CustomPrincipal.cs" />
+    <Compile Include="ICustomPrincipal.cs" />
     <Compile Include="SecurityInitializer.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="SecurityContextConfig.cs" />

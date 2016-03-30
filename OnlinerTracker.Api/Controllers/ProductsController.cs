@@ -1,4 +1,5 @@
-﻿using OnlinerTracker.Api.Models;
+﻿using Autofac.Integration.WebApi;
+using OnlinerTracker.Api.Models;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Security;
@@ -8,9 +9,9 @@ using System.Web.Http;
 
 namespace OnlinerTracker.Api.Controllers
 {
-    [Authorize]
+    [AutofacControllerConfiguration]
     [RoutePrefix("api/Product")]
-    public class ProductsController : ApiController
+    public class ProductsController : BaseController
     {
         private IProductService _productService;
         private SecurityRepository _securityRepo;
@@ -25,22 +26,20 @@ namespace OnlinerTracker.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Get()
         {
-            var user = await _securityRepo.FindUserAsync(User.Identity.Name);
-            return Ok(_productService.GetAll(Guid.Parse(user.Id)));
+            return Ok(_productService.GetAll(User.Id));
         }
         
         [Route("Follow", Name = "Follow product")]
         [HttpPost]
         public async Task<IHttpActionResult> Follow(Product product)
         {
-            var user = await _securityRepo.FindUserAsync(User.Identity.Name);
             product.Id = Guid.NewGuid();
-            product.UserId = Guid.Parse(user.Id);
+            product.UserId = User.Id;
             product.Tracking = true;
             if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
-                return Ok("Duplicate");
+                return Duplicate();
             _productService.Insert(product);
-            return Ok("OK");
+            return Successful();
         }
 
         [Route("ChangeTrackingStatus", Name = "Change tracking status")]
@@ -48,16 +47,16 @@ namespace OnlinerTracker.Api.Controllers
         public IHttpActionResult ChangeTrackingStatus(Product product)
         {
             _productService.Update(product);
-            return Ok("OK");
+            return Successful();
         }
 
 
         [Route("remove", Name = "Remove product")]
         [HttpPost]
-        public IHttpActionResult Remove(RemoveObj obj)
+        public IHttpActionResult Remove(DeletedObject obj)
         {
             _productService.Delete(obj.Id);
-            return Ok("OK");
+            return Successful();
         }
     }
 }
