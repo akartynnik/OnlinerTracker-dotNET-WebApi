@@ -30,7 +30,14 @@ namespace OnlinerTracker.Services
 
         public void Delete(Guid id)
         {
-            _context.Products.Remove(GetById(id));
+            var product = GetById(id);
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+        }
+
+        public void InsertCost(Cost obj)
+        {
+            _context.Costs.Add(obj);
             _context.SaveChanges();
         }
 

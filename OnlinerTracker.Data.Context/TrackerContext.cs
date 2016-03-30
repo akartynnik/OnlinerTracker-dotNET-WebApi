@@ -9,5 +9,6 @@ namespace OnlinerTracker.Data.Context
             Database.SetInitializer(new TrackerInitializer());
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Cost> Costs { get; set; }
     }
 }

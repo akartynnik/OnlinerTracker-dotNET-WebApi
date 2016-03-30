@@ -12,6 +12,7 @@
                 <th></th>
                 <th>Name</th>
                 <th>Description</th>
+                <th style="width: 160px;" class="text-center">Current cost</th>
                 <th>Tracked</th>
                 <th>Action</th>
             </tr>
@@ -26,6 +27,10 @@
                 </td>
                 <td>
                     <span data-ng-bind-html="product.description"></span>
+                </td>
+                <td class="text-center">
+                    <span><strong>{{ product.currentCost | moneySeparatorAdd }}</strong> руб.</span><br/>
+                    <span style="font-size: 10px;">{{ product.updatedAt | date: 'dd.MM.yyyy / HH:mm' }}</span>
                 </td>
                 <td class="text-center">
                     <input type="checkbox" data-ng-model="product.tracking" data-ng-click="changeTrackingStatus(product);">

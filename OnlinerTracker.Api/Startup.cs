@@ -31,6 +31,7 @@ namespace OnlinerTracker.Api
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
             AutofacConfig.Register(config);
+            AutomapperConig.Register();
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.UseWebApi(config);

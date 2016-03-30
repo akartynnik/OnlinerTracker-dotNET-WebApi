@@ -1,9 +1,12 @@
 ﻿using Autofac.Integration.WebApi;
+using AutoMapper;
+using OnlinerTracker.Api.ApiViewModels;
 using OnlinerTracker.Api.Models;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Security;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -26,19 +29,28 @@ namespace OnlinerTracker.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Get()
         {
-            return Ok(_productService.GetAll(User.Id));
+            return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ProductGetModel>>(_productService.GetAll(User.Id)));
         }
         
         [Route("Follow", Name = "Follow product")]
         [HttpPost]
-        public async Task<IHttpActionResult> Follow(Product product)
+        public async Task<IHttpActionResult> Follow(ProductFollowModel model)
         {
+            var product = Mapper.Map<ProductFollowModel, Product>(model);
             product.Id = Guid.NewGuid();
             product.UserId = User.Id;
             product.Tracking = true;
+
             if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 return Duplicate();
             _productService.Insert(product);
+
+            var cost = Mapper.Map<ProductFollowModel, Cost>(model);
+            cost.Id = Guid.NewGuid();
+            cost.ProductId = product.Id;
+            cost.CratedAt = DateTime.Now;
+
+            _productService.InsertCost(cost);
             return Successful();
         }
 

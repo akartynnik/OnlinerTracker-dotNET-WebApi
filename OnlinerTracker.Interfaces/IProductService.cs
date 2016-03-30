@@ -8,6 +8,8 @@ namespace OnlinerTracker.Interfaces
     {
         void Insert(Product obj);
 
+        void InsertCost(Cost obj);
+
         void Update(Product obj);
 
         void Delete(Guid id);

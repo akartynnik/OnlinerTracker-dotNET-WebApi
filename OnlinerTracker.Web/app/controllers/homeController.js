@@ -31,7 +31,13 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
         $http({
             url: ngAuthSettings.apiServiceBaseUri + 'api/product/follow',
             method: 'post',
-            data: '{"OnlinerId":' + product.id + ',"Name":"' + product.full_name + '","ImageUrl":"' + product.images.header + '", "Description":"' + product.description.replace(/"/g, "&quot;") + '"}'
+            data: {
+                OnlinerId: product.id,
+                Name: product.full_name,
+                ImageUrl: product.images.header,
+                Description: product.description.replace(/"/g, "&quot;"),
+                Cost: product.prices.min
+            }
         }).success(function (response) {
             console.log(response);
             if (response == "\"OK\"") {

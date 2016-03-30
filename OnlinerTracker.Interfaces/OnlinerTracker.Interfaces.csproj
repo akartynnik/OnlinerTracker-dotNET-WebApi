@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="IProductService.cs" />
     <Compile Include="IAuthorizationService.cs" />
+    <Compile Include="ITrackingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

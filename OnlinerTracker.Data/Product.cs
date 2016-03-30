@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace OnlinerTracker.Data
 {
@@ -28,5 +31,8 @@ namespace OnlinerTracker.Data
         public string Description { get; set; }
 
         public bool Tracking { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Cost> Costs { get; private set; }
     }
 }
