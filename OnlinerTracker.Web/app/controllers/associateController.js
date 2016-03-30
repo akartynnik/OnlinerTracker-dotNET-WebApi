@@ -17,7 +17,6 @@ app.controller('associateController', ['$scope', '$location','$timeout','authSer
 
             $scope.savedSuccessfully = true;
             $scope.message = "You have been registered successfully! Now you can view products binded to you.";
-            startTimer();
 
         },
           function (response) {

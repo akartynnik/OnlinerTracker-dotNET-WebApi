@@ -4,7 +4,7 @@ using System.Data.Entity;
 
 namespace OnlinerTracker.Security
 {
-    public class SecurityContext : IdentityDbContext<IdentityUser>
+    public class SecurityContext : IdentityDbContext<ApplicationUser>
     {
         public SecurityContext()
             : base("SecurityConnection")

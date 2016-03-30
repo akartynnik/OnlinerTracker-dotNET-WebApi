@@ -1,0 +1,52 @@
+﻿using OnlinerTracker.Data;
+using OnlinerTracker.Data.Context;
+using OnlinerTracker.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+
+namespace OnlinerTracker.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly TrackerContext _context;
+        public ProductService()
+        {
+            _context = new TrackerContext();
+        }
+
+        public void Insert(Product obj)
+        {
+            _context.Products.Add(obj);
+            _context.SaveChanges();
+        }
+
+        public void Update(Product obj)
+        {
+            _context.Entry(obj).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public void Delete(Guid id)
+        {
+            _context.Products.Remove(GetById(id));
+            _context.SaveChanges();
+        }
+
+        public Product GetById(Guid id)
+        {
+            return _context.Products.FirstOrDefault(u => u.Id == id);
+        }
+
+        public Product GetBy(string onlinerId, Guid userId)
+        {
+            return _context.Products.FirstOrDefault(u => u.OnlinerId == onlinerId && u.UserId == userId);
+        }
+
+        public IEnumerable<Product> GetAll(Guid userId)
+        {
+            return _context.Products.Where(u => u.UserId == userId);
+        }
+    }
+}

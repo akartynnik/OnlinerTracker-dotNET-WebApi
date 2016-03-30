@@ -18,13 +18,14 @@ namespace OnlinerTracker.Services
         {
             _repo = new SecurityRepository();
         }
-        public JObject GenerateLocalAccessTokenResponse(string userName, OAuthBearerAuthenticationOptions oAuthBearerOptions)
+        public JObject GenerateLocalAccessTokenResponse(string userName, string userId, OAuthBearerAuthenticationOptions oAuthBearerOptions)
         {
             var tokenExpiration = TimeSpan.FromHours(10);
             var identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
 
             identity.AddClaim(new Claim(ClaimTypes.Name, userName));
             identity.AddClaim(new Claim("role", "user"));
+            identity.AddClaim(new Claim("userId", userId));
 
             var props = new AuthenticationProperties()
             {

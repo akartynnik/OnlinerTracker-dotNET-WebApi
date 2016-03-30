@@ -11,7 +11,7 @@ app.controller('signinController', ['$scope', '$location', 'authService', 'ngAut
 
     $scope.login = function () {
         authService.login($scope.loginData).then(function (response) {
-            $location.path('/orders');
+            $location.path('/');
         },
          function (err) {
              $scope.message = err.error_description;
@@ -47,7 +47,7 @@ app.controller('signinController', ['$scope', '$location', 'authService', 'ngAut
                     userId: fragment.user_id
                 };
                 authService.obtainAccessToken(externalData).then(function (response) {
-                    $location.path('/products');
+                    $location.path('/');
                 },
              function (err) {
                  $scope.message = err.error_description;

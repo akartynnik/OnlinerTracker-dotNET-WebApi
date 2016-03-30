@@ -3,6 +3,7 @@
     <head>
         <meta content="IE=edge, chrome=1" http-equiv="X-UA-Compatible" />
         <title>Onliner Product Super-Mega Tracker</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link href="content/css/bootstrap.min.css" rel="stylesheet" />
         <link href="content/css/site.css" rel="stylesheet" />
         <link href="content/css/loading-bar.css" rel="stylesheet" />
@@ -19,10 +20,11 @@
             </div>
             <div class="collapse navbar-collapse" data-collapse="!navbarExpanded">
                 <ul class="nav navbar-nav navbar-right">
-                    <li data-ng-hide="!authentication.isAuth"><a href="#">Hi, {{authentication.userName}}</a></li>
-                    <li data-ng-hide="!authentication.isAuth"><a href="#/products">My Products</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a style="color: #4FA4EF; font-size: 10px;">Hi, {{authentication.userName}}</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/home') }" href="#">Search</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/products') }" href="#/products">My Products</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Sign Out</a></li>
-                    <li data-ng-hide="authentication.isAuth"> <a href="#/signin">Sign In</a></li>
+                    <li data-ng-hide="authentication.isAuth"> <a ng-class="{ active: isActive('/signin') }" href="#/signin">Sign In</a></li>
                 </ul>
             </div>
         </div>
@@ -56,5 +58,6 @@
     <script src="app/controllers/signinController.js"></script>
     <script src="app/controllers/associateController.js"></script>
     <script src="app/controllers/productsController.js"></script>
+    <script src="app/filters.js"></script>
 </body>
 </html>

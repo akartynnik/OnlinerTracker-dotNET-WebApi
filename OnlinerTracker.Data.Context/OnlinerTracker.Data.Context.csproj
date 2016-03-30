@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TrackerInitializer.cs" />
     <Compile Include="TrackerContextConfig.cs" />
     <Compile Include="TrackerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
