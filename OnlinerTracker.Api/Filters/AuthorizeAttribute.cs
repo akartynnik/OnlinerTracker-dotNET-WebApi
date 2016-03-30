@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -14,14 +13,14 @@ using System.Web.Http.Filters;
 
 namespace OnlinerTracker.Api.Filters
 {
-    public class CustomAuthorizeAttribute : Attribute, IAuthorizationFilter
+    public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
 
         public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext,
                         CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
         {
-            IPrincipal principal = actionContext.RequestContext.Principal;
-            var newUser = new CustomPrincipal(principal.Identity);
+            System.Security.Principal.IPrincipal principal = actionContext.RequestContext.Principal;
+            var newUser = new Principal(principal.Identity);
             HttpContext.Current.User = newUser;
             if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any()
                 ||actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Any())

@@ -4,11 +4,11 @@ using System.Web.Http;
 
 namespace OnlinerTracker.Api.Controllers
 {
-    public class BaseController : ApiController
+    public class ApiControllerBase : ApiController
     {
-        protected virtual new CustomPrincipal User
+        protected virtual new Principal User
         {
-            get { return HttpContext.Current.User as CustomPrincipal; }
+            get { return HttpContext.Current.User as Principal; }
         }
 
         public IHttpActionResult Successful()

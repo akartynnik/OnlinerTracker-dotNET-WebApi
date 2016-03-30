@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Security.Principal;
 
 namespace OnlinerTracker.Security
 {
-    public interface ICustomPrincipal : IPrincipal
+    public interface IPrincipal : System.Security.Principal.IPrincipal
     {
         Guid Id { get; }
     }

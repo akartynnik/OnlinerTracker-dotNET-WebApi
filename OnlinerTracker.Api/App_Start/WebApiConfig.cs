@@ -20,7 +20,7 @@ namespace OnlinerTracker.Api
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Filters.Add(new CustomAuthorizeAttribute());
+            config.Filters.Add(new Filters.AuthorizeAttribute());
 
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

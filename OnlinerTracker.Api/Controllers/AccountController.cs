@@ -16,7 +16,7 @@ namespace OnlinerTracker.Api.Controllers
 {
     [AutofacControllerConfiguration]
     [RoutePrefix("api/Account")]
-    public class AccountController : BaseController
+    public class AccountController : ApiControllerBase
     {
         #region Fields and Properties
 

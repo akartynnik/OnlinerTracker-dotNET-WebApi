@@ -11,7 +11,7 @@ namespace OnlinerTracker.Api.Controllers
 {
     [AutofacControllerConfiguration]
     [RoutePrefix("api/Product")]
-    public class ProductsController : BaseController
+    public class ProductsController : ApiControllerBase
     {
         private IProductService _productService;
         private SecurityRepository _securityRepo;
