@@ -6,24 +6,26 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
     $scope.textAlert = "";
     $scope.showAlert = false;
     $scope.alertClassName = "alert-success";
+    $scope.getedProducts = [];
     var promise;
 
-    $scope.fetchdata = function () {
-        if ($scope.searchQuery.length < 2) {
-            $scope.getedProducts = [];
-            return;
+    $scope.$watch('searchQuery', function(typedString) {
+        console.log(typedString);
+        if (!typedString || typedString.length < 2)
+            return 0;
+        if (typedString === $scope.searchQuery) {
+            $http({
+                url: 'https://catalog.api.onliner.by/search/products',
+                method: 'GET',
+                params: {
+                    query: $scope.searchQuery
+                }
+            }).success(function(response) {
+                $scope.getedProducts = response.products;
+            });
         }
-        $http({
-            url: 'https://catalog.api.onliner.by/search/products',
-            method: 'GET',
-            params: {
-                query: $scope.searchQuery
-            }
-        }).success(function (response) {
-            $scope.getedProducts = response.products;
-        });
-    }
-
+    });
+    
     $scope.followProduct = function (product) {
         //stop alerts timer
         $timeout.cancel(promise);

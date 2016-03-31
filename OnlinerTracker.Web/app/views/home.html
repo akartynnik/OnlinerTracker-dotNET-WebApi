@@ -8,7 +8,7 @@
     <hr />
     <div class="search-container">
         <div class="search-input-box">
-            <input type="text" data-ng-model="searchQuery" data-ng-keyup="fetchdata();" placeholder="Type product here..." class="form-control" />
+            <input type="text" data-ng-model="searchQuery" data-ng-model-options="{ debounce: 700 }" placeholder="Type product here..." class="form-control" />
         </div>
         <div class="finded-products">
             <div data-ng-repeat="product in getedProducts" class="finded-product">
