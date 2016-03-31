@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using OnlinerTracker.Interfaces;
+using OnlinerTracker.Proxies;
 using OnlinerTracker.Services;
+using System.Configuration;
 using System.Reflection;
 using System.Web.Http;
 
@@ -19,8 +21,8 @@ namespace OnlinerTracker.Api
 
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>();
             builder.RegisterType<ProductService>().As<IProductService>();
-            //builder.RegisterType<CheckStatusJob>().As<ICheckStatusJob>();
             builder.Register(c => new TrackingService()).As<ITrackingService>();
+            builder.Register(c => new ExternalProductProxy(ConfigurationManager.AppSettings["externalApiUrl"])).As<IExternalProductService>();
 
             #endregion
 

@@ -210,7 +210,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiViewModels\ProductGetModel.cs" />
     <Compile Include="ApiViewModels\ProductFollowModel.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\AutomapperConig.cs" />
@@ -244,6 +243,10 @@
     <ProjectReference Include="..\OnlinerTracker.Interfaces\OnlinerTracker.Interfaces.csproj">
       <Project>{e1305ad0-61c9-4a82-a6fb-b213d689bc7d}</Project>
       <Name>OnlinerTracker.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlinerTracker.Proxies\OnlinerTracker.Proxies.csproj">
+      <Project>{2b0d3661-0edb-4c88-a868-ec14dbdb061c}</Project>
+      <Name>OnlinerTracker.Proxies</Name>
     </ProjectReference>
     <ProjectReference Include="..\OnlinerTracker.Security\OnlinerTracker.Security.csproj">
       <Project>{ee045b0a-bffe-46a1-903b-0da908aadac9}</Project>

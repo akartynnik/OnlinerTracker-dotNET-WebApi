@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6B25CAC3-320D-4441-BEAA-58A6B06B48C9}</ProjectGuid>
+    <ProjectGuid>{2B0D3661-0EDB-4C88-A868-EC14DBDB061C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OnlinerTracker.Data</RootNamespace>
-    <AssemblyName>OnlinerTracker.Data</AssemblyName>
+    <RootNamespace>OnlinerTracker.Proxies</RootNamespace>
+    <AssemblyName>OnlinerTracker.Proxies</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -38,10 +38,6 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -57,21 +53,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JobsLog.cs" />
-    <Compile Include="Cost.cs" />
-    <Compile Include="JobType.cs" />
-    <Compile Include="Product.cs" />
-    <Compile Include="ExternalProduct.cs" />
+    <Compile Include="ExternalProductProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecurityModels\Client.cs" />
-    <Compile Include="SecurityModels\ApplicationType.cs" />
-    <Compile Include="SecurityModels\ExternalLoginData.cs" />
-    <Compile Include="SecurityModels\ParsedExternalAccessToken.cs" />
-    <Compile Include="SecurityModels\RegisterExternalBindingModel.cs" />
-    <Compile Include="SecurityModels\UserModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\OnlinerTracker.Core\OnlinerTracker.Core.csproj">
+      <Project>{714d0dc0-3def-4885-adef-e561e7fe0947}</Project>
+      <Name>OnlinerTracker.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlinerTracker.Data.Context\OnlinerTracker.Data.Context.csproj">
+      <Project>{6839e16d-f6d0-4844-96f0-0af1aa737b48}</Project>
+      <Name>OnlinerTracker.Data.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlinerTracker.Data\OnlinerTracker.Data.csproj">
+      <Project>{6b25cac3-320d-4441-beaa-58a6b06b48c9}</Project>
+      <Name>OnlinerTracker.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlinerTracker.Interfaces\OnlinerTracker.Interfaces.csproj">
+      <Project>{e1305ad0-61c9-4a82-a6fb-b213d689bc7d}</Project>
+      <Name>OnlinerTracker.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace OnlinerTracker.Api.ApiViewModels
+namespace OnlinerTracker.Data
 {
-    public class ProductGetModel
+    public class ExternalProduct
     {
         public Guid Id { get; set; }
-        
+
         public Guid UserId { get; set; }
         
         public string OnlinerId { get; set; }

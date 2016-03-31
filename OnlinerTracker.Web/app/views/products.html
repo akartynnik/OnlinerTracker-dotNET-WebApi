@@ -13,7 +13,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th style="width: 160px;" class="text-center">Current cost</th>
-                <th>Tracked</th>
+                <th>Active</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -29,7 +29,7 @@
                     <span data-ng-bind-html="product.description"></span>
                 </td>
                 <td class="text-center">
-                    <span data-ng-bind-html="product.currentCost | priceFromServerFormater"></span><br/>
+                    <span data-ng-bind-html="product.currentCost | priceFormater"></span><br/>
                     <span style="font-size: 10px;">{{ product.updatedAt | date: 'dd.MM.yyyy / HH:mm' }}</span>
                 </td>
                 <td class="text-center">

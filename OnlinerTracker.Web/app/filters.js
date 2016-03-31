@@ -1,15 +1,8 @@
 ﻿'use strict';
 angular.module('filters', [])
-    .filter('priceFromOnlinerSeparatorFormater', function () {
-        return function (prices) {
-            if (!prices)
-                return "Price wasn't set...";
-            return '<strong>' + prices.min.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + '</strong> BLR';
-        };
-    })
-    .filter('priceFromServerFormater', function () {
+    .filter('priceFormater', function () {
         return function (cost) {
-            if (!cost)
+            if (cost === 0)
                 return "Price wasn't set...";
             return '<strong>' + cost.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + '</strong> BLR';
         };

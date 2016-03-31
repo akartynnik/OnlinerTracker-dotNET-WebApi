@@ -15,13 +15,13 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
             return 0;
         if (typedString === $scope.searchQuery) {
             $http({
-                url: 'https://catalog.api.onliner.by/search/products',
+                url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
                 params: {
-                    query: $scope.searchQuery
+                    searchQuery: $scope.searchQuery
                 }
             }).success(function(response) {
-                $scope.getedProducts = response.products;
+                $scope.getedProducts = response;
             });
         }
     });
@@ -34,11 +34,11 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
             url: ngAuthSettings.apiServiceBaseUri + 'api/product/follow',
             method: 'post',
             data: {
-                OnlinerId: product.id,
-                Name: product.full_name,
-                ImageUrl: product.images.header,
+                OnlinerId: product.onlinerId,
+                Name: product.name,
+                ImageUrl: product.imageUrl.replace(/"/g, "&quot;"),
                 Description: product.description.replace(/"/g, "&quot;"),
-                Cost: !product.prices ? 0 : product.prices.min
+                Cost: product.currentCost
             }
         }).success(function (response) {
             console.log(response);
@@ -54,6 +54,7 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
                 $scope.textAlert = "This product is already being tracked!";
             }
             promise = $timeout(function () { $scope.showAlert = false; }, 3000);
+            product.tracking = true;
         }).error(function (msg) {
             $scope.showAlert = true;
             $scope.alertClassName = "alert-danger";

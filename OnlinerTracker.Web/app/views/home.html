@@ -11,17 +11,20 @@
             <input type="text" data-ng-model="searchQuery" data-ng-model-options="{ debounce: 550 }" placeholder="Type product here..." class="form-control" />
         </div>
         <div class="finded-products">
-            <div data-ng-repeat="product in getedProducts" class="finded-product">
+            <div data-ng-repeat="product in getedProducts" class="finded-product tracking-{{product.tracking}}">
                 <div>
                     <div class="finded-product-img-box">
-                        <img data-ng-src="http:{{ product.images.header }}" />
+                        <img data-ng-src="http:{{ product.imageUrl }}" />
                     </div>
-                    <span data-ng-bind-html="product.full_name"></span>
+                    <span data-ng-bind-html="product.name"></span>
                     <div class="price">
-                        <span data-ng-bind-html="product.prices | priceFromOnlinerSeparatorFormater"></span>
+                        <span data-ng-bind-html="product.currentCost | priceFormater"></span>
                     </div>
-                    <div class="follow-me">
+                    <div class="follow-me" data-ng-hide="product.tracking">
                         <button class="follow-me-button btn-primary" data-ng-click="followProduct(product);">Follow me</button>
+                    </div>
+                    <div class="follow-me product-tracked" data-ng-show="product.tracking">
+                        <i class="fa fa-check"></i> Product is tracked
                     </div>
                 </div>
             </div>

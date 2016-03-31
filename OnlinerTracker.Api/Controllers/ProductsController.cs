@@ -4,7 +4,6 @@ using OnlinerTracker.Api.ApiViewModels;
 using OnlinerTracker.Api.Models;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
-using OnlinerTracker.Security;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,21 +16,29 @@ namespace OnlinerTracker.Api.Controllers
     public class ProductsController : ApiControllerBase
     {
         private IProductService _productService;
-        private SecurityRepository _securityRepo;
+        private IExternalProductService _externalPproductService;
 
-        public ProductsController (IProductService productService)
+        public ProductsController (IProductService productService, IExternalProductService externalPproductService)
         {
             _productService = productService;
-            _securityRepo = new SecurityRepository();
+            _externalPproductService = externalPproductService;
         }
 
         [Route("GetAll", Name = "Get all products for current user")]
         [HttpGet]
         public async Task<IHttpActionResult> Get()
         {
-            return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ProductGetModel>>(_productService.GetAll(User.Id)));
+            return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(_productService.GetAll(User.Id)));
         }
-        
+
+        [Route("GetFromExternalServer", Name = "Get products from external server (proxy)")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetExternal(string searchQuery)
+        {
+
+            return Ok(_externalPproductService.Get(searchQuery, User.Id));
+        }
+
         [Route("Follow", Name = "Follow product")]
         [HttpPost]
         public async Task<IHttpActionResult> Follow(ProductFollowModel model)
