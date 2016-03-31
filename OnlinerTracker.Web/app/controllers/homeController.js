@@ -38,16 +38,17 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
                 Name: product.full_name,
                 ImageUrl: product.images.header,
                 Description: product.description.replace(/"/g, "&quot;"),
-                Cost: product.prices.min
+                Cost: !product.prices ? 0 : product.prices.min
             }
         }).success(function (response) {
             console.log(response);
-            if (response == "\"OK\"") {
+            if (response == "OK") {
                 $scope.showAlert = true;
                 $scope.alertClassName = "alert-success";
                 $scope.textAlert = '<b>' + product.name + "</b> now is tracked!";
             }
-            if (response == "\"Duplicate\"") {
+            if (response == "Duplicate") {
+                console.log("duplicate");
                 $scope.showAlert = true;
                 $scope.alertClassName = "alert-warning";
                 $scope.textAlert = "This product is already being tracked!";

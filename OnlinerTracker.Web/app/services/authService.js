@@ -30,7 +30,7 @@ app.factory('authService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
         localStorageService.remove('authorizationData');
         _authentication.isAuth = false;
         _authentication.userName = "";
-        $location.path('/signin');
+        return $location.path('/signin');
 
     };
 

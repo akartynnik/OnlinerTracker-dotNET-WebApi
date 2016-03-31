@@ -1,5 +1,5 @@
 ﻿<div class="row">
-    <div class="alert {{alertClassName}}" ng-show="showAlert">
+    <div class="alert {{alertClassName}}" data-ng-show="showAlert">
         <button type="button" class="close" data-ng-click="closeAlert()">×</button>
         <span data-ng-bind-html="textAlert"></span>
     </div>
@@ -18,7 +18,7 @@
                     </div>
                     <span data-ng-bind-html="product.full_name"></span>
                     <div class="price">
-                        <span>{{ product.prices | moneySeparatorAdd }}</span>
+                        <span data-ng-bind-html="product.prices | priceFromOnlinerSeparatorFormater"></span>
                     </div>
                     <div class="follow-me">
                         <button class="follow-me-button btn-primary" data-ng-click="followProduct(product);">Follow me</button>

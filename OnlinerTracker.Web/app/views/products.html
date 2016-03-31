@@ -29,7 +29,7 @@
                     <span data-ng-bind-html="product.description"></span>
                 </td>
                 <td class="text-center">
-                    <span><strong>{{ product.currentCost | moneySeparatorAdd }}</strong> руб.</span><br/>
+                    <span data-ng-bind-html="product.currentCost | priceFromServerFormater"></span><br/>
                     <span style="font-size: 10px;">{{ product.updatedAt | date: 'dd.MM.yyyy / HH:mm' }}</span>
                 </td>
                 <td class="text-center">

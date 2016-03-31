@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('productsController', ['$scope', 'productsService', '$location', '$http', 'ngAuthSettings', '$timeout', function ($scope, productsService, $location, $http, ngAuthSettings, $timeout) {
+app.controller('productsController', ['$scope', 'productsService', '$http', 'ngAuthSettings', '$timeout', function ($scope, productsService, $http, ngAuthSettings, $timeout) {
 
     $scope.products = [];
     $scope.textAlert = "";
@@ -16,8 +16,6 @@ app.controller('productsController', ['$scope', 'productsService', '$location', 
     $scope.changeTrackingStatus = function (product) {
         //stop alerts timer
         $timeout.cancel(promise);
-        //change status
-        product.tracking = !product.tracking;
         //send request
         $http({
             url: ngAuthSettings.apiServiceBaseUri + 'api/product/ChangeTrackingStatus',
@@ -25,7 +23,7 @@ app.controller('productsController', ['$scope', 'productsService', '$location', 
             data: product,
         }).success(function (response) {
             console.log(response);
-            if (response == "\"OK\"") {
+            if (response == "OK") {
                 $scope.showAlert = true;
                 if (product.tracking) {
                     $scope.textAlert = '<b>' + product.name + "</b> tracking is started!";
@@ -53,7 +51,7 @@ app.controller('productsController', ['$scope', 'productsService', '$location', 
             },
         }).success(function (response) {
             console.log(response);
-            if (response == "\"OK\"") {
+            if (response == "OK") {
                 $scope.showAlert = true;
                 $scope.textAlert = '<b>' + product.name + "</b> was deleted.";
                 $scope.alertClassName = "alert-warning";
