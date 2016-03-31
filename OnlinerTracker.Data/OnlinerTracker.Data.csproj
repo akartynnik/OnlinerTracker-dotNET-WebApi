@@ -57,11 +57,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JobsLog.cs" />
     <Compile Include="Cost.cs" />
+    <Compile Include="JobType.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityModels\Client.cs" />
-    <Compile Include="SecurityModels\ApplicationTypes.cs" />
+    <Compile Include="SecurityModels\ApplicationType.cs" />
     <Compile Include="SecurityModels\ExternalLoginData.cs" />
     <Compile Include="SecurityModels\ParsedExternalAccessToken.cs" />
     <Compile Include="SecurityModels\RegisterExternalBindingModel.cs" />

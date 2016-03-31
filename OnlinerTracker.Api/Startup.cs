@@ -1,4 +1,6 @@
-﻿using KatanaContrib.Security.VK;
+﻿using Autofac;
+using FluentScheduler;
+using KatanaContrib.Security.VK;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Google;
@@ -27,14 +29,19 @@ namespace OnlinerTracker.Api
         public void Configuration(IAppBuilder app)
         {
             ConfigureOAuth(app);
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
-            AutofacConfig.Register(config);
-            AutomapperConig.Register();
-
-            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            IContainer iocContainer;
+            AutofacConfig.Register(config, out iocContainer);
+            app.UseAutofacMiddleware(iocContainer);
+            app.UseAutofacWebApi(config);
             app.UseWebApi(config);
+
+            AutomapperConig.Register();
+            JobManager.JobFactory = new JobFactory(config);
+            JobManager.Initialize(new FluentSchedulerConfig());
         }
 
         public void ConfigureOAuth(IAppBuilder app)

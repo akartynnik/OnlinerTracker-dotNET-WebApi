@@ -1,6 +1,9 @@
-﻿namespace OnlinerTracker.Interfaces
+﻿using FluentScheduler;
+
+namespace OnlinerTracker.Interfaces
 {
-    public interface ITrackingService
+    public interface ITrackingService : IJob
     {
+        void StartCheck();
     }
 }

@@ -21,7 +21,7 @@ namespace OnlinerTracker.Security
                     Id = "onlinerTrackerWebUI",
                     Secret= HashGenerator.GetHash("secret"),
                     Name="Onliner Tracker Web UI",
-                    ApplicationType =  ApplicationTypes.JavaScript,
+                    ApplicationType =  ApplicationType.JavaScript,
                     Active = true,
                     RefreshTokenLifeTime = 7200,
                     AllowedOrigin = "http://localhost:56366"
