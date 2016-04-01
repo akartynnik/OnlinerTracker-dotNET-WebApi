@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using OnlinerTracker.Data;
+﻿using OnlinerTracker.Data;
 using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
 using System;
@@ -57,27 +56,9 @@ namespace OnlinerTracker.Services
             return _context.Products.Where(u => u.UserId == userId);
         }
 
-        public List<Product> ConvertToProducts(string externalProductsJsonString, RemoteServiceType providerType, Guid userId)
+        public bool IfSameProductExist(string onlinerId, Guid userId)
         {
-            var productList = new List<Product>();
-            dynamic externalProducts = JsonConvert.DeserializeObject(externalProductsJsonString);
-            foreach (var externalProduct in externalProducts["products"])
-            {
-                var product = new Product();
-                if (providerType == RemoteServiceType.Onliner)
-                {
-                    product.OnlinerId = externalProduct["id"];
-                    product.Name = externalProduct["full_name"];
-                    product.Description = externalProduct["description"];
-                    product.ImageUrl = externalProduct["images"]["header"];
-                    product.CurrentCost = externalProduct["prices"] != null ? externalProduct["prices"]["min"] : 0;
-                }
-                var sameProduct = _context.Products.Any(u => u.OnlinerId == product.OnlinerId && u.UserId == userId);
-                if (sameProduct)
-                    product.Tracking = true;
-                productList.Add(product);
-            }
-            return productList;
+            return _context.Products.Any(u => u.OnlinerId ==onlinerId && u.UserId == userId);
         }
     }
 }

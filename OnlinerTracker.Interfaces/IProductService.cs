@@ -20,7 +20,6 @@ namespace OnlinerTracker.Interfaces
 
         IEnumerable<Product> GetAll(Guid userId);
 
-        List<Product> ConvertToProducts(string externalProductsJsonString, RemoteServiceType providerType,
-            Guid userId);
+        bool IfSameProductExist(string onlinerId, Guid userId);
     }
 }
