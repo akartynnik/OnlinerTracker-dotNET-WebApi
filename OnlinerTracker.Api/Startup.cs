@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using FluentScheduler;
 using KatanaContrib.Security.VK;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Google;
@@ -30,7 +31,14 @@ namespace OnlinerTracker.Api
         {
             ConfigureOAuth(app);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-            app.MapSignalR();
+
+            //SignalR
+            var hubConfiguration = new HubConfiguration
+            {
+                EnableDetailedErrors = true,
+                EnableJSONP = true
+            };
+            app.MapSignalR("/signalr", hubConfiguration);
 
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);

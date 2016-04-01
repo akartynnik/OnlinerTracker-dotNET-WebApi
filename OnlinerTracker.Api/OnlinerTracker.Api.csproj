@@ -227,7 +227,7 @@
     <Compile Include="Controllers\ApiControllerBase.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Filters\AuthorizeAttribute.cs" />
-    <Compile Include="Hubs\PopupCommunicationHub .cs" />
+    <Compile Include="Hubs\DialogHub.cs" />
     <Compile Include="Models\DeletedObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\GoogleAuthProvider.cs" />

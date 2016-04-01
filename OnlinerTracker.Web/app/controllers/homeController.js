@@ -2,12 +2,11 @@
 app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', '$timeout', function ($scope, $http, productsService, ngAuthSettings, $timeout) {
 
     $scope.products = [];
-    $scope.responser = [];
-    $scope.textAlert = "";
-    $scope.showAlert = false;
     $scope.alertClassName = "alert-success";
     $scope.getedProducts = [];
     $scope.searchQuery = "";
+
+    
 
     var page = 1;
     var lenghtForStartSearch = 2;
@@ -91,7 +90,4 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
         }
     }
 
-    $scope.closeAlert = function () {
-        $scope.showAlert = false;
-    }
 }]);

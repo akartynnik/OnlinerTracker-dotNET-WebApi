@@ -16,11 +16,13 @@ namespace OnlinerTracker.Api.Controllers
     public class ProductsController : ApiControllerBase
     {
         private IProductService _productService;
+        private IDialogService _dialogService;
         private IExternalProductService _externalPproductService;
 
-        public ProductsController (IProductService productService, IExternalProductService externalPproductService)
+        public ProductsController (IProductService productService, IExternalProductService externalPproductService, IDialogService dialogService)
         {
             _productService = productService;
+            _dialogService = dialogService;
             _externalPproductService = externalPproductService;
         }
 
@@ -58,6 +60,7 @@ namespace OnlinerTracker.Api.Controllers
             cost.CratedAt = DateTime.Now;
 
             _productService.InsertCost(cost);
+            _dialogService.ShowDialogBox(DialogType.PopupSuccess, string.Format("Now you are follow <b>{0}</b>", product.Name));
             return Successful();
         }
 

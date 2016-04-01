@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDialogService.cs" />
     <Compile Include="IExternalProductService.cs" />
     <Compile Include="ITrackingService.cs" />
     <Compile Include="IProductService.cs" />

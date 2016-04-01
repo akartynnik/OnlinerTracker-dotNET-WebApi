@@ -1,9 +1,10 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using Microsoft.AspNet.SignalR;
+using OnlinerTracker.Api.Hubs;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Proxies;
 using OnlinerTracker.Services;
-using System.Configuration;
 using System.Reflection;
 using System.Web.Http;
 
@@ -21,6 +22,7 @@ namespace OnlinerTracker.Api
 
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerDependency();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerDependency();
+            builder.Register(c => new DialogService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>())).As<IDialogService>().InstancePerDependency();
             builder.Register(c => new TrackingService()).As<ITrackingService>().InstancePerDependency();
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>())).As<IExternalProductService>().InstancePerDependency();
 

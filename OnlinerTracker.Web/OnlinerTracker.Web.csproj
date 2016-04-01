@@ -69,6 +69,7 @@
   <ItemGroup>
     <Content Include="app\directives\scrollyDirective.js" />
     <Content Include="app\filters.js" />
+    <Content Include="scripts\signalRConfig.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -109,7 +110,6 @@
   <ItemGroup>
     <Folder Include="content\fonts\" />
     <Folder Include="content\images\" />
-    <Folder Include="signalr\hubs\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
