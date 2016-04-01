@@ -22,7 +22,12 @@ namespace OnlinerTracker.Api
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>();
             builder.RegisterType<ProductService>().As<IProductService>();
             builder.Register(c => new TrackingService()).As<ITrackingService>();
-            builder.Register(c => new ExternalProductProxy(ConfigurationManager.AppSettings["externalApiUrl"])).As<IExternalProductService>();
+            builder.Register(c => new ExternalProductProxy(c.Resolve<IProductService>())
+                                    {
+                                        RemoteServiceUrl = ConfigurationManager.AppSettings["remoteService:Url"],
+                                        RemoteServiceType = ConfigurationManager.AppSettings["remoteService:Type"]
+                                    })
+                    .As<IExternalProductService>();
 
             #endregion
 

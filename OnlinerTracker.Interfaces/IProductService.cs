@@ -19,5 +19,8 @@ namespace OnlinerTracker.Interfaces
         Product GetBy(string onlinerId, Guid userId);
 
         IEnumerable<Product> GetAll(Guid userId);
+
+        List<Product> ConvertToProducts(string externalProductsJsonString, RemoteServiceType providerType,
+            Guid userId);
     }
 }

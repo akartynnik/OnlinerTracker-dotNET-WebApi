@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
-using OnlinerTracker.Data;
-using OnlinerTracker.Data.Context;
+﻿using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -15,24 +12,27 @@ namespace OnlinerTracker.Proxies
     {
         #region Properties and Fields
 
-        protected string ServiceUrl;
-        private readonly TrackerContext _context;
+        public string RemoteServiceType { get; set; }
+        public string RemoteServiceUrl { get; set; }
+        private readonly IProductService _productService;
 
         #endregion
 
         #region Constructors
-
-        public ExternalProductProxy(string srviceUrl)
+        public ExternalProductProxy()
         {
-            this.ServiceUrl = srviceUrl;
-            _context = new TrackerContext();
+        }
+
+        public ExternalProductProxy(IProductService productService)
+        {
+            _productService = productService;
         }
 
         #endregion
 
-        public List<ExternalProduct> Get(string searchQuery, Guid userId)
+        public List<Product> Get(string searchQuery, Guid userId)
         {
-            var url = string.Format("{0}?query={1}", ServiceUrl, searchQuery);
+            var url = string.Format("{0}?query={1}", RemoteServiceUrl, searchQuery);
             var request = (HttpWebRequest) WebRequest.Create(url);
             request.ContentType = "application/json";
             request.MediaType = "application/json";
@@ -48,24 +48,9 @@ namespace OnlinerTracker.Proxies
                     responseString = reader.ReadToEnd();
                 }
             }
-            var externalProductList = new  List<ExternalProduct>();
-            dynamic jObjects = JsonConvert.DeserializeObject(responseString);
-            foreach (var jObject in jObjects.products)
-            {
-                var externalProduct = new ExternalProduct
-                {
-                    OnlinerId = jObject["id"],
-                    Name = jObject["full_name"],
-                    Description = jObject["description"],
-                    ImageUrl = jObject["images"]["header"],
-                    CurrentCost = jObject["prices"] != null ? jObject["prices"]["min"] : 0,
-                };
-                var sameProduct = _context.Products.Any(u => u.OnlinerId == externalProduct.OnlinerId && u.UserId == userId);
-                if (sameProduct)
-                    externalProduct.Tracking = true;
-                externalProductList.Add(externalProduct);
-            }
-            return externalProductList;
+            var poductList = _productService.ConvertToProducts(responseString,
+                (RemoteServiceType) Convert.ToInt32(RemoteServiceType), userId);
+            return poductList;
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
 
 namespace OnlinerTracker.Data
 {
@@ -34,5 +33,8 @@ namespace OnlinerTracker.Data
 
         [JsonIgnore]
         public virtual ICollection<Cost> Costs { get; private set; }
+
+        [NotMapped]
+        public decimal CurrentCost { get; set; }
     }
 }
