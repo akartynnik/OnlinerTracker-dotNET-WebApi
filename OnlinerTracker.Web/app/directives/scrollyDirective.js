@@ -4,8 +4,6 @@ app.directive('scrolly', function () {
         restrict: 'A',
         link: function (scope, element, attrs) {
             var raw = element[0];
-            console.log('loading directive');
-
             element.bind('scroll', function () {
                 if (raw.scrollTop + raw.offsetHeight === raw.scrollHeight) {
                     scope.$apply(attrs.scrolly);

@@ -10,7 +10,7 @@
         <div class="search-input-box">
             <input type="text" data-ng-model="searchQuery" data-ng-model-options="{ debounce: 550 }" placeholder="Type product here..." class="form-control" />
         </div>
-        <div class="finded-products" scrolly="myPagingFunction()" >
+        <div class="finded-products" scrolly="onScrollEnd()" >
             <div data-ng-repeat="product in getedProducts track by $index" class="finded-product tracking-{{product.tracking}}">
                 <div>
                     <div class="finded-product-img-box">

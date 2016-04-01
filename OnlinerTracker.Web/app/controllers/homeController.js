@@ -11,14 +11,16 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
 
     var page = 1;
     var lenghtForStartSearch = 2;
+    var isLoding = true;
     var promise;
 
     $scope.$watch('searchQuery', function(typedString) {
         console.log(typedString);
-        if (!typedString || typedString.length < lenghtForStartSearch)
+        if ((!typedString || typedString.length < lenghtForStartSearch) && isLoding)
             return 0;
         if (typedString === $scope.searchQuery) {
             page = 1;
+            isLoding = false;
             $http({
                 url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
@@ -28,6 +30,7 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
                 }
             }).success(function(response) {
                 $scope.getedProducts = response;
+                isLoding = true;
             });
         }
     });
@@ -68,10 +71,10 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
         });
     }
 
-    $scope.myPagingFunction = function () {
-        console.log("ololo1");
-        if ($scope.searchQuery.length >= lenghtForStartSearch) {
+    $scope.onScrollEnd = function () {
+        if ($scope.searchQuery.length >= lenghtForStartSearch && isLoding) {
             page++;
+            isLoding = false;
             $http({
                 url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
@@ -83,6 +86,7 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
                 response.forEach(function (entry) {
                     $scope.getedProducts.push(entry);
                 });
+                isLoding = true;
             }); 
         }
     }
