@@ -19,15 +19,15 @@ namespace OnlinerTracker.Api
 
             #region Dependensies
 
-            builder.RegisterType<AuthorizationService>().As<IAuthorizationService>();
-            builder.RegisterType<ProductService>().As<IProductService>();
-            builder.Register(c => new TrackingService()).As<ITrackingService>();
+            builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerDependency();
+            builder.RegisterType<ProductService>().As<IProductService>().InstancePerDependency();
+            builder.Register(c => new TrackingService()).As<ITrackingService>().InstancePerDependency();
             builder.Register(c => new ExternalProductProxy(c.Resolve<IProductService>())
                                     {
                                         RemoteServiceUrl = ConfigurationManager.AppSettings["remoteService:Url"],
                                         RemoteServiceType = ConfigurationManager.AppSettings["remoteService:Type"]
                                     })
-                    .As<IExternalProductService>();
+                    .As<IExternalProductService>().InstancePerDependency();
 
             #endregion
 

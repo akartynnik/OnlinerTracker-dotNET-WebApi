@@ -30,9 +30,11 @@ namespace OnlinerTracker.Proxies
 
         #endregion
 
-        public List<Product> Get(string searchQuery, Guid userId)
+        public List<Product> Get(string searchQuery, Guid userId, int page)
         {
             var url = string.Format("{0}?query={1}", RemoteServiceUrl, searchQuery);
+            if (page > 1)
+                url = string.Format("{0}&page={1}", url, page);
             var request = (HttpWebRequest) WebRequest.Create(url);
             request.ContentType = "application/json";
             request.MediaType = "application/json";

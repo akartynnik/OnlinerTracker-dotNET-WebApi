@@ -30,6 +30,7 @@ namespace OnlinerTracker.Api
         {
             ConfigureOAuth(app);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+            app.MapSignalR();
 
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);

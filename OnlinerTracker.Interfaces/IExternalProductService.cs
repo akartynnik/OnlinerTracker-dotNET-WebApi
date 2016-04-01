@@ -6,6 +6,6 @@ namespace OnlinerTracker.Interfaces
 {
     public interface IExternalProductService
     {
-        List<Product> Get(string searchQuery, Guid userId);
+        List<Product> Get(string searchQuery, Guid userId, int page);
     }
 }

@@ -62,7 +62,7 @@ app.controller('productsController', ['$scope', 'productsService', '$http', 'ngA
                 promise = $timeout(function () { $scope.showAlert = false; }, 3000);
             }
         }).error(function (msg) {
-            onError();
+            console.log("error");
         });
     }
 

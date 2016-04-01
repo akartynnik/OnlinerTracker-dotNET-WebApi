@@ -33,10 +33,10 @@ namespace OnlinerTracker.Api.Controllers
 
         [Route("GetFromExternalServer", Name = "Get products from external server (proxy)")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetExternal(string searchQuery)
+        public async Task<IHttpActionResult> GetExternal(string searchQuery, int page)
         {
 
-            return Ok(_externalPproductService.Get(searchQuery, User.Id));
+            return Ok(_externalPproductService.Get(searchQuery, User.Id, page));
         }
 
         [Route("Follow", Name = "Follow product")]

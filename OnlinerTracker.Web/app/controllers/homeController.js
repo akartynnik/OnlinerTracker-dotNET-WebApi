@@ -7,18 +7,24 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
     $scope.showAlert = false;
     $scope.alertClassName = "alert-success";
     $scope.getedProducts = [];
+    $scope.searchQuery = "";
+
+    var page = 1;
+    var lenghtForStartSearch = 2;
     var promise;
 
     $scope.$watch('searchQuery', function(typedString) {
         console.log(typedString);
-        if (!typedString || typedString.length < 2)
+        if (!typedString || typedString.length < lenghtForStartSearch)
             return 0;
         if (typedString === $scope.searchQuery) {
+            page = 1;
             $http({
                 url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
                 params: {
-                    searchQuery: $scope.searchQuery
+                    searchQuery: $scope.searchQuery,
+                    page: 1
                 }
             }).success(function(response) {
                 $scope.getedProducts = response;
@@ -60,6 +66,25 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
             $scope.alertClassName = "alert-danger";
             $scope.textAlert = 'ERROR!';
         });
+    }
+
+    $scope.myPagingFunction = function () {
+        console.log("ololo1");
+        if ($scope.searchQuery.length >= lenghtForStartSearch) {
+            page++;
+            $http({
+                url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
+                method: 'GET',
+                params: {
+                searchQuery: $scope.searchQuery,
+                page: page
+            }
+            }).success(function (response) {
+                response.forEach(function (entry) {
+                    $scope.getedProducts.push(entry);
+                });
+            }); 
+        }
     }
 
     $scope.closeAlert = function () {
