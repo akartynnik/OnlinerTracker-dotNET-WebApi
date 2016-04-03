@@ -1,3 +1,6 @@
+# Cache
+*.cche
+
 # User-specific files
 *.suo
 *.user
