@@ -1,17 +1,14 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', '$timeout', function ($scope, $http, productsService, ngAuthSettings, $timeout) {
+app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', function ($scope, $http, productsService, ngAuthSettings) {
 
     $scope.products = [];
     $scope.alertClassName = "alert-success";
     $scope.getedProducts = [];
     $scope.searchQuery = "";
 
-    
-
     var page = 1;
     var lenghtForStartSearch = 2;
     var isLoding = true;
-    var promise;
 
     $scope.$watch('searchQuery', function(typedString) {
         console.log(typedString);
@@ -35,9 +32,6 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
     });
     
     $scope.followProduct = function (product) {
-        //stop alerts timer
-        $timeout.cancel(promise);
-        //send request
         $http({
             url: ngAuthSettings.apiServiceBaseUri + 'api/product/follow',
             method: 'post',
@@ -48,25 +42,8 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
                 Description: product.description.replace(/"/g, "&quot;"),
                 Cost: product.currentCost
             }
-        }).success(function (response) {
-            console.log(response);
-            if (response == "OK") {
-                $scope.showAlert = true;
-                $scope.alertClassName = "alert-success";
-                $scope.textAlert = '<b>' + product.name + "</b> now is tracked!";
-            }
-            if (response == "Duplicate") {
-                console.log("duplicate");
-                $scope.showAlert = true;
-                $scope.alertClassName = "alert-warning";
-                $scope.textAlert = "This product is already being tracked!";
-            }
-            promise = $timeout(function () { $scope.showAlert = false; }, 3000);
+        }).success(function () {
             product.tracking = true;
-        }).error(function (msg) {
-            $scope.showAlert = true;
-            $scope.alertClassName = "alert-danger";
-            $scope.textAlert = 'ERROR!';
         });
     }
 

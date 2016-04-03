@@ -2,6 +2,7 @@
 using AutoMapper;
 using OnlinerTracker.Api.ApiViewModels;
 using OnlinerTracker.Api.Models;
+using OnlinerTracker.Api.Resources;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using System;
@@ -19,7 +20,7 @@ namespace OnlinerTracker.Api.Controllers
         private IDialogService _dialogService;
         private IExternalProductService _externalPproductService;
 
-        public ProductsController (IProductService productService, IExternalProductService externalPproductService, IDialogService dialogService)
+        public ProductsController(IProductService productService, IExternalProductService externalPproductService, IDialogService dialogService)
         {
             _productService = productService;
             _dialogService = dialogService;
@@ -45,23 +46,36 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Follow(ProductFollowModel model)
         {
-            var product = Mapper.Map<ProductFollowModel, Product>(model);
-            product.Id = Guid.NewGuid();
-            product.UserId = User.Id;
-            product.Tracking = true;
+            try
+            {
+                var product = Mapper.Map<ProductFollowModel, Product>(model);
+                product.Id = Guid.NewGuid();
+                product.UserId = User.Id;
+                product.Tracking = true;
 
-            if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
-                return Duplicate();
-            _productService.Insert(product);
+                if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
+                {
+                    _dialogService.ShowDialogBox(DialogType.PopupWarning, DialogResources.Warning_DuplicateTracking);
+                    return Duplicate();
+                }
+                _productService.Insert(product);
 
-            var cost = Mapper.Map<ProductFollowModel, Cost>(model);
-            cost.Id = Guid.NewGuid();
-            cost.ProductId = product.Id;
-            cost.CratedAt = DateTime.Now;
+                var cost = Mapper.Map<ProductFollowModel, Cost>(model);
+                cost.Id = Guid.NewGuid();
+                cost.ProductId = product.Id;
+                cost.CratedAt = DateTime.Now;
 
-            _productService.InsertCost(cost);
-            _dialogService.ShowDialogBox(DialogType.PopupSuccess, string.Format("Now you are follow <b>{0}</b>", product.Name));
-            return Successful();
+                _productService.InsertCost(cost);
+                _dialogService.ShowDialogBox(DialogType.PopupSuccess,
+                    string.Format(DialogResources.Success_StartFollowProduct, product.Name));
+                return Successful();
+            }
+            catch (Exception ex)
+            {
+                _dialogService.ShowDialogBox(DialogType.PopupError, DialogResources.Error_ServerError);
+                return InternalServerError(ex);
+            }
+
         }
 
         [Route("ChangeTrackingStatus", Name = "Change tracking status")]
@@ -69,6 +83,16 @@ namespace OnlinerTracker.Api.Controllers
         public IHttpActionResult ChangeTrackingStatus(Product product)
         {
             _productService.Update(product);
+            if (product.Tracking)
+            {
+                _dialogService.ShowDialogBox(DialogType.PopupSuccess,
+                    string.Format(DialogResources.Success_TrackingStarted, product.Name));
+            }
+            else
+            {
+                _dialogService.ShowDialogBox(DialogType.PopupWarning,
+                   string.Format(DialogResources.Warning_TrackingStoped, product.Name));
+            }
             return Successful();
         }
 
@@ -77,6 +101,8 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public IHttpActionResult Remove(DeletedObject obj)
         {
+            _dialogService.ShowDialogBox(DialogType.PopupWarning,
+                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name));
             _productService.Delete(obj.Id);
             return Successful();
         }
