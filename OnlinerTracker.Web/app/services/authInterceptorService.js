@@ -1,8 +1,7 @@
 ﻿'use strict';
-app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localStorageService', function ($q, $injector, $location, localStorageService) {
+app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localStorageService', 'signalRService', function ($q, $injector, $location, localStorageService, signalRService) {
 
     var authInterceptorServiceFactory = {};
-    var $http;
 
     var _request = function (config) {
         config.headers = config.headers || {};
@@ -10,6 +9,7 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localSto
         var authData = localStorageService.get('authorizationData');
         if (authData) {
             config.headers.Authorization = 'Bearer ' + authData.token;
+            config.headers.SignalRConnectionId = signalRService.connectionId();
         }
         if (!authData && $location.path() !== '/signin' && $location.path() !== '/associate') {
             $location.path('/signin');

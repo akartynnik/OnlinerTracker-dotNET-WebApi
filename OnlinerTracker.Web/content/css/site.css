@@ -74,10 +74,17 @@ p.footer-text {
     box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
 }
 
-.finded-products .finded-product{
+.finded-products .finded-product {
     border-bottom: 1px solid #ddd;
     padding: 10px 20px;
     height: 60px;
+}
+
+.finded-products .tracking-true {
+    cursor: default;
+}
+
+.finded-products .tracking-false {
     cursor: pointer;
 }
 
@@ -113,6 +120,14 @@ p.footer-text {
     border-radius: 5px;
     padding: 8px 16px;
     width: 200px;
+}
+
+.finded-product .product-tracked {
+    border-radius: 5px;
+    padding: 8px 16px;
+    width: 200px;
+    color: green;
+    font-style: italic;
 }
 
 .btn-right {
@@ -157,14 +172,14 @@ p.footer-text {
     border-top: none !important;
 }
 
-.delete-product {
+.delete-product i{
     color: darkred;
     cursor: pointer;
     font-size: 22px;
     transition: 0.2s;
 }
 
-.delete-product:hover {
+.delete-product:hover i{
     color: red;
 }
 

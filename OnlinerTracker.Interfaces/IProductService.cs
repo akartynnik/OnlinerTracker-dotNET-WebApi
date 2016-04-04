@@ -8,6 +8,8 @@ namespace OnlinerTracker.Interfaces
     {
         void Insert(Product obj);
 
+        void InsertCost(Cost obj);
+
         void Update(Product obj);
 
         void Delete(Guid id);
@@ -17,5 +19,7 @@ namespace OnlinerTracker.Interfaces
         Product GetBy(string onlinerId, Guid userId);
 
         IEnumerable<Product> GetAll(Guid userId);
+
+        bool IfSameProductExist(string onlinerId, Guid userId);
     }
 }

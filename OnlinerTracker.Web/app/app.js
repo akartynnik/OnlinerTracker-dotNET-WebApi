@@ -1,4 +1,4 @@
-﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar', 'filters']);
+﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar', 'filters', 'SignalR']);
 
 app.config(function ($routeProvider) {
 
@@ -34,6 +34,6 @@ app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptorService');
 });
 
-app.run(['authService', function (authService) {
+app.run(['authService', 'signalRService', function (authService, signalRService) {
     authService.fillAuthData();
 }]);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,5 +30,11 @@ namespace OnlinerTracker.Data
         public string Description { get; set; }
 
         public bool Tracking { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Cost> Costs { get; private set; }
+
+        [NotMapped]
+        public decimal CurrentCost { get; set; }
     }
 }

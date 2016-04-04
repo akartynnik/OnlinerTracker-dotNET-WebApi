@@ -67,7 +67,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\directives\scrollyDirective.js" />
     <Content Include="app\filters.js" />
+    <Content Include="app\services\signalRService.js" />
+    <Content Include="scripts\signalr-hub.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -97,7 +100,9 @@
     <Content Include="index.html" />
     <Content Include="scripts\angular-local-storage.min.js" />
     <Content Include="scripts\authComplete.js" />
+    <Content Include="scripts\jquery.signalR.js" />
     <Content Include="scripts\loading-bar.min.js" />
+    <Content Include="scripts\ng-infinite-scroll.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

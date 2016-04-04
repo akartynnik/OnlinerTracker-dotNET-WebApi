@@ -12,12 +12,8 @@ app.controller('associateController', ['$scope', '$location','$timeout','authSer
     };
 
     $scope.registerExternal = function () {
-
         authService.registerExternal($scope.registerData).then(function (response) {
-
-            $scope.savedSuccessfully = true;
-            $scope.message = "You have been registered successfully! Now you can view products binded to you.";
-
+            return $location.path('/home');
         },
           function (response) {
               var errors = [];

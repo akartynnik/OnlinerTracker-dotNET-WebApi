@@ -1,58 +1,69 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', '$timeout', function ($scope, $http, productsService, ngAuthSettings, $timeout) {
+app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', 'signalRService', function ($scope, $http, productsService, ngAuthSettings, signalRService) {
 
     $scope.products = [];
-    $scope.responser = [];
-    $scope.textAlert = "";
-    $scope.showAlert = false;
     $scope.alertClassName = "alert-success";
-    var promise;
+    $scope.getedProducts = [];
+    $scope.searchQuery = "";
 
-    $scope.fetchdata = function () {
-        if ($scope.searchQuery.length < 2) {
-            $scope.getedProducts = [];
-            return;
+    var page = 1;
+    var lenghtForStartSearch = 2;
+    var isLoding = true;
+
+    $scope.$watch('searchQuery', function(typedString) {
+        console.log(typedString);
+        if ((!typedString || typedString.length < lenghtForStartSearch) && isLoding)
+            return 0;
+        if (typedString === $scope.searchQuery) {
+            page = 1;
+            isLoding = false;
+            $http({
+                url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
+                method: 'GET',
+                params: {
+                    searchQuery: $scope.searchQuery,
+                    page: 1
+                }
+            }).success(function(response) {
+                $scope.getedProducts = response;
+                isLoding = true;
+            });
         }
-        $http({
-            url: 'https://catalog.api.onliner.by/search/products',
-            method: 'GET',
-            params: {
-                query: $scope.searchQuery
-            }
-        }).success(function (response) {
-            $scope.getedProducts = response.products;
-        });
-    }
-
+    });
+    
     $scope.followProduct = function (product) {
-        //stop alerts timer
-        $timeout.cancel(promise);
-        //send request
         $http({
             url: ngAuthSettings.apiServiceBaseUri + 'api/product/follow',
             method: 'post',
-            data: '{"OnlinerId":' + product.id + ',"Name":"' + product.full_name + '","ImageUrl":"' + product.images.header + '", "Description":"' + product.description.replace(/"/g, "&quot;") + '"}'
-        }).success(function (response) {
-            console.log(response);
-            if (response == "\"OK\"") {
-                $scope.showAlert = true;
-                $scope.alertClassName = "alert-success";
-                $scope.textAlert = '<b>' + product.name + "</b> now is tracked!";
+            data: {
+                OnlinerId: product.onlinerId,
+                Name: product.name,
+                ImageUrl: product.imageUrl.replace(/"/g, "&quot;"),
+                Description: product.description.replace(/"/g, "&quot;"),
+                Cost: product.currentCost
             }
-            if (response == "\"Duplicate\"") {
-                $scope.showAlert = true;
-                $scope.alertClassName = "alert-warning";
-                $scope.textAlert = "This product is already being tracked!";
-            }
-            promise = $timeout(function () { $scope.showAlert = false; }, 3000);
-        }).error(function (msg) {
-            $scope.showAlert = true;
-            $scope.alertClassName = "alert-danger";
-            $scope.textAlert = 'ERROR!';
+        }).success(function () {
+            product.tracking = true;
         });
     }
 
-    $scope.closeAlert = function () {
-        $scope.showAlert = false;
+    $scope.onScrollEnd = function () {
+        if ($scope.searchQuery.length >= lenghtForStartSearch && isLoding) {
+            page++;
+            isLoding = false;
+            $http({
+                url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
+                method: 'GET',
+                params: {
+                searchQuery: $scope.searchQuery,
+                page: page
+            }
+            }).success(function (response) {
+                response.forEach(function (entry) {
+                    $scope.getedProducts.push(entry);
+                });
+                isLoding = true;
+            }); 
+        }
     }
 }]);
