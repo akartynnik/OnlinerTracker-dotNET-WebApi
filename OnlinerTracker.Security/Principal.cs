@@ -14,5 +14,7 @@ namespace OnlinerTracker.Security
         }
 
         public Guid Id { get; set; }
+
+        public string SignalRConnectionId { get; set; }
     }
 }

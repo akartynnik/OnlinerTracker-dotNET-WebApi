@@ -55,7 +55,7 @@ namespace OnlinerTracker.Api.Controllers
 
                 if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 {
-                    _dialogService.ShowDialogBox(DialogType.PopupWarning, DialogResources.Warning_DuplicateTracking);
+                    _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.SignalRConnectionId);
                     return Duplicate();
                 }
                 _productService.Insert(product);
@@ -66,13 +66,13 @@ namespace OnlinerTracker.Api.Controllers
                 cost.CratedAt = DateTime.Now;
 
                 _productService.InsertCost(cost);
-                _dialogService.ShowDialogBox(DialogType.PopupSuccess,
-                    string.Format(DialogResources.Success_StartFollowProduct, product.Name));
+                _dialogService.SendInPopupForUser(PopupType.Success,
+                    string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.SignalRConnectionId);
                 return Successful();
             }
             catch (Exception ex)
             {
-                _dialogService.ShowDialogBox(DialogType.PopupError, DialogResources.Error_ServerError);
+                _dialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.SignalRConnectionId);
                 return InternalServerError(ex);
             }
 
@@ -85,13 +85,13 @@ namespace OnlinerTracker.Api.Controllers
             _productService.Update(product);
             if (product.Tracking)
             {
-                _dialogService.ShowDialogBox(DialogType.PopupSuccess,
-                    string.Format(DialogResources.Success_TrackingStarted, product.Name));
+                _dialogService.SendInPopupForUser(PopupType.Success,
+                    string.Format(DialogResources.Success_TrackingStarted, product.Name), User.SignalRConnectionId);
             }
             else
             {
-                _dialogService.ShowDialogBox(DialogType.PopupWarning,
-                   string.Format(DialogResources.Warning_TrackingStoped, product.Name));
+                _dialogService.SendInPopupForUser(PopupType.Warning,
+                   string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.SignalRConnectionId);
             }
             return Successful();
         }
@@ -101,8 +101,8 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public IHttpActionResult Remove(DeletedObject obj)
         {
-            _dialogService.ShowDialogBox(DialogType.PopupWarning,
-                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name));
+            _dialogService.SendInPopupForUser(PopupType.Warning,
+                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.SignalRConnectionId);
             _productService.Delete(obj.Id);
             return Successful();
         }

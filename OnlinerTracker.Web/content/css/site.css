@@ -172,14 +172,14 @@ p.footer-text {
     border-top: none !important;
 }
 
-.delete-product {
+.delete-product i{
     color: darkred;
     cursor: pointer;
     font-size: 22px;
     transition: 0.2s;
 }
 
-.delete-product:hover {
+.delete-product:hover i{
     color: red;
 }
 

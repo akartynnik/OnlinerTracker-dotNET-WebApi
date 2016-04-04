@@ -14,9 +14,14 @@ namespace OnlinerTracker.Services
             _context = context;
         }
 
-        public void ShowDialogBox(DialogType dialogType, string message)
+        public void SendInPopupForAll(PopupType popupType, string message)
         {
-            _context.Clients.All.showDialogBox(dialogType.ToString(), message);
+            _context.Clients.All.showPopup(popupType.ToString(), message);
+        }
+
+        public void SendInPopupForUser(PopupType popupType, string message, string connectionId)
+        {
+            _context.Clients.Client(connectionId).showPopup(popupType.ToString(), message);
         }
     }
 }

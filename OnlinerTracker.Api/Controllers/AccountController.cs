@@ -107,7 +107,6 @@ namespace OnlinerTracker.Api.Controllers
             var hasRegistered = user != null;
             if (!hasRegistered)
                 return BadRequest("External user is not registered");
-
             //generate access token response
             var accessTokenResponse = _authService.GenerateLocalAccessTokenResponse(user.UserName, user.Id, Startup.OAuthBearerOptions);
             return Ok(accessTokenResponse);

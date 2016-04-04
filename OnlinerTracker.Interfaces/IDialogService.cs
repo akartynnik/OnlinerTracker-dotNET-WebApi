@@ -4,6 +4,7 @@ namespace OnlinerTracker.Interfaces
 {
     public interface IDialogService
     {
-        void ShowDialogBox(DialogType dialogType, string message);
+        void SendInPopupForAll(PopupType popupType, string message);
+        void SendInPopupForUser(PopupType popupType, string message, string connectionId);
     }
 }

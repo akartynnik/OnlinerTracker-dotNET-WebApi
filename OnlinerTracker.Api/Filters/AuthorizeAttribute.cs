@@ -29,11 +29,17 @@ namespace OnlinerTracker.Api.Filters
             if (string.IsNullOrEmpty(actionContext.Request.Headers.Authorization?.Parameter) || principal == null)
                 return Task.FromResult(actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized));
 
-                var identity = (ClaimsIdentity) principal.Identity;
-                var firstOrDefault = identity.Claims.FirstOrDefault(u => u.Type == "userId");
-                if (firstOrDefault != null)
-                    newUser.Id = Guid.Parse(firstOrDefault.Value);
-                HttpContext.Current.User = newUser;
+            var identity = (ClaimsIdentity) principal.Identity;
+
+            if (identity.Claims.Any(u => u.Type == "userId"))
+                newUser.Id = Guid.Parse(identity.Claims.FirstOrDefault(u => u.Type == "userId").Value);
+
+            if (string.IsNullOrEmpty(newUser.SignalRConnectionId))
+            {
+                newUser.SignalRConnectionId = actionContext.Request.Headers.GetValues("SignalRConnectionId").FirstOrDefault();
+            }
+
+            HttpContext.Current.User = newUser;
                 return continuation();
             
         }

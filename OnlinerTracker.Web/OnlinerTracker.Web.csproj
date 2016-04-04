@@ -69,7 +69,8 @@
   <ItemGroup>
     <Content Include="app\directives\scrollyDirective.js" />
     <Content Include="app\filters.js" />
-    <Content Include="scripts\signalRConfig.js" />
+    <Content Include="app\services\signalRService.js" />
+    <Content Include="scripts\signalr-hub.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

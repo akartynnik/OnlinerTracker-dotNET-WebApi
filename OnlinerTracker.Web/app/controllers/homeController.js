@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', function ($scope, $http, productsService, ngAuthSettings) {
+app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', 'signalRService', function ($scope, $http, productsService, ngAuthSettings, signalRService) {
 
     $scope.products = [];
     $scope.alertClassName = "alert-success";
@@ -66,5 +66,4 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
             }); 
         }
     }
-
 }]);
