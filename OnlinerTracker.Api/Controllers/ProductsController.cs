@@ -38,8 +38,8 @@ namespace OnlinerTracker.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetExternal(string searchQuery, int page)
         {
-
-            return Ok(_externalPproductService.Get(searchQuery, User.Id, page));
+            var jsonProductsString = _externalPproductService.Get(searchQuery, page);
+            return Ok(_externalPproductService.ConvertJsonToProducts(jsonProductsString, User.Id));
         }
 
         [Route("Follow", Name = "Follow product")]

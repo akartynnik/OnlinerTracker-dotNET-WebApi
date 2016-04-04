@@ -25,8 +25,9 @@ app.config(function ($routeProvider) {
     $routeProvider.otherwise({ redirectTo: "/home" });
 });
 
-app.constant('ngAuthSettings', {
+app.constant('ngSettings', {
     apiServiceBaseUri: 'http://localhost:52304/',
+    signalRServerPath: 'http://localhost:52304/signalr',
     clientId: 'onlinerTrackerWebUI'
 });
 

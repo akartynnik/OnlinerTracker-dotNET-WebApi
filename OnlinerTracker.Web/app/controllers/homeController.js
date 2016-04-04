@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthSettings', 'signalRService', function ($scope, $http, productsService, ngAuthSettings, signalRService) {
+app.controller('homeController', ['$scope', '$http', 'productsService', 'ngSettings', 'signalRService', function ($scope, $http, productsService, ngSettings, signalRService) {
 
     $scope.products = [];
     $scope.alertClassName = "alert-success";
@@ -18,7 +18,7 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
             page = 1;
             isLoding = false;
             $http({
-                url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
+                url: ngSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
                 params: {
                     searchQuery: $scope.searchQuery,
@@ -33,7 +33,7 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
     
     $scope.followProduct = function (product) {
         $http({
-            url: ngAuthSettings.apiServiceBaseUri + 'api/product/follow',
+            url: ngSettings.apiServiceBaseUri + 'api/product/follow',
             method: 'post',
             data: {
                 OnlinerId: product.onlinerId,
@@ -52,7 +52,7 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngAuthS
             page++;
             isLoding = false;
             $http({
-                url: ngAuthSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
+                url: ngSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
                 params: {
                 searchQuery: $scope.searchQuery,

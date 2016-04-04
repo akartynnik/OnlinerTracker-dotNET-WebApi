@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('productsController', ['$scope', 'productsService', '$http', 'ngAuthSettings', function ($scope, productsService, $http, ngAuthSettings) {
+app.controller('productsController', ['$scope', 'productsService', '$http', 'ngSettings', function ($scope, productsService, $http, ngSettings) {
 
     $scope.products = [];
 
@@ -11,7 +11,7 @@ app.controller('productsController', ['$scope', 'productsService', '$http', 'ngA
 
     $scope.changeTrackingStatus = function (product) {
         $http({
-            url: ngAuthSettings.apiServiceBaseUri + 'api/product/ChangeTrackingStatus',
+            url: ngSettings.apiServiceBaseUri + 'api/product/ChangeTrackingStatus',
             method: 'post',
             data: product
         });
@@ -19,7 +19,7 @@ app.controller('productsController', ['$scope', 'productsService', '$http', 'ngA
 
     $scope.remove = function (product) {
         $http({
-            url: ngAuthSettings.apiServiceBaseUri + 'api/product/remove',
+            url: ngSettings.apiServiceBaseUri + 'api/product/remove',
             method: 'post',
             data: {
                 id: product.id,
