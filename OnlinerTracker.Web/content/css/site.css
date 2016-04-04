@@ -1,0 +1,237 @@
+﻿a:active, 
+a:focus,
+button:active, 
+button:focus {
+    outline: none !important;
+}
+
+.header-red {
+    color: red;
+}
+
+.header-blue {
+    color: #4FA4EF;
+}
+
+.main-content {
+    padding-top: 90px;
+}
+
+p.footer-text {
+    padding: 20px 25px;
+    margin: 0;
+}
+
+.form-login {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.form-login input, 
+.form-login button{
+    margin-bottom: 10px;
+}
+
+.form-login button{
+    transition: 0.2s;
+}
+
+.form-login button:focus{
+    color: #3e3f3a;
+}
+
+.form-login button:hover{
+    color: white;
+    background-color: green;
+}
+
+
+.search-container {
+    position: relative;
+    height: 46px;
+    margin-bottom: 20px;
+}
+
+.search-input-box {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+.search-input-box input{
+    border-radius: 0px;
+}
+
+.finded-products {
+    position: relative;
+    top: 46px;
+    width: 100%;
+    z-index: 1000;
+    max-height: 500px;
+    overflow: auto;
+    background-color: #eee;    
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
+.finded-products .finded-product {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    height: 60px;
+}
+
+.finded-products .tracking-true {
+    cursor: default;
+}
+
+.finded-products .tracking-false {
+    cursor: pointer;
+}
+
+.finded-products .finded-product:hover{
+    background-color: #ddd;
+}
+
+.finded-products .finded-product:last-child{
+    border-bottom: none;
+}
+
+.finded-products .finded-product .finded-product-img-box {
+    width: 60px;
+    display: inline-block;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.finded-products .finded-product .finded-product-img-box img{
+    max-width: 60px;
+    max-height: 40px;
+}
+
+.finded-products .finded-product .follow-me-button {
+    visibility: hidden;
+}
+
+.finded-products .finded-product:hover .follow-me-button {
+    visibility: visible;
+}
+
+.finded-product .follow-me-button {
+    border-radius: 5px;
+    padding: 8px 16px;
+    width: 200px;
+}
+
+.finded-product .product-tracked {
+    border-radius: 5px;
+    padding: 8px 16px;
+    width: 200px;
+    color: green;
+    font-style: italic;
+}
+
+.btn-right {
+    float: right;
+}
+
+.finded-product .follow-me {
+    text-align: center;
+    width: 220px;
+    overflow: hidden;
+    display: inline-block;
+    float: right;
+}
+
+.finded-product .price {
+    float: right;
+    width: 140px;
+    overflow: hidden;
+    text-align: right;
+}
+
+.navbar-nav li a.active{
+    color: white !important;
+}
+
+.products img{
+    max-width: 60px;
+    max-height: 40px;
+}
+
+.products{
+    border-top: none;
+    border-left: none;
+}
+
+.products tr:first-child th{
+    border-top: 1px solid #dfd7ca !important;
+    border-left: none !important;
+}
+
+.products tr:first-child th:first-child{
+    border-top: none !important;
+}
+
+.delete-product i{
+    color: darkred;
+    cursor: pointer;
+    font-size: 22px;
+    transition: 0.2s;
+}
+
+.delete-product:hover i{
+    color: red;
+}
+
+/** Bootstram redefine styles START**/
+
+.navbar {
+    background-color: black
+}
+
+.navbar-brand {
+    font-size: 28px;
+}
+
+.navbar-inverse .navbar-brand{
+    font-size: 28px;
+    color: #ccc;
+}
+
+#footer {
+    background-color: black;
+}
+
+#footer .container {
+    text-align: right;
+    color: #ccc;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    font-size: 12px;
+    color: #93C645;
+}
+
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    border-bottom-width: 1px !important;
+}
+
+.table-bordered > tbody > tr:nth-child(even):hover {
+    background-color: white !important;
+}
+
+.alert {
+    position: fixed !important;
+    top: 60px !important;
+    left: 0 !important;
+    border-radius: 0 0 5px 0 !important;
+    min-width: 300px;
+    text-align: center;
+}
+
+button.close {
+    margin-left: 10px !important;
+}
+
+/** Bootstram redefine styles END**/
+

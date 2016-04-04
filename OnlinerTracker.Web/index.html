@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html data-ng-app="AngularAuthApp">
+    <head>
+        <meta content="IE=edge, chrome=1" http-equiv="X-UA-Compatible" />
+        <title>Onliner Product Super-Mega Tracker</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link href="content/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="content/css/site.css" rel="stylesheet" />
+        <link href="content/css/loading-bar.css" rel="stylesheet" />
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    </head>
+    <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="indexController">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="btn btn-success navbar-toggle" data-ng-click="navbarExpanded = !navbarExpanded">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                <a class="navbar-brand" href="#/"><span class="header-blue">Onl</span><span class="header-red">i</span><span class="header-blue">ner</span> Product Super-Mega Tracker</a>
+            </div>
+            <div class="collapse navbar-collapse" data-collapse="!navbarExpanded">
+                <ul class="nav navbar-nav navbar-right">
+                    <li data-ng-hide="!authentication.isAuth"><a style="color: #4FA4EF; font-size: 10px;">Hi, {{authentication.userName}}</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/home') }" href="#">Search</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/products') }" href="#/products">My Products</a></li>
+                    <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Sign Out</a></li>
+                    <li data-ng-hide="authentication.isAuth"> <a ng-class="{ active: isActive('/signin') }" href="#/signin">Sign In</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="container">
+            <div class="alert  {{popupClass}}" data-ng-show="popupVisible">
+                <span data-ng-bind-html="popupMessage"></span>
+            </div>
+            <div data-ng-view="">
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="navbar-fixed-bottom">
+        <div class="container">
+            <p class="footer-text">&#169; 2016 OPSMT Inc.</p>
+        </div>
+    </div>
+    <!-- 3rd party libraries -->
+    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/jquery.effects.core.js"></script>
+    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/jquery.effects.slide.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-sanitize.min.js"></script>
+    <script src="scripts/angular-local-storage.min.js"></script>
+    <script src="scripts/loading-bar.min.js"></script>
+    <!-- Load SingalR -->
+    <script src="scripts/jquery.signalR.js" type="text/javascript"></script>
+    <script src="scripts/signalr-hub.js" type="text/javascript"></script>
+    <!-- Load app main script -->
+    <script src="app/app.js"></script> 
+    <!-- Load directives -->
+    <script src="app/directives/scrollyDirective.js"></script>
+    <!-- Load services -->
+    <script src="app/services/authInterceptorService.js"></script>
+    <script src="app/services/authService.js"></script>
+    <script src="app/services/productsService.js"></script>
+    <script src="app/services/signalRService.js"></script>
+    <!-- Load controllers -->
+    <script src="app/controllers/indexController.js"></script>
+    <script src="app/controllers/homeController.js"></script>
+    <script src="app/controllers/signinController.js"></script>
+    <script src="app/controllers/associateController.js"></script>
+    <script src="app/controllers/productsController.js"></script>
+    <script src="app/filters.js"></script>
+</body>
+</html>
