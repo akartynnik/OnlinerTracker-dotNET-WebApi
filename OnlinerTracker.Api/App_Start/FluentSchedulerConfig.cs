@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using FluentScheduler;
-using OnlinerTracker.Interfaces;
+using OnlinerTracker.Api.Jobs;
 using System.Web.Http;
 
 namespace OnlinerTracker.Api
@@ -10,7 +10,8 @@ namespace OnlinerTracker.Api
     {
         public FluentSchedulerConfig()
         {
-            Schedule<ITrackingService>().ToRunNow().AndEvery(30).Seconds();
+            Schedule<TrackingJob>().ToRunNow().AndEvery(10).Seconds();
+            Schedule<NotificationJob>().ToRunNow().AndEvery(30).Seconds();
         }
     }
 

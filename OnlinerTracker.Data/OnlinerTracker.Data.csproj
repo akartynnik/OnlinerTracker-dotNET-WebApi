@@ -61,6 +61,7 @@
     <Compile Include="JobsLog.cs" />
     <Compile Include="Cost.cs" />
     <Compile Include="JobType.cs" />
+    <Compile Include="ProductForNotification.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ExternalProduct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

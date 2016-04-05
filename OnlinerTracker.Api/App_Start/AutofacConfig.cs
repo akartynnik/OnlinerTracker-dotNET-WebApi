@@ -2,6 +2,7 @@
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.SignalR;
 using OnlinerTracker.Api.Hubs;
+using OnlinerTracker.Api.Jobs;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Proxies;
 using OnlinerTracker.Services;
@@ -20,7 +21,6 @@ namespace OnlinerTracker.Api
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             #region Dependensies
-            
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.Register(c => new DialogService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>()))
@@ -35,6 +35,19 @@ namespace OnlinerTracker.Api
                     })
                 .As<ITrackingService>()
                 .InstancePerLifetimeScope();
+            builder.Register(c => new NotificationService(c.Resolve<IProductService>(), ConfigurationManager.AppSettings["notifConfig:smtpServer"],
+                ConfigurationManager.AppSettings["notifConfig:smtpPort"], ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
+                ConfigurationManager.AppSettings["notifConfig:smtpPassword"])
+            {
+                EmailSenderName = ConfigurationManager.AppSettings["notifConfig:emailSenderName"],
+                HourInWhichSendingStart = ConfigurationManager.AppSettings["schedulerConfig:hourInWhichSendingStart"]
+
+            })
+                .As<INotificationService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<TrackingJob>().As<TrackingJob>().InstancePerLifetimeScope();
+            builder.RegisterType<NotificationJob>().As<NotificationJob>().InstancePerLifetimeScope();
 
             #endregion
 

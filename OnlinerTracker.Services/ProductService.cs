@@ -60,8 +60,25 @@ namespace OnlinerTracker.Services
 
         public IEnumerable<Product> GetAllTracking()
         {
-                return _context.Products.Where(u => u.Tracking).AsEnumerable();
-           
+            return _context.Products.Where(u => u.Tracking).AsEnumerable();
+        }
+        public IEnumerable<ProductForNotification> GetAllChanges(Guid userId)
+        {
+            var dayAgo = DateTime.Now.AddDays(-1);
+            return _context.Products
+                .Where(
+                    u =>
+                        u.Costs.OrderByDescending(c => c.CratedAt).FirstOrDefault().CratedAt.Day == DateTime.Now.Day &&
+                        u.UserId == userId)
+                .Select(x => new ProductForNotification()
+                {
+                    Name = x.Name,
+                    CurrentCost = x.Costs.OrderByDescending(c => c.CratedAt).FirstOrDefault().Value,
+                    DayAgoCost =
+                        x.Costs.OrderByDescending(c => c.CratedAt)
+                            .FirstOrDefault(u => u.CratedAt <= dayAgo)
+                            .Value,
+                });
         }
 
         public bool IfSameProductExist(string onlinerId, Guid userId)

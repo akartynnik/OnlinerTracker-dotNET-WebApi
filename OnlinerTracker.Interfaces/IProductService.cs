@@ -22,6 +22,8 @@ namespace OnlinerTracker.Interfaces
 
         IEnumerable<Product> GetAllTracking();
 
+        IEnumerable<ProductForNotification> GetAllChanges(Guid userId);
+
         bool IfSameProductExist(string onlinerId, Guid userId);
         
         decimal GetCurrentProductCost(Guid productId);

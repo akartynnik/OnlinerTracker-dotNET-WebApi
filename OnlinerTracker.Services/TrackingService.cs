@@ -12,13 +12,12 @@ namespace OnlinerTracker.Services
     {
         #region Fields and Properties
 
-        private readonly object _lock = new object();
-
         private readonly IProductService _productService;
 
         private readonly IExternalProductService _externalProductService;
 
         private readonly TrackerContext _context;
+
         public string MinutesBeforeCheck { get; set; }
 
         #endregion
@@ -36,7 +35,7 @@ namespace OnlinerTracker.Services
 
         #region ITrackingService methods
 
-        public async Task<string> CheckProduct()
+        public async Task<string> CheckProducts()
         {
             var minutesBeforeCheck = 0;
             int.TryParse(MinutesBeforeCheck, out minutesBeforeCheck);
@@ -52,15 +51,19 @@ namespace OnlinerTracker.Services
                     if (cost != null)
                         costsUpdateList.Add(cost);
                 }
-
+                var updatedCostsCount = 0;
                 foreach (var cost in costsUpdateList)
+                {
+                    updatedCostsCount++;
                     _productService.InsertCost(cost);
+                }
 
                 _context.JobsLogs.Add(new JobLog
                 {
                     Type = JobType.CostCheck,
                     CheckedAt = DateTime.Now,
-                    IsSuccessed = true
+                    IsSuccessed = true,
+                    Info = string.Format("Number of updated costs: {0}", updatedCostsCount)
                 });
                 _context.SaveChanges();
                 return string.Empty;
@@ -78,16 +81,6 @@ namespace OnlinerTracker.Services
                 return ex.Message;
             }
             
-        }
-
-        #endregion
-
-        #region IJob methods 
-
-        public void Execute()
-        {
-            lock (_lock)
-                CheckProduct();
         }
 
         #endregion
