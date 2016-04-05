@@ -63,6 +63,7 @@
     <Compile Include="IDialogService.cs" />
     <Compile Include="IExternalProductService.cs" />
     <Compile Include="INotificationService.cs" />
+    <Compile Include="ILogService.cs" />
     <Compile Include="ITrackingService.cs" />
     <Compile Include="IProductService.cs" />
     <Compile Include="IAuthorizationService.cs" />

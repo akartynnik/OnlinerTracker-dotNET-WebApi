@@ -16,32 +16,37 @@ namespace OnlinerTracker.Api
     {
         public static void Register(HttpConfiguration config, out IContainer iocContainer)
         {
-
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             #region Dependensies
+
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
+            builder.RegisterType<LogService>().As<ILogService>().InstancePerLifetimeScope();
             builder.Register(c => new DialogService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>()))
                 .As<IDialogService>()
                 .InstancePerLifetimeScope();
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>()))
                 .As<IExternalProductService>()
                 .InstancePerLifetimeScope();
-            builder.Register(c => new TrackingService(c.Resolve<IProductService>(), c.Resolve<IExternalProductService>())
+            builder.Register(
+                c =>
+                    new TrackingService(c.Resolve<IProductService>(), c.Resolve<IExternalProductService>(),
+                        c.Resolve<ILogService>())
                     {
                         MinutesBeforeCheck = ConfigurationManager.AppSettings["schedulerConfig:minutesBeforeCheckCost"]
                     })
                 .As<ITrackingService>()
                 .InstancePerLifetimeScope();
-            builder.Register(c => new NotificationService(c.Resolve<IProductService>(), ConfigurationManager.AppSettings["notifConfig:smtpServer"],
-                ConfigurationManager.AppSettings["notifConfig:smtpPort"], ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
+            builder.Register(c => new NotificationService(c.Resolve<IProductService>(), c.Resolve<ILogService>(),
+                ConfigurationManager.AppSettings["notifConfig:smtpServer"],
+                ConfigurationManager.AppSettings["notifConfig:smtpPort"],
+                ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
                 ConfigurationManager.AppSettings["notifConfig:smtpPassword"])
             {
                 EmailSenderName = ConfigurationManager.AppSettings["notifConfig:emailSenderName"],
                 HourInWhichSendingStart = ConfigurationManager.AppSettings["schedulerConfig:hourInWhichSendingStart"]
-
             })
                 .As<INotificationService>()
                 .InstancePerLifetimeScope();

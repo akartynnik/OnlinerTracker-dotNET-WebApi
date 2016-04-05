@@ -1,8 +1,8 @@
 ﻿using OnlinerTracker.Data;
-using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Security;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -22,7 +22,7 @@ namespace OnlinerTracker.Services
 
         private readonly IProductService _productService;
 
-        private readonly TrackerContext _context;
+        private readonly ILogService _logService;
 
         private readonly string _smtpAccount;
 
@@ -34,8 +34,8 @@ namespace OnlinerTracker.Services
 
         #region Constructor
 
-        public NotificationService(IProductService productService, string smtpHost, string smtpPortString,
-            string smtpAccount, string smtpPassword)
+        public NotificationService(IProductService productService, ILogService logService, string smtpHost, 
+            string smtpPortString, string smtpAccount, string smtpPassword)
         {
             int smtpPort;
             int.TryParse(smtpPortString, out smtpPort);
@@ -46,10 +46,10 @@ namespace OnlinerTracker.Services
                 EnableSsl = true,
                 Credentials = new NetworkCredential(smtpAccount, smtpPassword)
             };
+            _securityRepo = new SecurityRepository();
             _smtpAccount = smtpAccount;
             _productService = productService;
-            _context = new TrackerContext();
-            _securityRepo = new SecurityRepository();
+            _logService = logService;
         }
 
         #endregion
@@ -60,12 +60,19 @@ namespace OnlinerTracker.Services
         {
             var hourInWhichSendingStart = 0;
             int.TryParse(HourInWhichSendingStart, out hourInWhichSendingStart);
-            var lastCheck =
-                _context.JobsLogs.OrderByDescending(u => u.CheckedAt)
-                    .FirstOrDefault(u => u.Type == JobType.EmailSend && u.IsSuccessed);
-            if ((lastCheck != null && lastCheck.CheckedAt.Hour == hourInWhichSendingStart) || DateTime.Now.Hour != hourInWhichSendingStart)
+            var lastSuccessLog = _logService.GetLastSuccessLog(JobType.EmailSend);
+            if ((lastSuccessLog != null && lastSuccessLog.CheckedAt.Hour == hourInWhichSendingStart) || DateTime.Now.Hour != hourInWhichSendingStart)
                 return string.Empty;
+            StartSend();
+            return string.Empty;
+        }
 
+        #endregion
+
+        #region Additional methods
+
+        public void StartSend()
+        {
             try
             {
                 var usersWithUpdateCount = 0;
@@ -74,44 +81,20 @@ namespace OnlinerTracker.Services
                     if (!string.IsNullOrEmpty(user.Email))
                     {
                         var products = _productService.GetAllChanges(Guid.Parse(user.Id));
-                        var count = products.Count();
-                        if (count > 0)
+                        if (products.Any())
                         {
-                            EmailSend("Updates for you", 
-                                products.Aggregate(string.Empty, (current, product) => current + (product.Name + " <b>" + product.CurrentCost + "</b> ( old:" + product.DayAgoCost + ")<br/>")), 
-                                user.Email);
+                            EmailSend("Updates for you", NotificationBodyGenerator(products), user.Email);
                             usersWithUpdateCount++;
                         }
                     }
                 }
-                _context.JobsLogs.Add(new JobLog
-                {
-                    Type = JobType.EmailSend,
-                    CheckedAt = DateTime.Now,
-                    IsSuccessed = true,
-                    Info = string.Format("Users number, who gets updates: {0}", usersWithUpdateCount)
-                });
-                _context.SaveChanges();
-
-                return string.Empty;
+                _logService.AddJobLog(JobType.EmailSend, string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
             }
             catch (Exception ex)
             {
-                _context.JobsLogs.Add(new JobLog
-                {
-                    Type = JobType.EmailSend,
-                    CheckedAt = DateTime.Now,
-                    IsSuccessed = false,
-                    Info = ex.Message
-                });
-                _context.SaveChanges();
-                return ex.Message;
+                _logService.AddJobLog(JobType.EmailSend, ex.Message, false);
             }
         }
-
-        #endregion
-
-        #region Additional methods
 
         public void EmailSend(string subject, string body, string recipientEmail)
         {
@@ -125,6 +108,14 @@ namespace OnlinerTracker.Services
             message.To.Add(new MailAddress(recipientEmail));
             message.ReplyToList.Add(new MailAddress(_smtpAccount, EmailSenderName));
             _defaultServiceClient.SendAsync(message, null);
+        }
+
+        public string NotificationBodyGenerator(IEnumerable<ProductForNotification> products)
+        {
+            return products.Aggregate(string.Empty,
+                (current, product) =>
+                    current +
+                    (product.Name + " <b>" + product.CurrentCost + "</b> ( old:" + product.DayAgoCost + ")<br/>"));
         }
 
         #endregion

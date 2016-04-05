@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="DialogService.cs" />
     <Compile Include="NotificationService.cs" />
+    <Compile Include="LogService.cs" />
     <Compile Include="TrackingService.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="AuthorizationService.cs" />

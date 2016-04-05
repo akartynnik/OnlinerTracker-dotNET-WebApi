@@ -17,7 +17,9 @@ namespace OnlinerTracker.Api.Jobs
         public void Execute()
         {
             lock (_lock)
+            {
                 _notificationService.CheckNotifications();
+            }
         }
     }
 }
