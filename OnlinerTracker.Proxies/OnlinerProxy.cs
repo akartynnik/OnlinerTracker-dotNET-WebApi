@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OnlinerTracker.Core;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using System;
@@ -30,9 +31,9 @@ namespace OnlinerTracker.Proxies
 
         #region IExternalProductService methods
 
-        public List<Product> Get(string searchQuery, Guid userId, int page)
+        public string Get(string searchQuery, int page)
         {
-            var url = string.Format("{0}?query={1}", OnlinerApiUrl, searchQuery);
+            var url = string.Format("{0}?query={1}", OnlinerApiUrl, searchQuery.Replace(" ", "+"));
             if (page > 1)
                 url = string.Format("{0}&page={1}", url, page);
             var request = (HttpWebRequest) WebRequest.Create(url);
@@ -41,7 +42,15 @@ namespace OnlinerTracker.Proxies
             request.Accept = "application/json";
             request.Method = "GET";
             var responseString = string.Empty;
-            var response = (HttpWebResponse) request.GetResponse();
+            HttpWebResponse response;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
             var encoding = Encoding.GetEncoding(response.CharacterSet);
             using (var responseStream = response.GetResponseStream())
             {
@@ -50,15 +59,10 @@ namespace OnlinerTracker.Proxies
                     responseString = reader.ReadToEnd();
                 }
             }
-            var poductList = ConvertToProducts(responseString, userId);
-            return poductList;
+            return responseString;
         }
 
-        #endregion
-
-        #region Additional methods
-
-        public List<Product> ConvertToProducts(string externalProductsJsonString, Guid userId)
+        public List<Product> ConvertJsonToProducts(string externalProductsJsonString, Guid? userId = null)
         {
             var productList = new List<Product>();
             dynamic externalProducts = JsonConvert.DeserializeObject(externalProductsJsonString);
@@ -72,9 +76,12 @@ namespace OnlinerTracker.Proxies
                     ImageUrl = externalProduct["images"]["header"],
                     CurrentCost = externalProduct["prices"] != null ? externalProduct["prices"]["min"] : 0
                 };
-                var ifSameProductExist = _productService.IfSameProductExist(product.OnlinerId, userId);
-                if (ifSameProductExist)
-                    product.Tracking = true;
+                if (userId != null)
+                {
+                    var ifSameProductExist = _productService.IfSameProductExist(product.OnlinerId, userId.ToGuid());
+                    if (ifSameProductExist)
+                        product.Tracking = true;
+                }
                 productList.Add(product);
             }
             return productList;

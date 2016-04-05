@@ -10,7 +10,7 @@ namespace OnlinerTracker.Api
     {
         public FluentSchedulerConfig()
         {
-            Schedule<ITrackingService>().ToRunNow().AndEvery(10).Seconds();
+            Schedule<ITrackingService>().ToRunNow().AndEvery(30).Seconds();
         }
     }
 

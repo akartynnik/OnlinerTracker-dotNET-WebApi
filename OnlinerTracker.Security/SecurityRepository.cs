@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using OnlinerTracker.Data.SecurityModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnlinerTracker.Security
@@ -49,6 +50,11 @@ namespace OnlinerTracker.Security
         {
             var result = await _userManager.AddLoginAsync(userId, login);
             return result;
+        }
+
+        public IEnumerable<ApplicationUser> GetAllUsers()
+        {
+            return _ctx.Users;
         }
 
         #region IDisposable methods

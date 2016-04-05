@@ -11,6 +11,7 @@ namespace OnlinerTracker.Services
     public class ProductService : IProductService
     {
         private readonly TrackerContext _context;
+
         public ProductService()
         {
             _context = new TrackerContext();
@@ -37,8 +38,9 @@ namespace OnlinerTracker.Services
 
         public void InsertCost(Cost obj)
         {
-            _context.Costs.Add(obj);
-            _context.SaveChanges();
+                _context.Costs.Add(obj);
+                _context.SaveChanges();
+
         }
 
         public Product GetById(Guid id)
@@ -56,9 +58,22 @@ namespace OnlinerTracker.Services
             return _context.Products.Where(u => u.UserId == userId);
         }
 
+        public IEnumerable<Product> GetAllTracking()
+        {
+                return _context.Products.Where(u => u.Tracking).AsEnumerable();
+           
+        }
+
         public bool IfSameProductExist(string onlinerId, Guid userId)
         {
             return _context.Products.Any(u => u.OnlinerId ==onlinerId && u.UserId == userId);
+        }
+
+        public decimal GetCurrentProductCost(Guid productId)
+        {
+            var cost =
+                _context.Costs.OrderByDescending(u => u.CratedAt).FirstOrDefault(u => u.ProductId == productId);
+            return cost?.Value ?? 0;
         }
     }
 }

@@ -20,6 +20,10 @@ namespace OnlinerTracker.Interfaces
 
         IEnumerable<Product> GetAll(Guid userId);
 
+        IEnumerable<Product> GetAllTracking();
+
         bool IfSameProductExist(string onlinerId, Guid userId);
+        
+        decimal GetCurrentProductCost(Guid productId);
     }
 }

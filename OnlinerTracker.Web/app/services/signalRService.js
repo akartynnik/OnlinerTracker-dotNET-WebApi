@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('signalRService', ['$rootScope', 'Hub', '$timeout', function ($rootScope, Hub, $timeout) {
+app.factory('signalRService', ['$rootScope', 'Hub', '$timeout', 'ngSettings', function ($rootScope, Hub, $timeout, ngSettings) {
     var promise;
     $rootScope.popupVisible = false;
     $rootScope.popupMessage = "";
@@ -33,7 +33,7 @@ app.factory('signalRService', ['$rootScope', 'Hub', '$timeout', function ($rootS
             }
         },
 
-        rootPath: "http://localhost:52304/signalr",
+        rootPath: ngSettings.signalRServerPath,
 
         errorHandler: function (error) {
             console.error(error);

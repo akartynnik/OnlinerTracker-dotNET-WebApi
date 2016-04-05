@@ -9,11 +9,14 @@ namespace OnlinerTracker.Data
         public Guid Id { get; set; }
 
         [Index("IX_JobTypeAndCheckedAt", 0, IsUnique = true)]
-        public JobType JobType { get; set; }
+        public JobType Type { get; set; }
 
         [Index("IX_JobTypeAndCheckedAt", 1, IsUnique = true)]
         public DateTime CheckedAt { get; set; }
 
-        public bool JobSuccess { get; set; }
+        public bool IsSuccessed { get; set; }
+
+
+        public string Info { get; set; }
     }
 }

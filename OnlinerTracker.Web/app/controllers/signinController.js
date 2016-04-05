@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('signinController', ['$scope', '$location', 'authService', 'ngAuthSettings', function ($scope, $location, authService, ngAuthSettings) {
+app.controller('signinController', ['$scope', '$location', 'authService', 'ngSettings', function ($scope, $location, authService, ngSettings) {
 
     $scope.loginData = {
         userName: "",
@@ -20,8 +20,8 @@ app.controller('signinController', ['$scope', '$location', 'authService', 'ngAut
 
     $scope.authExternalProvider = function (provider) {
         var redirectUri = location.protocol + '//' + location.host + '/authcomplete.html';
-        var externalProviderUrl = ngAuthSettings.apiServiceBaseUri + "api/Account/ExternalLogin?provider=" + provider
-                                                                    + "&response_type=token&client_id=" + ngAuthSettings.clientId
+        var externalProviderUrl = ngSettings.apiServiceBaseUri + "api/Account/ExternalLogin?provider=" + provider
+                                                                    + "&response_type=token&client_id=" + ngSettings.clientId
                                                                     + "&redirect_uri=" + redirectUri;
         window.$windowScope = $scope;
         var oauthWindow = window.open(externalProviderUrl, "Authenticate Account", "location=0,status=0,width=600,height=750");

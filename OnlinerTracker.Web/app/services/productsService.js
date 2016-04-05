@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.factory('productsService', ['$http', '$q', '$location', 'ngAuthSettings', function ($http, $q, $location, ngAuthSettings) {
-    var serviceBase = ngAuthSettings.apiServiceBaseUri;
+app.factory('productsService', ['$http', '$q', '$location', 'ngSettings', function ($http, $q, $location, ngSettings) {
+    var serviceBase = ngSettings.apiServiceBaseUri;
     var productsServiceFactory = {};
 
     var _getProducts = function () {

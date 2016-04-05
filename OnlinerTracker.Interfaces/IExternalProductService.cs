@@ -6,6 +6,8 @@ namespace OnlinerTracker.Interfaces
 {
     public interface IExternalProductService
     {
-        List<Product> Get(string searchQuery, Guid userId, int page);
+        string Get(string searchQuery, int page);
+
+        List<Product> ConvertJsonToProducts(string externalProductsJsonString, Guid? userId = null);
     }
 }

@@ -1,9 +1,10 @@
 ﻿using FluentScheduler;
+using System.Threading.Tasks;
 
 namespace OnlinerTracker.Interfaces
 {
     public interface ITrackingService : IJob
     {
-        void StartCheck();
+        Task<string> CheckProduct();
     }
 }
