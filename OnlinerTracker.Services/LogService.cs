@@ -10,9 +10,9 @@ namespace OnlinerTracker.Services
     {
         private readonly TrackerContext _context;
 
-        public LogService()
+        public LogService(TrackerContext context)
         {
-            _context = new TrackerContext();
+            _context = context;
         }
 
         public void AddJobLog(JobType logType, string info, bool isSuccessed = true)

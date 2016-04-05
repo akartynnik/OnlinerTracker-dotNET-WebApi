@@ -3,8 +3,11 @@ using Autofac.Integration.WebApi;
 using Microsoft.AspNet.SignalR;
 using OnlinerTracker.Api.Hubs;
 using OnlinerTracker.Api.Jobs;
+using OnlinerTracker.Data;
+using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Proxies;
+using OnlinerTracker.Security;
 using OnlinerTracker.Services;
 using System.Configuration;
 using System.Reflection;
@@ -21,9 +24,16 @@ namespace OnlinerTracker.Api
 
             #region Dependensies
 
+            builder.RegisterType<SecurityRepository>().As<SecurityRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<TrackerContext>().As<TrackerContext>().InstancePerLifetimeScope();
+
+            builder.RegisterType<TrackingJob>().As<TrackingJob>().InstancePerLifetimeScope();
+            builder.RegisterType<NotificationJob>().As<NotificationJob>().InstancePerLifetimeScope();
+
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().InstancePerLifetimeScope();
+
             builder.Register(c => new DialogService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>()))
                 .As<IDialogService>()
                 .InstancePerLifetimeScope();
@@ -39,20 +49,25 @@ namespace OnlinerTracker.Api
                     })
                 .As<ITrackingService>()
                 .InstancePerLifetimeScope();
-            builder.Register(c => new NotificationService(c.Resolve<IProductService>(), c.Resolve<ILogService>(),
-                ConfigurationManager.AppSettings["notifConfig:smtpServer"],
-                ConfigurationManager.AppSettings["notifConfig:smtpPort"],
-                ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
-                ConfigurationManager.AppSettings["notifConfig:smtpPassword"])
-            {
-                EmailSenderName = ConfigurationManager.AppSettings["notifConfig:emailSenderName"],
-                HourInWhichSendingStart = ConfigurationManager.AppSettings["schedulerConfig:hourInWhichSendingStart"]
-            })
+            builder.Register(
+                c =>
+                    new NotificationService(c.Resolve<IProductService>(), c.Resolve<ILogService>(),
+                        c.Resolve<SecurityRepository>(),
+                        new NotificationConfig()
+                        {
+                            SmtpHost = ConfigurationManager.AppSettings["notifConfig:smtpServer"],
+                            SmtpPortString = ConfigurationManager.AppSettings["notifConfig:smtpPort"],
+                            SmtpAccount = ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
+                            SmtpPassword = ConfigurationManager.AppSettings["notifConfig:smtpPassword"]
+                        }
+                        )
+                    {
+                        EmailSenderName = ConfigurationManager.AppSettings["notifConfig:emailSenderName"],
+                        HourInWhichSendingStart =
+                            ConfigurationManager.AppSettings["schedulerConfig:hourInWhichSendingStart"]
+                    })
                 .As<INotificationService>()
                 .InstancePerLifetimeScope();
-
-            builder.RegisterType<TrackingJob>().As<TrackingJob>().InstancePerLifetimeScope();
-            builder.RegisterType<NotificationJob>().As<NotificationJob>().InstancePerLifetimeScope();
 
             #endregion
 

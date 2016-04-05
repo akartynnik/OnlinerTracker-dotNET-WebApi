@@ -12,9 +12,9 @@ namespace OnlinerTracker.Services
     {
         private readonly TrackerContext _context;
 
-        public ProductService()
+        public ProductService(TrackerContext context)
         {
-            _context = new TrackerContext();
+            _context = context;
         }
 
         public void Insert(Product obj)

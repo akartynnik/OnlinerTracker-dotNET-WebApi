@@ -18,13 +18,13 @@ namespace OnlinerTracker.Services
 
         private readonly SmtpClient _defaultServiceClient;
 
-        private readonly SecurityRepository _securityRepo;
+        private readonly SecurityRepository _securityRepository;
 
         private readonly IProductService _productService;
 
         private readonly ILogService _logService;
 
-        private readonly string _smtpAccount;
+        private readonly NotificationConfig _notificationConfig;
 
         public string EmailSenderName { get; set; }
 
@@ -34,20 +34,20 @@ namespace OnlinerTracker.Services
 
         #region Constructor
 
-        public NotificationService(IProductService productService, ILogService logService, string smtpHost, 
-            string smtpPortString, string smtpAccount, string smtpPassword)
+        public NotificationService(IProductService productService, ILogService logService,
+            SecurityRepository securityRepository, NotificationConfig notificationConfig)
         {
             int smtpPort;
-            int.TryParse(smtpPortString, out smtpPort);
+            int.TryParse(notificationConfig.SmtpPortString, out smtpPort);
             _defaultServiceClient = new SmtpClient
             {
-                Host = smtpHost,
+                Host = notificationConfig.SmtpHost,
                 Port = smtpPort,
                 EnableSsl = true,
-                Credentials = new NetworkCredential(smtpAccount, smtpPassword)
+                Credentials = new NetworkCredential(notificationConfig.SmtpAccount, notificationConfig.SmtpPassword)
             };
-            _securityRepo = new SecurityRepository();
-            _smtpAccount = smtpAccount;
+            _securityRepository = securityRepository;
+            _notificationConfig = notificationConfig;
             _productService = productService;
             _logService = logService;
         }
@@ -61,7 +61,8 @@ namespace OnlinerTracker.Services
             var hourInWhichSendingStart = 0;
             int.TryParse(HourInWhichSendingStart, out hourInWhichSendingStart);
             var lastSuccessLog = _logService.GetLastSuccessLog(JobType.EmailSend);
-            if ((lastSuccessLog != null && lastSuccessLog.CheckedAt.Hour == hourInWhichSendingStart) || DateTime.Now.Hour != hourInWhichSendingStart)
+            if ((lastSuccessLog != null && lastSuccessLog.CheckedAt.Hour == hourInWhichSendingStart) ||
+                DateTime.Now.Hour != hourInWhichSendingStart)
                 return string.Empty;
             StartSend();
             return string.Empty;
@@ -76,7 +77,7 @@ namespace OnlinerTracker.Services
             try
             {
                 var usersWithUpdateCount = 0;
-                foreach (var user in _securityRepo.GetAllUsers())
+                foreach (var user in _securityRepository.GetAllUsers())
                 {
                     if (!string.IsNullOrEmpty(user.Email))
                     {
@@ -88,7 +89,8 @@ namespace OnlinerTracker.Services
                         }
                     }
                 }
-                _logService.AddJobLog(JobType.EmailSend, string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
+                _logService.AddJobLog(JobType.EmailSend,
+                    string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
             }
             catch (Exception ex)
             {
@@ -100,13 +102,13 @@ namespace OnlinerTracker.Services
         {
             var message = new MailMessage
             {
-                From = new MailAddress(_smtpAccount, EmailSenderName),
+                From = new MailAddress(_notificationConfig.SmtpAccount, EmailSenderName),
                 Subject = subject,
                 Body = string.Format(HtmlTemplite, body),
                 IsBodyHtml = true
             };
             message.To.Add(new MailAddress(recipientEmail));
-            message.ReplyToList.Add(new MailAddress(_smtpAccount, EmailSenderName));
+            message.ReplyToList.Add(new MailAddress(_notificationConfig.SmtpAccount, EmailSenderName));
             _defaultServiceClient.SendAsync(message, null);
         }
 

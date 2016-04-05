@@ -14,9 +14,9 @@ namespace OnlinerTracker.Services
     public class AuthorizationService: IAuthorizationService
     {
         private readonly SecurityRepository _repo;
-        public AuthorizationService()
+        public AuthorizationService(SecurityRepository securityRepository)
         {
-            _repo = new SecurityRepository();
+            _repo = securityRepository;
         }
         public JObject GenerateLocalAccessTokenResponse(string userName, string userId, OAuthBearerAuthenticationOptions oAuthBearerOptions)
         {

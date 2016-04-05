@@ -38,7 +38,7 @@ namespace OnlinerTracker.Services
         {
             var minutesBeforeCheck = 0;
             int.TryParse(MinutesBeforeCheck, out minutesBeforeCheck);
-            var lastSuccessLog = _logService.GetLastSuccessLog(JobType.EmailSend);
+            var lastSuccessLog = _logService.GetLastSuccessLog(JobType.CostCheck);
             if (lastSuccessLog != null && (DateTime.Now - lastSuccessLog.CheckedAt).Minutes < minutesBeforeCheck)
                 return string.Empty;
             try
