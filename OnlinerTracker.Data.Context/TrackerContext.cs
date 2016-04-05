@@ -13,6 +13,6 @@ namespace OnlinerTracker.Data.Context
 
         public DbSet<Cost> Costs { get; set; }
 
-        public DbSet<JobLog> JobsLogs { get; set; }
+        public DbSet<JobLog> JobLogs { get; set; }
     }
 }

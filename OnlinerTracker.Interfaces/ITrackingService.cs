@@ -1,10 +1,9 @@
-﻿using FluentScheduler;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OnlinerTracker.Interfaces
 {
-    public interface ITrackingService : IJob
+    public interface ITrackingService
     {
-        Task<string> CheckProduct();
+        Task<string> CheckProducts();
     }
 }

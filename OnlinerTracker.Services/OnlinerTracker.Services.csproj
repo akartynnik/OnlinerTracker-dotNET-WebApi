@@ -38,10 +38,6 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentScheduler, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b76503528a14ebd1, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentScheduler.4.0.0\lib\net40\FluentScheduler.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DialogService.cs" />
+    <Compile Include="NotificationService.cs" />
+    <Compile Include="LogService.cs" />
     <Compile Include="TrackingService.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="AuthorizationService.cs" />

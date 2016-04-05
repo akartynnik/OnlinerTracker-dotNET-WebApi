@@ -1,5 +1,4 @@
 ﻿using OnlinerTracker.Data;
-using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,36 +11,35 @@ namespace OnlinerTracker.Services
     {
         #region Fields and Properties
 
-        private readonly object _lock = new object();
-
         private readonly IProductService _productService;
 
         private readonly IExternalProductService _externalProductService;
 
-        private readonly TrackerContext _context;
+        private readonly ILogService _logService;
+
         public string MinutesBeforeCheck { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public TrackingService(IProductService productService, IExternalProductService externalProductService)
+        public TrackingService(IProductService productService, IExternalProductService externalProductService, ILogService logService)
         {
             _productService = productService;
             _externalProductService = externalProductService;
-            _context = new TrackerContext();
+            _logService = logService;
         }
 
         #endregion
 
         #region ITrackingService methods
 
-        public async Task<string> CheckProduct()
+        public async Task<string> CheckProducts()
         {
             var minutesBeforeCheck = 0;
             int.TryParse(MinutesBeforeCheck, out minutesBeforeCheck);
-            var lastCheck = _context.JobsLogs.OrderByDescending(u => u.CheckedAt).FirstOrDefault(u => u.Type == JobType.CostCheck && u.IsSuccessed);
-            if (lastCheck != null && (DateTime.Now - lastCheck.CheckedAt).Minutes < minutesBeforeCheck)
+            var lastSuccessLog = _logService.GetLastSuccessLog(JobType.CostCheck);
+            if (lastSuccessLog != null && (DateTime.Now - lastSuccessLog.CheckedAt).Minutes < minutesBeforeCheck)
                 return string.Empty;
             try
             {
@@ -52,42 +50,21 @@ namespace OnlinerTracker.Services
                     if (cost != null)
                         costsUpdateList.Add(cost);
                 }
-
+                var updatedCostsCount = 0;
                 foreach (var cost in costsUpdateList)
-                    _productService.InsertCost(cost);
-
-                _context.JobsLogs.Add(new JobLog
                 {
-                    Type = JobType.CostCheck,
-                    CheckedAt = DateTime.Now,
-                    IsSuccessed = true
-                });
-                _context.SaveChanges();
+                    updatedCostsCount++;
+                    _productService.InsertCost(cost);
+                }
+                _logService.AddJobLog(JobType.CostCheck, string.Format("Number of updated costs: {0}", updatedCostsCount));
                 return string.Empty;
             }
             catch (Exception ex)
             {
-                _context.JobsLogs.Add(new JobLog
-                {
-                    Type = JobType.CostCheck,
-                    CheckedAt = DateTime.Now,
-                    IsSuccessed = false,
-                    Info = ex.Message
-                });
-                _context.SaveChanges();
+                _logService.AddJobLog(JobType.CostCheck, ex.Message, false);
                 return ex.Message;
             }
             
-        }
-
-        #endregion
-
-        #region IJob methods 
-
-        public void Execute()
-        {
-            lock (_lock)
-                CheckProduct();
         }
 
         #endregion

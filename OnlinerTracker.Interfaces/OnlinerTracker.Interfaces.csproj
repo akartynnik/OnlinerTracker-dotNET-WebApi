@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentScheduler, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b76503528a14ebd1, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentScheduler.4.0.0\lib\net40\FluentScheduler.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -66,6 +62,8 @@
   <ItemGroup>
     <Compile Include="IDialogService.cs" />
     <Compile Include="IExternalProductService.cs" />
+    <Compile Include="INotificationService.cs" />
+    <Compile Include="ILogService.cs" />
     <Compile Include="ITrackingService.cs" />
     <Compile Include="IProductService.cs" />
     <Compile Include="IAuthorizationService.cs" />
