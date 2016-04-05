@@ -17,7 +17,7 @@ namespace OnlinerTracker.Services
 
         public void AddJobLog(JobType logType, string info, bool isSuccessed = true)
         {
-            _context.JobsLogs.Add(new JobLog
+            _context.JobLogs.Add(new JobLog
             {
                 Type = logType,
                 CheckedAt = DateTime.Now,
@@ -29,7 +29,7 @@ namespace OnlinerTracker.Services
 
         public JobLog GetLastSuccessLog(JobType logType)
         {
-            return _context.JobsLogs.OrderByDescending(u => u.CheckedAt).FirstOrDefault(u => u.Type == logType && u.IsSuccessed);
+            return _context.JobLogs.OrderByDescending(u => u.CheckedAt).FirstOrDefault(u => u.Type == logType && u.IsSuccessed);
         }
     }
 }
