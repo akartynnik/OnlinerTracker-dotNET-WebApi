@@ -66,4 +66,18 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngSetti
             }); 
         }
     }
+
+    $scope.test = function() {
+
+        $http({
+            url: ngSettings.apiServiceBaseUri + 'api/currency/get',
+            method: 'GET',
+            params: {
+                currencytype: 1,
+                page: page
+            }
+        }).success(function(response) {
+            console.log(response);
+        });
+    }
 }]);

@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDialogService.cs" />
+    <Compile Include="ICurrencyService.cs" />
     <Compile Include="IExternalProductService.cs" />
     <Compile Include="INotificationService.cs" />
     <Compile Include="ILogService.cs" />
