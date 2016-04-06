@@ -1,9 +1,13 @@
 ﻿'use strict';
-app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localStorageService', 'signalRService', function ($q, $injector, $location, localStorageService, signalRService) {
+app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localStorageService', 'signalRService',
+    function ($q, $injector, $location, localStorageService, signalRService) {
 
     var authInterceptorServiceFactory = {};
 
     var _request = function (config) {
+
+        //currencyService.getCurrency(); // check curracy in each request
+
         config.headers = config.headers || {};
 
         var authData = localStorageService.get('authorizationData');

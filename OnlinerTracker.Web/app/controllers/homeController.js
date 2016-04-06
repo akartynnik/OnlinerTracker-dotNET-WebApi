@@ -1,17 +1,22 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$http', 'productsService', 'ngSettings', 'signalRService', function ($scope, $http, productsService, ngSettings, signalRService) {
+app.controller('homeController', ['$scope', '$http', 'productsService', 'ngSettings', 'currencyService', 'localStorageService',
+    function ($scope, $http, productsService, ngSettings, currencyService, localStorageService) {
 
     $scope.products = [];
     $scope.alertClassName = "alert-success";
     $scope.getedProducts = [];
     $scope.searchQuery = "";
 
+    $scope.$on('$viewContentLoaded', function() {
+        //var curerncies = localStorageService.get('currencies');
+        //currencyService.getCurrency(curerncies.current);
+    });
+
     var page = 1;
     var lenghtForStartSearch = 2;
     var isLoding = true;
 
-    $scope.$watch('searchQuery', function(typedString) {
-        console.log(typedString);
+    $scope.$watch('searchQuery', function (typedString) {
         if ((!typedString || typedString.length < lenghtForStartSearch) && isLoding)
             return 0;
         if (typedString === $scope.searchQuery) {
@@ -55,9 +60,9 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngSetti
                 url: ngSettings.apiServiceBaseUri + 'api/product/GetFromExternalServer',
                 method: 'GET',
                 params: {
-                searchQuery: $scope.searchQuery,
-                page: page
-            }
+                    searchQuery: $scope.searchQuery,
+                    page: page
+                }
             }).success(function (response) {
                 response.forEach(function (entry) {
                     $scope.getedProducts.push(entry);

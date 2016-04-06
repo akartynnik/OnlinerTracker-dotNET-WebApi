@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicXml.cs" />
     <Compile Include="GuidExtensions.cs" />
     <Compile Include="HashGenerator.cs" />
     <Compile Include="HttpRequestMessageExtensions.cs" />

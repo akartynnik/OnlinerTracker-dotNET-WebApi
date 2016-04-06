@@ -1,5 +1,14 @@
 ﻿'use strict';
-app.controller('indexController', ['$scope', '$location', 'authService', function ($scope, $location, authService) {
+app.controller('indexController', ['$scope', '$location', 'authService', 'currencyService', 'ngEnums',
+    function ($scope, $location, authService, currencyService, ngEnums) {
+    $scope.currencyTypes = ngEnums.currencyType;
+    $scope.currentCurrency = ngEnums.currencyName[currencyService.getCurrentType()];
+
+    $scope.changeCurrency = function (currencyType) {
+        currencyService.setCurrent(currencyType);
+        $scope.currentCurrency = ngEnums.currencyName[currencyType];
+    }
+
     $scope.isActive = function (viewLocation) {
         var active = (viewLocation === $location.path());
         return active;
@@ -10,5 +19,4 @@ app.controller('indexController', ['$scope', '$location', 'authService', functio
     }
 
     $scope.authentication = authService.authentication;
-
 }]);
