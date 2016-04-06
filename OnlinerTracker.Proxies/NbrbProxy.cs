@@ -20,6 +20,10 @@ namespace OnlinerTracker.Proxies
 
         public Currency GetCurrent(CurrencyType currencyType)
         {
+            if (currencyType == CurrencyType.BLR)
+            {
+                return new Currency {Type = CurrencyType.BLR, Value = 1};
+            }
             var url = string.Format("{0}?ondate={1}/{2}/{3}", NbrbCurrencyApiUrl, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Year);
             var request = (HttpWebRequest) WebRequest.Create(url);
             request.Method = "GET";

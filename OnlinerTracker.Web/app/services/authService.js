@@ -31,7 +31,6 @@ app.factory('authService', ['$http', '$q', 'localStorageService', 'ngSettings', 
         _authentication.isAuth = false;
         _authentication.userName = "";
         return $location.path('/signin');
-
     };
 
     var _obtainAccessToken = function (externalData) {

@@ -2,7 +2,8 @@
 {
     public enum CurrencyType
     {
-        USD = 0,
-        EUR = 1
+        BLR = 0,
+        USD = 1,
+        EUR = 2
     }
 }

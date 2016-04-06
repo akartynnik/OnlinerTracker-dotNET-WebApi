@@ -1,4 +1,4 @@
-﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar', 'filters', 'SignalR']);
+﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar', 'filters', 'SignalR', 'ui.bootstrap']);
 
 app.config(function ($routeProvider) {
 
@@ -31,10 +31,24 @@ app.constant('ngSettings', {
     clientId: 'onlinerTrackerWebUI'
 });
 
+app.constant('ngEnums', {
+    currencyType: Object.freeze({
+        "BLR": 0,
+        "USD": 1,
+        "EUR": 2
+    }),
+    currencyName: Object.freeze({
+        0: "BLR",
+        1: "USD",
+        2: "EUR"
+    })
+});
+
 app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptorService');
 });
 
-app.run(['authService', 'signalRService', function (authService, signalRService) {
+app.run(['authService', 'localStorageService', 'currencyService', function (authService, localStorageService, currencyService) {
     authService.fillAuthData();
+    //localStorageService.remove('currencies');
 }]);
