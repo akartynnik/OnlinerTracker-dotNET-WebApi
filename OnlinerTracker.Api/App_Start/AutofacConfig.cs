@@ -34,10 +34,13 @@ namespace OnlinerTracker.Api
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().InstancePerLifetimeScope();
             builder.RegisterType<NbrbProxy>().As<ICurrencyService>().InstancePerLifetimeScope();
-
-            builder.Register(c => new DialogService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>()))
+            
+            
+            builder.Register(c => new SignalRService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>()))
                 .As<IDialogService>()
                 .InstancePerLifetimeScope();
+            
+
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>()))
                 .As<IExternalProductService>()
                 .InstancePerLifetimeScope();

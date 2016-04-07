@@ -6,10 +6,10 @@ using OnlinerTracker.Interfaces;
 namespace OnlinerTracker.Services
 {
     [HubName("dialog")]
-    public class DialogService : IDialogService
+    public class SignalRService : IDialogService
     {
         private IHubContext _hubContext;
-        public DialogService(IHubContext hubContext)
+        public SignalRService(IHubContext hubContext)
         {
             _hubContext = hubContext;
         }

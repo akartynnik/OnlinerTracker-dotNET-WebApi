@@ -51,6 +51,7 @@ namespace OnlinerTracker.Api
             AutomapperConig.Register();
             JobManager.JobFactory = new JobFactory(config);
             JobManager.Initialize(new FluentSchedulerConfig());
+            ZeroMQConfig.Register();
         }
 
         public void ConfigureOAuth(IAppBuilder app)
