@@ -7,6 +7,7 @@ namespace OnlinerTracker.Data.Context
         public TrackerContext() : base("DataConnection")
         {
             Database.SetInitializer(new TrackerInitializer());
+            this.Configuration.LazyLoadingEnabled = false;
         }
 
         public DbSet<Product> Products { get; set; }

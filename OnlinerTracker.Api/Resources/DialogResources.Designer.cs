@@ -70,6 +70,15 @@ namespace OnlinerTracker.Api.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;{0}&lt;/b&gt; add in comare..
+        /// </summary>
+        public static string Success_ComparedStarted {
+            get {
+                return ResourceManager.GetString("Success_ComparedStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Now you are follow &lt;b&gt;{0}&lt;/b&gt;.
         /// </summary>
         public static string Success_StartFollowProduct {
@@ -84,6 +93,15 @@ namespace OnlinerTracker.Api.Resources {
         public static string Success_TrackingStarted {
             get {
                 return ResourceManager.GetString("Success_TrackingStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;{0}&lt;/b&gt; remove from comare..
+        /// </summary>
+        public static string Warning_ComparedStoped {
+            get {
+                return ResourceManager.GetString("Warning_ComparedStoped", resourceCulture);
             }
         }
         

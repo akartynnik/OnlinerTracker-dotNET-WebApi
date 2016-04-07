@@ -67,10 +67,16 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\controllers\chartsController.js" />
     <Content Include="app\directives\scrollyDirective.js" />
     <Content Include="app\filters.js" />
     <Content Include="app\services\currencyService.js" />
     <Content Include="app\services\signalRService.js" />
+    <Content Include="app\views\charts.html" />
+    <Content Include="content\css\angular-chart.css" />
+    <Content Include="scripts\angular-chart.js" />
+    <Content Include="scripts\Chart.js" />
+    <Content Include="scripts\custom-functions.js" />
     <Content Include="scripts\signalr-hub.js" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">

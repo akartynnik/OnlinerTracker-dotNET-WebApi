@@ -1,4 +1,4 @@
-﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar', 'filters', 'SignalR', 'ui.bootstrap']);
+﻿var app = angular.module('AngularAuthApp', ['ngSanitize', 'ngRoute', 'LocalStorageModule', 'angular-loading-bar', 'filters', 'SignalR', 'ui.bootstrap', 'chart.js']);
 
 app.config(function ($routeProvider) {
 
@@ -20,6 +20,11 @@ app.config(function ($routeProvider) {
     $routeProvider.when("/associate", {
         controller: "associateController",
         templateUrl: "/app/views/associate.html"
+    });
+
+    $routeProvider.when("/charts", {
+        controller: "chartsController",
+        templateUrl: "/app/views/charts.html"
     });
 
     $routeProvider.otherwise({ redirectTo: "/home" });

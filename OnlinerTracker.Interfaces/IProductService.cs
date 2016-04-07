@@ -21,6 +21,7 @@ namespace OnlinerTracker.Interfaces
         IEnumerable<Product> GetAll(Guid userId);
 
         IEnumerable<Product> GetAllTracking();
+        IEnumerable<Product> GetAllCompared();
 
         IEnumerable<ProductForNotification> GetAllChanges(Guid userId);
 

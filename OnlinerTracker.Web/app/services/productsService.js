@@ -3,13 +3,21 @@ app.factory('productsService', ['$http', '$q', '$location', 'ngSettings', functi
     var serviceBase = ngSettings.apiServiceBaseUri;
     var productsServiceFactory = {};
 
-    var _getProducts = function () {
+    var _getAll = function () {
 
         return $http.get(serviceBase + 'api/product/getAll').then(function (results) {
             return results;
         });
     };
 
-    productsServiceFactory.getProducts = _getProducts;
+    var _getAllCompared = function () {
+
+        return $http.get(serviceBase + 'api/product/getAllCompared').then(function (results) {
+            return results;
+        });
+    };
+
+    productsServiceFactory.getAll = _getAll;
+    productsServiceFactory.getAllCompared = _getAllCompared;
     return productsServiceFactory;
 }]);

@@ -4,6 +4,6 @@ namespace OnlinerTracker.Security
 {
     public class ApplicationUser: IdentityUser
     { 
-        
+        public int NotificationHour { get; set; }
     }
 }
