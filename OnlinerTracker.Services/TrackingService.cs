@@ -34,13 +34,13 @@ namespace OnlinerTracker.Services
 
         #region ITrackingService methods
 
-        public async Task<string> CheckProducts()
+        public async Task CheckProducts()
         {
             var minutesBeforeCheck = 0;
             int.TryParse(MinutesBeforeCheck, out minutesBeforeCheck);
             var lastSuccessLog = _logService.GetLastSuccessLog(JobType.CostCheck);
             if (lastSuccessLog != null && (DateTime.Now - lastSuccessLog.CheckedAt).Minutes < minutesBeforeCheck)
-                return string.Empty;
+                return;
             try
             {
                 var costsUpdateList = new List<Cost>();
@@ -56,13 +56,14 @@ namespace OnlinerTracker.Services
                     updatedCostsCount++;
                     _productService.InsertCost(cost);
                 }
-                _logService.AddJobLog(JobType.CostCheck, string.Format("Number of updated costs: {0}", updatedCostsCount));
-                return string.Empty;
+                if (updatedCostsCount > 0)
+                {
+                    _logService.AddJobLog(JobType.CostCheck, string.Format("Number of updated costs: {0}", updatedCostsCount));
+                }
             }
             catch (Exception ex)
             {
                 _logService.AddJobLog(JobType.CostCheck, ex.Message, false);
-                return ex.Message;
             }
             
         }

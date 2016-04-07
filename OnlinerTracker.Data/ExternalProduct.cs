@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OnlinerTracker.Data
 {
@@ -17,7 +18,12 @@ namespace OnlinerTracker.Data
         public string Description { get; set; }
 
         public bool Tracking { get; set; }
-        
+
+        public bool Compared { get; set; }
+
+
+        public IEnumerable<Cost> Costs { get; set; }
+
         public decimal CurrentCost { get; set; }
 
         public DateTime UpdatedAt { get; set; }

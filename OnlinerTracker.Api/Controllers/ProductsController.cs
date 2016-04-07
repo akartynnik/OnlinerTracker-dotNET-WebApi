@@ -34,6 +34,14 @@ namespace OnlinerTracker.Api.Controllers
             return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(_productService.GetAll(User.Id)));
         }
 
+        [Route("GetAllCompared", Name = "Get product by id with costs")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllCompared()
+        {
+            var products = _productService.GetAllCompared();
+            return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(products));
+        }
+
         [Route("GetFromExternalServer", Name = "Get products from external server (proxy)")]
         [HttpGet]
         public async Task<IHttpActionResult> GetExternal(string searchQuery, int page)
@@ -80,8 +88,10 @@ namespace OnlinerTracker.Api.Controllers
 
         [Route("ChangeTrackingStatus", Name = "Change tracking status")]
         [HttpPost]
-        public IHttpActionResult ChangeTrackingStatus(Product product)
+        public IHttpActionResult ChangeTrackingStatus(Guid id, bool tracking)
         {
+            var product = _productService.GetById(id);
+            product.Tracking = tracking;
             _productService.Update(product);
             if (product.Tracking)
             {
@@ -92,6 +102,27 @@ namespace OnlinerTracker.Api.Controllers
             {
                 _dialogService.SendInPopupForUser(PopupType.Warning,
                    string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.SignalRConnectionId);
+            }
+            return Successful();
+        }
+
+        [Route("ChangeComparedStatus", Name = "Change compared status")]
+        [HttpPost]
+        public IHttpActionResult ChangeComparedStatus(Guid id, bool compared)
+        {
+
+            var product = _productService.GetById(id);
+            product.Compared = compared;
+            _productService.Update(product);
+            if (product.Compared)
+            {
+                _dialogService.SendInPopupForUser(PopupType.Success,
+                    string.Format(DialogResources.Success_ComparedStarted, product.Name), User.SignalRConnectionId);
+            }
+            else
+            {
+                _dialogService.SendInPopupForUser(PopupType.Warning,
+                   string.Format(DialogResources.Warning_ComparedStoped, product.Name), User.SignalRConnectionId);
             }
             return Successful();
         }

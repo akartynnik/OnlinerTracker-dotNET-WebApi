@@ -4,6 +4,6 @@ namespace OnlinerTracker.Interfaces
 {
     public interface INotificationService
     {
-        Task<string> CheckNotifications();
+        Task CheckNotifications();
     }
 }

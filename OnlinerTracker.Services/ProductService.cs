@@ -55,13 +55,19 @@ namespace OnlinerTracker.Services
 
         public IEnumerable<Product> GetAll(Guid userId)
         {
-            return _context.Products.Where(u => u.UserId == userId);
+                return _context.Products.Where(u => u.UserId == userId).Include(b => b.Costs);
         }
 
         public IEnumerable<Product> GetAllTracking()
         {
             return _context.Products.Where(u => u.Tracking).AsEnumerable();
         }
+
+        public IEnumerable<Product> GetAllCompared()
+        {
+            return _context.Products.Where(u => u.Compared).Include(b => b.Costs).AsEnumerable();
+        }
+
         public IEnumerable<ProductForNotification> GetAllChanges(Guid userId)
         {
             var dayAgo = DateTime.Now.AddDays(-1);

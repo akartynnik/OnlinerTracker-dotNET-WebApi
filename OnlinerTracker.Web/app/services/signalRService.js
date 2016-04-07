@@ -29,7 +29,7 @@ app.factory('signalRService', ['$rootScope', 'Hub', '$timeout', 'ngSettings', fu
                 }
                 $rootScope.popupMessage = message;
                 $rootScope.popupVisible = true;
-                promise = $timeout(function () { $rootScope.popupVisible = false; }, 5000);
+                promise = $timeout(function () { $rootScope.popupVisible = false; }, 3000);
             }
         },
 

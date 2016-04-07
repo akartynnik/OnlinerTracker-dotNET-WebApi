@@ -25,7 +25,6 @@
                     <li data-ng-hide="!authentication.isAuth"><a style="color: #4FA4EF; font-size: 10px;">Hi, {{authentication.userName}}</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/home') }" href="#">Search</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/products') }" href="#/products">My Products</a></li>
-                    <li data-ng-hide="!authentication.isAuth"><a ng-class="{ active: isActive('/charts') }" href="#/charts">Charts</a></li>
                     <li data-ng-hide="!authentication.isAuth"><a href="" data-ng-click="logOut()">Sign Out</a></li>
                     <li data-ng-hide="authentication.isAuth"> <a ng-class="{ active: isActive('/signin') }" href="#/signin">Sign In</a></li>
                 </ul>
@@ -58,6 +57,7 @@
         </div>
     </div>
     <!-- 3rd party libraries -->
+    <script src="scripts/custom-functions.js"></script>
     <script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/jquery.effects.core.js"></script>
     <script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/jquery.effects.slide.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>

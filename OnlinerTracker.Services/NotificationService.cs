@@ -56,23 +56,25 @@ namespace OnlinerTracker.Services
 
         #region INotificationService methods
 
-        public async Task<string> CheckNotifications()
+        public async Task CheckNotifications()
         {
             var hourInWhichSendingStart = 0;
-            int.TryParse(HourInWhichSendingStart, out hourInWhichSendingStart);
-            var lastSuccessLog = _logService.GetLastSuccessLog(JobType.EmailSend);
-            if ((lastSuccessLog != null && lastSuccessLog.CheckedAt.Hour == hourInWhichSendingStart) ||
-                DateTime.Now.Hour != hourInWhichSendingStart)
-                return string.Empty;
-            StartSend();
-            return string.Empty;
+            if (int.TryParse(HourInWhichSendingStart, out hourInWhichSendingStart))
+            {
+                var lastSuccessLog = _logService.GetLastSuccessLog(JobType.EmailSend);
+                if ((lastSuccessLog != null && lastSuccessLog.CheckedAt.Hour == hourInWhichSendingStart) ||
+                    DateTime.Now.Hour != hourInWhichSendingStart)
+                {
+                    StartSend();
+                }
+            }
         }
 
         #endregion
 
         #region Additional methods
 
-        public void StartSend()
+        private void StartSend()
         {
             try
             {
@@ -89,8 +91,10 @@ namespace OnlinerTracker.Services
                         }
                     }
                 }
-                _logService.AddJobLog(JobType.EmailSend,
-                    string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
+                if(usersWithUpdateCount > 0)
+                {
+                    _logService.AddJobLog(JobType.EmailSend, string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
+                }
             }
             catch (Exception ex)
             {
@@ -98,7 +102,7 @@ namespace OnlinerTracker.Services
             }
         }
 
-        public void EmailSend(string subject, string body, string recipientEmail)
+        private void EmailSend(string subject, string body, string recipientEmail)
         {
             var message = new MailMessage
             {
@@ -112,7 +116,7 @@ namespace OnlinerTracker.Services
             _defaultServiceClient.SendAsync(message, null);
         }
 
-        public string NotificationBodyGenerator(IEnumerable<ProductForNotification> products)
+        private string NotificationBodyGenerator(IEnumerable<ProductForNotification> products)
         {
             return products.Aggregate(string.Empty,
                 (current, product) =>

@@ -1,10 +1,16 @@
 ﻿'use strict';
-app.controller('productsController', ['$scope', 'productsService', '$http', 'ngSettings', function ($scope, productsService, $http, ngSettings) {
+app.controller('productsController', ['$scope', 'productsService', '$http', 'ngSettings', '$location', function ($scope, productsService, $http, ngSettings, $location) {
 
     $scope.products = [];
+    $scope.productsComparedCount = 0;
 
-    productsService.getProducts().then(function (results) {
+    productsService.getAll().then(function (results) {
         $scope.products = results.data;
+        angular.forEach(results.data, function (product, key) {
+            if (product.compared) {
+                $scope.productsComparedCount = $scope.productsComparedCount + 1;
+            }
+        });
     }, function (error) {
         alert(error.data.message);
     });
@@ -13,8 +19,27 @@ app.controller('productsController', ['$scope', 'productsService', '$http', 'ngS
         $http({
             url: ngSettings.apiServiceBaseUri + 'api/product/ChangeTrackingStatus',
             method: 'post',
-            data: product
+            params: {
+                id: product.id,
+                tracking: product.tracking
+            }
         });
+    }
+
+    $scope.changeComparedStatus = function (product) {
+        $http({
+            url: ngSettings.apiServiceBaseUri + 'api/product/ChangeComparedStatus',
+            method: 'post',
+            params: {
+                id: product.id,
+                compared: product.compared
+            }
+        });
+        if (product.compared) {
+            $scope.productsComparedCount = $scope.productsComparedCount + 1;
+        } else {
+            $scope.productsComparedCount = $scope.productsComparedCount - 1;
+        }
     }
 
     $scope.remove = function (product) {
@@ -32,5 +57,9 @@ app.controller('productsController', ['$scope', 'productsService', '$http', 'ngS
                 $scope.products.splice(deletedProductId, 1);
             }
         });
+    }
+
+    $scope.compare = function() {
+        return $location.path('/charts');
     }
 }]);

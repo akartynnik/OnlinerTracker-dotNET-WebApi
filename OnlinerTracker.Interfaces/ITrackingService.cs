@@ -4,6 +4,6 @@ namespace OnlinerTracker.Interfaces
 {
     public interface ITrackingService
     {
-        Task<string> CheckProducts();
+        Task CheckProducts();
     }
 }

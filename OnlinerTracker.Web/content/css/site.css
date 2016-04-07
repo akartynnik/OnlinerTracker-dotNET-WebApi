@@ -196,6 +196,18 @@ p.footer-text {
     min-width: 65px !important;
 }
 
+.compared-products {
+    float: right;
+}
+
+.compared-products button{    
+    padding: 4px 20px !important;
+}
+
+.row.ng-scope {
+    padding-bottom: 60px !important;
+}
+
 /** Bootstram redefine styles START**/
 
 .navbar {

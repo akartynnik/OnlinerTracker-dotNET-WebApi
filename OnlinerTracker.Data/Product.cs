@@ -31,6 +31,8 @@ namespace OnlinerTracker.Data
 
         public bool Tracking { get; set; }
 
+        public bool Compared { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Cost> Costs { get; private set; }
 
