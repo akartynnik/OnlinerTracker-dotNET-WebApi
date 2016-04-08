@@ -32,8 +32,9 @@ app.config(function ($routeProvider) {
 
 app.constant('ngSettings', {
     apiServiceBaseUri: 'http://localhost:52304/',
-    signalRServerPath: 'http://localhost:52304/signalr',
-    clientId: 'onlinerTrackerWebUI'
+    signalRServerPath: 'http://localhost:52304//signalr',
+    clientId: 'onlinerTrackerWebUI',
+    dialogProvider: 'signalr' // Can be "zeromq" or "signalr" (default)
 });
 
 app.constant('ngEnums', {

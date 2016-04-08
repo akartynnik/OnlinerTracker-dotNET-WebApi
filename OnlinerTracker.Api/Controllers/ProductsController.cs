@@ -63,7 +63,7 @@ namespace OnlinerTracker.Api.Controllers
 
                 if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 {
-                    _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.SignalRConnectionId);
+                    _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.DialogConnectionId);
                     return Duplicate();
                 }
                 _productService.Insert(product);
@@ -75,12 +75,12 @@ namespace OnlinerTracker.Api.Controllers
 
                 _productService.InsertCost(cost);
                 _dialogService.SendInPopupForUser(PopupType.Success,
-                    string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
                 return Successful();
             }
             catch (Exception ex)
             {
-                _dialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.SignalRConnectionId);
+                _dialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.DialogConnectionId);
                 return InternalServerError(ex);
             }
 
@@ -96,12 +96,12 @@ namespace OnlinerTracker.Api.Controllers
             if (product.Tracking)
             {
                 _dialogService.SendInPopupForUser(PopupType.Success,
-                    string.Format(DialogResources.Success_TrackingStarted, product.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Success_TrackingStarted, product.Name), User.DialogConnectionId);
             }
             else
             {
                 _dialogService.SendInPopupForUser(PopupType.Warning,
-                   string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.SignalRConnectionId);
+                   string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.DialogConnectionId);
             }
             return Successful();
         }
@@ -117,12 +117,12 @@ namespace OnlinerTracker.Api.Controllers
             if (product.Compared)
             {
                 _dialogService.SendInPopupForUser(PopupType.Success,
-                    string.Format(DialogResources.Success_ComparedStarted, product.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Success_ComparedStarted, product.Name), User.DialogConnectionId);
             }
             else
             {
                 _dialogService.SendInPopupForUser(PopupType.Warning,
-                   string.Format(DialogResources.Warning_ComparedStoped, product.Name), User.SignalRConnectionId);
+                   string.Format(DialogResources.Warning_ComparedStoped, product.Name), User.DialogConnectionId);
             }
             return Successful();
         }
@@ -133,8 +133,16 @@ namespace OnlinerTracker.Api.Controllers
         public IHttpActionResult Remove(DeletedObject obj)
         {
             _dialogService.SendInPopupForUser(PopupType.Warning,
-                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.DialogConnectionId);
             _productService.Delete(obj.Id);
+            return Successful();
+        }
+
+        [Route("test", Name = "test t")]
+        [HttpGet]
+        public IHttpActionResult Test(string msg)
+        {
+            _dialogService.SendInPopupForUser(PopupType.Warning, msg, User.DialogConnectionId);
             return Successful();
         }
     }

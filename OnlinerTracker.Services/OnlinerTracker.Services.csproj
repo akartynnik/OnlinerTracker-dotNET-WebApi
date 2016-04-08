@@ -70,8 +70,9 @@
       <HintPath>..\packages\NetMQ.3.3.0.11\lib\net40\NetMQ.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NetMQ.WebSockets">
+    <Reference Include="NetMQ.WebSockets, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NetMQ.WebSockets.0.5.0.0-beta\lib\net40\NetMQ.WebSockets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -98,6 +99,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\SignalRDialogHub.cs" />
+    <Compile Include="Contexts\NetMqDialogContext.cs" />
+    <Compile Include="NetMqService.cs" />
     <Compile Include="SignalRService.cs" />
     <Compile Include="NotificationService.cs" />
     <Compile Include="LogService.cs" />

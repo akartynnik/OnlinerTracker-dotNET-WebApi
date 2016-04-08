@@ -1,19 +1,18 @@
 ﻿'use strict';
-app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localStorageService', 'signalRService',
-    function ($q, $injector, $location, localStorageService, signalRService) {
+app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localStorageService', 'dialogService',
+    function ($q, $injector, $location, localStorageService, dialogService) {
 
     var authInterceptorServiceFactory = {};
 
     var _request = function (config) {
-
-        //currencyService.getCurrency(); // check curracy in each request
 
         config.headers = config.headers || {};
 
         var authData = localStorageService.get('authorizationData');
         if (authData) {
             config.headers.Authorization = 'Bearer ' + authData.token;
-            config.headers.SignalRConnectionId = signalRService.connectionId();
+            /* get connectionId per request for dialog service correct work */
+            config.headers.DialogConnectionId = dialogService.connectionId();
         }
         if (!authData && $location.path() !== '/signin' && $location.path() !== '/associate') {
             $location.path('/signin');
