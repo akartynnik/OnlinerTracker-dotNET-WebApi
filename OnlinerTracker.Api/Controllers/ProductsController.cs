@@ -60,19 +60,18 @@ namespace OnlinerTracker.Api.Controllers
                 product.Id = Guid.NewGuid();
                 product.UserId = User.Id;
                 product.Tracking = true;
+                _productService.Insert(product);
 
                 if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 {
                     _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.DialogConnectionId);
                     return Duplicate();
                 }
-                _productService.Insert(product);
 
                 var cost = Mapper.Map<ProductFollowModel, Cost>(model);
                 cost.Id = Guid.NewGuid();
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
-
                 _productService.InsertCost(cost);
                 _dialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
@@ -132,9 +131,9 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public IHttpActionResult Remove(DeletedObject obj)
         {
+            _productService.Delete(obj.Id);
             _dialogService.SendInPopupForUser(PopupType.Warning,
                     string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.DialogConnectionId);
-            _productService.Delete(obj.Id);
             return Successful();
         }
 
