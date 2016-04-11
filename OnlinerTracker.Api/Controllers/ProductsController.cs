@@ -60,27 +60,26 @@ namespace OnlinerTracker.Api.Controllers
                 product.Id = Guid.NewGuid();
                 product.UserId = User.Id;
                 product.Tracking = true;
+                _productService.Insert(product);
 
                 if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 {
-                    _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.SignalRConnectionId);
+                    _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.DialogConnectionId);
                     return Duplicate();
                 }
-                _productService.Insert(product);
 
                 var cost = Mapper.Map<ProductFollowModel, Cost>(model);
                 cost.Id = Guid.NewGuid();
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
-
                 _productService.InsertCost(cost);
                 _dialogService.SendInPopupForUser(PopupType.Success,
-                    string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
                 return Successful();
             }
             catch (Exception ex)
             {
-                _dialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.SignalRConnectionId);
+                _dialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.DialogConnectionId);
                 return InternalServerError(ex);
             }
 
@@ -96,12 +95,12 @@ namespace OnlinerTracker.Api.Controllers
             if (product.Tracking)
             {
                 _dialogService.SendInPopupForUser(PopupType.Success,
-                    string.Format(DialogResources.Success_TrackingStarted, product.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Success_TrackingStarted, product.Name), User.DialogConnectionId);
             }
             else
             {
                 _dialogService.SendInPopupForUser(PopupType.Warning,
-                   string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.SignalRConnectionId);
+                   string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.DialogConnectionId);
             }
             return Successful();
         }
@@ -117,12 +116,12 @@ namespace OnlinerTracker.Api.Controllers
             if (product.Compared)
             {
                 _dialogService.SendInPopupForUser(PopupType.Success,
-                    string.Format(DialogResources.Success_ComparedStarted, product.Name), User.SignalRConnectionId);
+                    string.Format(DialogResources.Success_ComparedStarted, product.Name), User.DialogConnectionId);
             }
             else
             {
                 _dialogService.SendInPopupForUser(PopupType.Warning,
-                   string.Format(DialogResources.Warning_ComparedStoped, product.Name), User.SignalRConnectionId);
+                   string.Format(DialogResources.Warning_ComparedStoped, product.Name), User.DialogConnectionId);
             }
             return Successful();
         }
@@ -132,9 +131,17 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public IHttpActionResult Remove(DeletedObject obj)
         {
-            _dialogService.SendInPopupForUser(PopupType.Warning,
-                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.SignalRConnectionId);
             _productService.Delete(obj.Id);
+            _dialogService.SendInPopupForUser(PopupType.Warning,
+                    string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.DialogConnectionId);
+            return Successful();
+        }
+
+        [Route("test", Name = "test t")]
+        [HttpGet]
+        public IHttpActionResult Test(string msg)
+        {
+            _dialogService.SendInPopupForUser(PopupType.Warning, msg, User.DialogConnectionId);
             return Successful();
         }
     }

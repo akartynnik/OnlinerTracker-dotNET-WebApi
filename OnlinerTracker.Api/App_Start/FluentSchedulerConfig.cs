@@ -10,8 +10,8 @@ namespace OnlinerTracker.Api
     {
         public FluentSchedulerConfig()
         {
-            Schedule<TrackingJob>().ToRunNow().AndEvery(10).Seconds();
-            Schedule<NotificationJob>().ToRunNow().AndEvery(30).Seconds();
+            Schedule<TrackingJob>().ToRunNow().AndEvery(5).Minutes();
+            Schedule<NotificationJob>().ToRunNow().AndEvery(6).Minutes();
         }
     }
 

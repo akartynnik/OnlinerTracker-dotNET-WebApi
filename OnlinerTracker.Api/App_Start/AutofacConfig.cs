@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.SignalR;
-using OnlinerTracker.Api.Hubs;
 using OnlinerTracker.Api.Jobs;
 using OnlinerTracker.Data;
 using OnlinerTracker.Data.Context;
@@ -9,6 +8,7 @@ using OnlinerTracker.Interfaces;
 using OnlinerTracker.Proxies;
 using OnlinerTracker.Security;
 using OnlinerTracker.Services;
+using OnlinerTracker.Services.Contexts;
 using System.Configuration;
 using System.Reflection;
 using System.Web.Http;
@@ -35,9 +35,6 @@ namespace OnlinerTracker.Api
             builder.RegisterType<LogService>().As<ILogService>().InstancePerLifetimeScope();
             builder.RegisterType<NbrbProxy>().As<ICurrencyService>().InstancePerLifetimeScope();
 
-            builder.Register(c => new DialogService(GlobalHost.ConnectionManager.GetHubContext<DialogHub>()))
-                .As<IDialogService>()
-                .InstancePerLifetimeScope();
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>()))
                 .As<IExternalProductService>()
                 .InstancePerLifetimeScope();
@@ -50,6 +47,7 @@ namespace OnlinerTracker.Api
                     })
                 .As<ITrackingService>()
                 .InstancePerLifetimeScope();
+
             builder.Register(
                 c =>
                     new NotificationService(c.Resolve<IProductService>(), c.Resolve<ILogService>(),
@@ -69,6 +67,25 @@ namespace OnlinerTracker.Api
                     })
                 .As<INotificationService>()
                 .InstancePerLifetimeScope();
+            
+
+            /* Register and resolve dialog service */
+            switch (ConfigurationManager.AppSettings["dialogServiceProvider"])
+            {
+                case "zeromq":
+                    builder.RegisterInstance(
+                        new NetMqDialogContext(ConfigurationManager.AppSettings["zeroMq:routerUrl"],
+                            ConfigurationManager.AppSettings["zeroMq:publisherUrl"])).SingleInstance();
+                    builder.Register(c => new NetMqService(c.Resolve<NetMqDialogContext>()))
+                        .As<IDialogService>()
+                        .InstancePerLifetimeScope();
+                    break;
+                default: //signalr
+                    builder.Register(c => new SignalRService(GlobalHost.ConnectionManager.GetHubContext<SignalRDialogHub>()))
+                        .As<IDialogService>()
+                        .InstancePerLifetimeScope();
+                    break;
+            }
 
             #endregion
 

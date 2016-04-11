@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AsyncIO, Version=0.1.17.0, Culture=neutral, PublicKeyToken=44a94435bd6f33f8, processorArchitecture=MSIL">
+      <HintPath>..\packages\AsyncIO.0.1.17.0\lib\net40\AsyncIO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
@@ -228,7 +232,6 @@
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Filters\AuthorizeAttribute.cs" />
-    <Compile Include="Hubs\DialogHub.cs" />
     <Compile Include="Jobs\NotificationJob.cs" />
     <Compile Include="Jobs\TrackingJob.cs" />
     <Compile Include="Models\DeletedObject.cs" />

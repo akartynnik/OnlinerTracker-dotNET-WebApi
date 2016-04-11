@@ -34,17 +34,15 @@ namespace OnlinerTracker.Api.Filters
             if (identity.Claims.Any(u => u.Type == "userId"))
                 newUser.Id = Guid.Parse(identity.Claims.FirstOrDefault(u => u.Type == "userId").Value);
 
+            //try get DialogConnectionId
             try
             {
-                if (string.IsNullOrEmpty(newUser.SignalRConnectionId))
-                {
-                    newUser.SignalRConnectionId =
-                        actionContext.Request.Headers.GetValues("SignalRConnectionId").FirstOrDefault();
-                }
+                newUser.DialogConnectionId =
+                    actionContext.Request.Headers.GetValues("DialogConnectionId").FirstOrDefault();
             }
             catch (Exception)
             {
-                newUser.SignalRConnectionId = null;
+                newUser.DialogConnectionId = null;
             }
             
 
