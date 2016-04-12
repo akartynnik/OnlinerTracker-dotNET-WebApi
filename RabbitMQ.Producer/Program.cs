@@ -14,21 +14,14 @@ namespace RabbitMQ.Producer
         [STAThread] 
         static void Main()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-
             var factory = new ConnectionFactory {HostName = "localhost"};
             var _connection = factory.CreateConnection();
-            var chanel = _connection.CreateModel();
-            chanel.QueueDeclare("chanel", false, false, false, null);
+            var channel = _connection.CreateModel();
+            channel.ExchangeDeclare("first-exchange", "fanout");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(chanel));
-        }
-
-        static void OnProcessExit(object sender, EventArgs e)
-        {
-            _connection.Close();
+            Application.Run(new MainForm(channel));
         }
     }
 }

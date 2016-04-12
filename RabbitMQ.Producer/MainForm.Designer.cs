@@ -59,6 +59,7 @@
             this.Controls.Add(this.sendToMQ);
             this.Name = "MainForm";
             this.Text = "RabbitMQ Producer";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

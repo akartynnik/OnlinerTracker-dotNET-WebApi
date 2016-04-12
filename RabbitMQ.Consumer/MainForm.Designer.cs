@@ -30,6 +30,7 @@
         {
             this.mqBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.gotMessagesCountLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mqBox
@@ -51,15 +52,26 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Got messages:";
             // 
+            // gotMessagesCountLbl
+            // 
+            this.gotMessagesCountLbl.AutoSize = true;
+            this.gotMessagesCountLbl.Location = new System.Drawing.Point(256, 15);
+            this.gotMessagesCountLbl.Name = "gotMessagesCountLbl";
+            this.gotMessagesCountLbl.Size = new System.Drawing.Size(13, 13);
+            this.gotMessagesCountLbl.TabIndex = 4;
+            this.gotMessagesCountLbl.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(294, 288);
+            this.Controls.Add(this.gotMessagesCountLbl);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.mqBox);
             this.Name = "MainForm";
             this.Text = "RabitMQ Consumers";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -69,6 +81,7 @@
 
         private System.Windows.Forms.TextBox mqBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label gotMessagesCountLbl;
     }
 }
 

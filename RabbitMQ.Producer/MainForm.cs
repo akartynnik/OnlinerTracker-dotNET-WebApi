@@ -21,8 +21,16 @@ namespace RabbitMQ.Producer
             var body = Encoding.UTF8.GetBytes(message);
             var properties = _chanel.CreateBasicProperties();
             properties.SetPersistent(true);
-            _chanel.BasicPublish("", "chanel", properties, body);
-            Console.WriteLine("Producer sent to MQ: \"{0}\"", message);
+            _chanel.BasicPublish(exchange: "first-exchange",
+                                 routingKey: "",
+                                 basicProperties: null,
+                                 body: body);
+            Console.WriteLine("Producer sent: \"{0}\"", message);
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
