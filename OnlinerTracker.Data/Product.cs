@@ -34,7 +34,7 @@ namespace OnlinerTracker.Data
         public bool Compared { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Cost> Costs { get; private set; }
+        public virtual ICollection<Cost> Costs { get; set; }
 
         [NotMapped]
         public decimal CurrentCost { get; set; }

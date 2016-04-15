@@ -1,26 +1,30 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using OnlinerTracker.Api.Controllers;
 using System.Web.Http.Results;
 
-namespace OnlinerTracker.Tests
+namespace OnlinerTracker.UnitTests
 {
-    [TestClass]
-    public class TestApiControllerBase
+    [TestFixture]
+    public class ApiControllerBaseTests
     {
-        [TestMethod]
-        public void Successful_ShouldReturnOkNegotiatedContentResultWithOkMessage()
+        [Test]
+        public void Successful_CheckCustomOkHttpStatusCode_ShouldReturnOkText()
         {
             var controller = new ApiControllerBase();
+
             var result =  controller.Successful() as OkNegotiatedContentResult<string>;
+
             Assert.IsNotNull(result);
             Assert.AreEqual("OK", result.Content);
         }
 
-        [TestMethod]
-        public void Duplicate_ShouldReturnOkNegotiatedContentResultWithDuplicateMessage()
+        [Test]
+        public void Duplicate_CheckCustomOkHttpStatusCode__ShouldReturnDuplicateText()
         {
             var controller = new ApiControllerBase();
+
             var result = controller.Duplicate() as OkNegotiatedContentResult<string>;
+
             Assert.IsNotNull(result);
             Assert.AreEqual("Duplicate", result.Content);
         }

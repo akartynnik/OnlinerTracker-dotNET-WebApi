@@ -6,10 +6,7 @@ namespace OnlinerTracker.Api.Controllers
 {
     public class ApiControllerBase : ApiController
     {
-        protected virtual new Principal User
-        {
-            get { return HttpContext.Current.User as Principal; }
-        }
+        protected virtual new Principal User => HttpContext.Current.User as Principal;
 
         public IHttpActionResult Successful()
         {
