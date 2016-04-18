@@ -93,7 +93,7 @@ namespace OnlinerTracker.Api
 
             /* Register and resolve Automapper*/
             var profiles =
-                from t in typeof(AutomapperConig.ProviderMappingProfile).Assembly.GetTypes()
+                from t in typeof(AutomapperMappingProfile).Assembly.GetTypes()
                 where typeof(Profile).IsAssignableFrom(t)
                 select (Profile)Activator.CreateInstance(t);
 

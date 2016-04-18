@@ -225,7 +225,7 @@
   <ItemGroup>
     <Compile Include="ApiViewModels\ProductFollowModel.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
-    <Compile Include="App_Start\AutomapperConig.cs" />
+    <Compile Include="AutomapperMappingProfile.cs" />
     <Compile Include="App_Start\FluentSchedulerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
