@@ -8,6 +8,7 @@ using OnlinerTracker.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web.Http;
 
 namespace OnlinerTracker.Api.Controllers
@@ -77,8 +78,12 @@ namespace OnlinerTracker.Api.Controllers
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
 
-                _productService.Insert(product);
-                _productService.InsertCost(cost);
+                using (var transaction = new TransactionScope(TransactionScopeOption.Suppress))
+                {
+                    _productService.Insert(product);
+                    _productService.InsertCost(cost);
+                    transaction.Complete();
+                }
 
                 _dialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
