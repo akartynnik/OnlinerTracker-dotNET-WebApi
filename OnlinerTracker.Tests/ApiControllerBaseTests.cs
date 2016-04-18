@@ -2,7 +2,7 @@
 using OnlinerTracker.Api.Controllers;
 using System.Web.Http.Results;
 
-namespace OnlinerTracker.UnitTests
+namespace OnlinerTracker.Api.Tests
 {
     [TestFixture]
     public class ApiControllerBaseTests
@@ -14,7 +14,7 @@ namespace OnlinerTracker.UnitTests
 
             var result =  controller.Successful() as OkNegotiatedContentResult<string>;
 
-            Assert.IsNotNull(result);
+            Assert.IsNotNull(result); 
             Assert.AreEqual("OK", result.Content);
         }
 

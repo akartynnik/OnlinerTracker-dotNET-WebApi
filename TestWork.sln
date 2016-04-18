@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.Consumer", "Rabbit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.Producer", "RabbitMQ.Producer\RabbitMQ.Producer.csproj", "{3BBEF013-7720-443F-8A61-BAF9E41F9AE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlinerTracker.UnitTests", "OnlinerTracker.Tests\OnlinerTracker.UnitTests.csproj", "{A6F9CCCE-9856-4943-8CAA-2E773E5F5925}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlinerTracker.Api.Tests", "OnlinerTracker.Tests\OnlinerTracker.Api.Tests.csproj", "{A6F9CCCE-9856-4943-8CAA-2E773E5F5925}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

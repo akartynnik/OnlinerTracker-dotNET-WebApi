@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.SessionState;
 
-namespace OnlinerTracker.UnitTests
+namespace OnlinerTracker.Api.Tests
 {
     [TestFixture]
     public class ProductControllerTests
@@ -26,7 +26,7 @@ namespace OnlinerTracker.UnitTests
 
         public static HttpContext FakeHttpContext()
         {
-            var httpRequest = new HttpRequest("", "http://stackoverflow/", "");
+            var httpRequest = new HttpRequest("", "http://ololo/", "");
             var stringWriter = new StringWriter();
             var httpResponse = new HttpResponse(stringWriter);
             var httpContext = new HttpContext(httpRequest, httpResponse);

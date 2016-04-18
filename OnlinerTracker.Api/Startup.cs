@@ -48,7 +48,7 @@ namespace OnlinerTracker.Api
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
 
-            AutomapperConig.Register();
+            //AutomapperConig.Register();
             JobManager.JobFactory = new JobFactory(config);
             JobManager.Initialize(new FluentSchedulerConfig());
             //ZeroMqConfig.Initialize();

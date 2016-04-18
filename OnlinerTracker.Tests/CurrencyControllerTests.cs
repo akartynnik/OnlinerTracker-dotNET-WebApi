@@ -5,7 +5,7 @@ using OnlinerTracker.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 
-namespace OnlinerTracker.UnitTests
+namespace OnlinerTracker.Api.Tests
 {
     [TestFixture]
     public class CurrencyControllerTests

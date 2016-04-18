@@ -19,19 +19,24 @@ namespace OnlinerTracker.Api.Controllers
         private IProductService _productService;
         private IDialogService _dialogService;
         private IExternalProductService _externalPproductService;
+        private IMapper _mapper;
 
-        public ProductsController(IProductService productService, IExternalProductService externalPproductService, IDialogService dialogService)
+        public ProductsController(IProductService productService, 
+            IExternalProductService externalPproductService, 
+            IDialogService dialogService,
+            IMapper mapper)
         {
             _productService = productService;
             _dialogService = dialogService;
             _externalPproductService = externalPproductService;
+            _mapper = mapper;
         }
 
         [Route("GetAll", Name = "Get all products for current user")]
         [HttpGet]
         public async Task<IHttpActionResult> Get()
         {
-            return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(_productService.GetAll(User.Id)));
+            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(_productService.GetAll(User.Id)));
         }
 
         [Route("GetAllCompared", Name = "Get product by id with costs")]
@@ -39,7 +44,7 @@ namespace OnlinerTracker.Api.Controllers
         public async Task<IHttpActionResult> GetAllCompared()
         {
             var products = _productService.GetAllCompared();
-            return Ok(Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(products));
+            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(products));
         }
 
         [Route("GetFromExternalServer", Name = "Get products from external server (proxy)")]
@@ -56,11 +61,10 @@ namespace OnlinerTracker.Api.Controllers
         {
             try
             {
-                var product = Mapper.Map<ProductFollowModel, Product>(model);
+                var product = _mapper.Map<ProductFollowModel, Product>(model);
                 product.Id = Guid.NewGuid();
                 product.UserId = User.Id;
                 product.Tracking = true;
-                _productService.Insert(product);
 
                 if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
                 {
@@ -68,11 +72,14 @@ namespace OnlinerTracker.Api.Controllers
                     return Duplicate();
                 }
 
-                var cost = Mapper.Map<ProductFollowModel, Cost>(model);
+                var cost = _mapper.Map<ProductFollowModel, Cost>(model);
                 cost.Id = Guid.NewGuid();
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
+
+                _productService.Insert(product);
                 _productService.InsertCost(cost);
+
                 _dialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
                 return Successful();
