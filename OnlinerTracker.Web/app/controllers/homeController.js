@@ -71,16 +71,4 @@ app.controller('homeController', ['$scope', '$http', 'productsService', 'ngSetti
             }); 
         }
     }
-
-    $scope.test = function () {
-        $http({
-            url: ngSettings.apiServiceBaseUri + 'api/product/test',
-            method: 'GET',
-            params: {
-                msg: "uuu"
-            }
-        });
-    }
-
-
 }]);

@@ -77,13 +77,9 @@ namespace OnlinerTracker.Api.Controllers
                 cost.Id = Guid.NewGuid();
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
+                product.Costs = new List<Cost> {cost};
 
-                using (var transaction = new TransactionScope(TransactionScopeOption.RequiresNew))
-                {
-                    _productService.Insert(product);
-                    _productService.InsertCost(cost);
-                    transaction.Complete();
-                }
+                _productService.Insert(product);
 
                 _dialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
