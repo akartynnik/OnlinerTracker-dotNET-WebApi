@@ -78,7 +78,7 @@ namespace OnlinerTracker.Api.Controllers
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
 
-                using (var transaction = new TransactionScope(TransactionScopeOption.Suppress))
+                using (var transaction = new TransactionScope(TransactionScopeOption.RequiresNew))
                 {
                     _productService.Insert(product);
                     _productService.InsertCost(cost);
