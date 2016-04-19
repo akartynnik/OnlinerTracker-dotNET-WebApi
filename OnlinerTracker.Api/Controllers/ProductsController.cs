@@ -8,8 +8,8 @@ using OnlinerTracker.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Transactions;
 using System.Web.Http;
+using OnlinerTracker.Services;
 
 namespace OnlinerTracker.Api.Controllers
 {
@@ -25,7 +25,8 @@ namespace OnlinerTracker.Api.Controllers
         public ProductsController(IProductService productService, 
             IExternalProductService externalPproductService, 
             IDialogService dialogService,
-            IMapper mapper)
+            IMapper mapper,
+            IPrincipalService principalService) : base (principalService)
         {
             _productService = productService;
             _dialogService = dialogService;

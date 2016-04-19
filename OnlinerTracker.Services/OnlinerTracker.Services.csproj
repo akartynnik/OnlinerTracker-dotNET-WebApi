@@ -102,6 +102,7 @@
     <Compile Include="Contexts\SignalRDialogHub.cs" />
     <Compile Include="Contexts\NetMqDialogContext.cs" />
     <Compile Include="NetMqService.cs" />
+    <Compile Include="PrincipalService.cs" />
     <Compile Include="SignalRService.cs" />
     <Compile Include="NotificationService.cs" />
     <Compile Include="LogService.cs" />

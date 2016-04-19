@@ -15,6 +15,7 @@ using System;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using System.Web.Http;
 
 namespace OnlinerTracker.Api
@@ -42,6 +43,9 @@ namespace OnlinerTracker.Api
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>()))
                 .As<IExternalProductService>()
                 .InstancePerLifetimeScope();
+            builder.Register(c => new PrincipalService(HttpContext.Current))
+                .As<IPrincipalService>()
+                .InstancePerRequest();
             builder.Register(
                 c =>
                     new TrackingService(c.Resolve<IProductService>(), c.Resolve<IExternalProductService>(),

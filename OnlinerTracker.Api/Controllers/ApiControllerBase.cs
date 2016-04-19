@@ -1,12 +1,22 @@
-﻿using OnlinerTracker.Security;
-using System.Web;
+﻿using OnlinerTracker.Interfaces;
+using OnlinerTracker.Security;
 using System.Web.Http;
 
 namespace OnlinerTracker.Api.Controllers
 {
     public class ApiControllerBase : ApiController
     {
-        protected virtual new Principal User => HttpContext.Current.User as Principal;
+        private readonly IPrincipalService _principalService;
+        protected virtual new Principal User => _principalService.GetSessionUser();
+
+        public ApiControllerBase()
+        {
+        }
+
+        public ApiControllerBase(IPrincipalService principalService)
+        {
+            _principalService = principalService;
+        }
 
         public IHttpActionResult Successful()
         {

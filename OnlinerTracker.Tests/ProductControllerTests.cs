@@ -1,11 +1,17 @@
-﻿using NUnit.Framework;
+﻿using AutoMapper;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using NSubstitute.ReturnsExtensions;
+using NUnit.Framework;
+using OnlinerTracker.Api.ApiViewModels;
+using OnlinerTracker.Api.Controllers;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Security;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.SessionState;
 
@@ -14,154 +20,95 @@ namespace OnlinerTracker.Api.Tests
     [TestFixture]
     public class ProductControllerTests
     {
-        
+        private ProductsController _testedController;
+        private IProductService _fakeProductService;
+        private IDialogService _fakeDialogService;
+        private IPrincipalService _fakePrincipleService;
 
-        public static Principal FakeIdentityUser()
+        [SetUp]
+        public void Setup()
         {
-            return new Principal(null)
+            _fakePrincipleService = Substitute.For<IPrincipalService>();
+            _fakePrincipleService.GetSessionUser().Returns(new Principal(null)
             {
-                Id = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a")
-            };
+                Id = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
+                DialogConnectionId = "000",
+            });
+
+            var fakeExternalPproductService = Substitute.For<IExternalProductService>();
+            _fakeDialogService = Substitute.For<IDialogService>();
+            _fakeProductService = Substitute.For<IProductService>();
+
+            var fakeMapper = Substitute.For<IMapper>();
+            fakeMapper.Map<ProductFollowModel, Product>(new ProductFollowModel()).ReturnsForAnyArgs(new Product() {Name = "ProductName"});
+            fakeMapper.Map<ProductFollowModel, Cost>(new ProductFollowModel()).ReturnsForAnyArgs(new Cost());
+
+            _testedController = new ProductsController(_fakeProductService, fakeExternalPproductService,
+                _fakeDialogService, fakeMapper, _fakePrincipleService);
         }
 
-        public static HttpContext FakeHttpContext()
+        [Test]
+        public async Task Follow_IfProductIsDublicateCallDialogServise_WithCorrectWarningMessage()
         {
-            var httpRequest = new HttpRequest("", "http://ololo/", "");
+            _fakeProductService.GetBy(string.Empty, Guid.Empty).ReturnsForAnyArgs(new Product());
+
+            await _testedController.Follow(new ProductFollowModel());
+
+            _fakeDialogService.Received()
+                .SendInPopupForUser(PopupType.Warning, "This product is already being tracked!", _fakePrincipleService.GetSessionUser().DialogConnectionId);
+        }
+
+        [Test]
+        public async Task Follow_IfSuccessfulCallDialogService_WithCorrectSuccessMessage()
+        {
+            _fakeProductService.GetBy(string.Empty, Guid.Empty).ReturnsNullForAnyArgs();
+
+            await _testedController.Follow(new ProductFollowModel());
+
+            _fakeDialogService.Received()
+                .SendInPopupForUser(PopupType.Success, "Now you are follow <b>ProductName</b>", _fakePrincipleService.GetSessionUser().DialogConnectionId);
+        }
+
+
+        [Test]
+        public async Task Follow_IfThrowExceptionCallDialogService_WithCorrectErrorMessage()
+        {
+            _fakeProductService.GetBy(string.Empty, Guid.Empty).ThrowsForAnyArgs(new Exception());
+
+            await _testedController.Follow(new ProductFollowModel());
+
+            _fakeDialogService.Received()
+                .SendInPopupForUser(PopupType.Error, "ERROR!", _fakePrincipleService.GetSessionUser().DialogConnectionId);
+        }
+    }
+
+    public static class FakeHttpFactory
+    {
+        public static HttpContext GetHttpContext()
+        {
+            return GetHttpContext(Guid.Empty, string.Empty);
+        }
+
+        public static HttpContext GetHttpContext(Guid userId, string dialogConnectionId)
+        {
+            var httpRequest = new HttpRequest("", "http://test/", "");
             var stringWriter = new StringWriter();
             var httpResponse = new HttpResponse(stringWriter);
             var httpContext = new HttpContext(httpRequest, httpResponse);
 
             var sessionContainer = new HttpSessionStateContainer("id", new SessionStateItemCollection(),
-                                                    new HttpStaticObjectsCollection(), 10, true,
-                                                    HttpCookieMode.AutoDetect,
-                                                    SessionStateMode.InProc, false);
+                new HttpStaticObjectsCollection(), 10, true,
+                HttpCookieMode.AutoDetect,
+                SessionStateMode.InProc, false);
 
-            httpContext.Items["AspSession"] = typeof(HttpSessionState).GetConstructor(
-                                        BindingFlags.NonPublic | BindingFlags.Instance,
-                                        null, CallingConventions.Standard,
-                                        new[] { typeof(HttpSessionStateContainer) },
-                                        null)
-                                .Invoke(new object[] { sessionContainer });
-
+            httpContext.Items["AspSession"] = typeof (HttpSessionState).GetConstructor(
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                null, CallingConventions.Standard,
+                new[] {typeof (HttpSessionStateContainer)},
+                null)
+                .Invoke(new object[] {sessionContainer});
+            httpContext.User = new Principal(null) {Id = userId, DialogConnectionId = dialogConnectionId};
             return httpContext;
-        }
-
-        private class FakeProductsService : IProductService
-        {
-            private readonly Product _product = new Product()
-            {
-                Id = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                UserId = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                Name = "Test product 1",
-                Description = "Description 1",
-                OnlinerId = "555",
-                CurrentCost = 100,
-                ImageUrl = string.Empty,
-                Costs = new List<Cost>
-                    {
-                        new Cost()
-                        {
-                            Id = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                            ProductId = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                            Value = 30000,
-                            CratedAt = DateTime.Parse("10/10/2010")
-                        }
-                    }
-            };
-
-            private readonly List<Product> _products = new List<Product>()
-            {
-                new Product
-                {
-                    Id = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                    UserId = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                    Name = "Test product 1",
-                    Description = "Description 1",
-                    OnlinerId = "555",
-                    CurrentCost = 100,
-                    ImageUrl = string.Empty,
-                    Costs = new List<Cost>
-                        {
-                            new Cost()
-                            {
-                                Id = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                                ProductId = Guid.Parse("eea2925f-a3fc-e511-bc42-50e549caaf5a"),
-                                Value = 30000,
-                                CratedAt = DateTime.Parse("10/10/2010")
-                            }
-                        }
-                }
-            };
-
-            private readonly IEnumerable<ProductForNotification> _productsForNotif = new List<ProductForNotification>()
-            {
-                new ProductForNotification
-                {
-                    Name = "Test product 1",
-                    CurrentCost = 250000,
-                },
-                new ProductForNotification
-                {
-                    Name = "Test product 2",
-                    CurrentCost = 400000,
-                }
-            };
-
-            public void Insert(Product obj)
-            {
-            }
-
-            public void Update(Product obj)
-            {
-            }
-
-            public void Delete(Guid id)
-            {
-            }
-
-            public void InsertCost(Cost obj)
-            {
-            }
-
-            public Product GetById(Guid id)
-            {
-                return _product;
-            }
-
-            public Product GetBy(string onlinerId, Guid userId)
-            {
-                return _product;
-            }
-
-            public IEnumerable<Product> GetAll(Guid userId)
-            {
-                return _products;
-            }
-
-            public IEnumerable<Product> GetAllTracking()
-            {
-                return _products;
-            }
-
-            public IEnumerable<Product> GetAllCompared()
-            {
-                return _products;
-            }
-
-            public IEnumerable<ProductForNotification> GetAllChanges(Guid userId)
-            {
-                return _productsForNotif;
-            }
-
-            public bool IfSameProductExist(string onlinerId, Guid userId)
-            {
-                return true;
-            }
-
-            public decimal GetCurrentProductCost(Guid productId)
-            {
-                return 0;
-            }
         }
     }
 }

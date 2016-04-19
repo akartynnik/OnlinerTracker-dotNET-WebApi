@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 using OnlinerTracker.Api.Controllers;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
@@ -13,20 +14,14 @@ namespace OnlinerTracker.Api.Tests
         [Test]
         public async Task Get_IfNotReturnNull_ShouldReturnOkHttpStatusCode()
         {
-            var currancyService = new FakeCurrencyService();
-            var controller = new CurrencyController(currancyService);
+            var fakeCurrancyService = Substitute.For<ICurrencyService>();
+            var fakePrincipleService = Substitute.For<IPrincipalService>();
+            fakeCurrancyService.GetCurrent(CurrencyType.BLR).ReturnsForAnyArgs(new Currency());
+            var controller = new CurrencyController(fakeCurrancyService, fakePrincipleService);
 
             var result = await controller.Get(CurrencyType.USD) as OkNegotiatedContentResult<Currency>;
 
             Assert.IsNotNull(result);
-        }
-
-        public class FakeCurrencyService : ICurrencyService
-        {
-            public Currency GetCurrent(CurrencyType currencyType)
-            {
-                return new Currency();
-            }
         }
     }
 }

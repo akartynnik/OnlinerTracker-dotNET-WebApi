@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +66,7 @@
     <Compile Include="IExternalProductService.cs" />
     <Compile Include="INotificationService.cs" />
     <Compile Include="ILogService.cs" />
+    <Compile Include="IPrincipalService.cs" />
     <Compile Include="ITrackingService.cs" />
     <Compile Include="IProductService.cs" />
     <Compile Include="IAuthorizationService.cs" />
@@ -78,6 +80,10 @@
     <ProjectReference Include="..\OnlinerTracker.Data\OnlinerTracker.Data.csproj">
       <Project>{6B25CAC3-320D-4441-BEAA-58A6B06B48C9}</Project>
       <Name>OnlinerTracker.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnlinerTracker.Security\OnlinerTracker.Security.csproj">
+      <Project>{EE045B0A-BFFE-46A1-903B-0DA908AADAC9}</Project>
+      <Name>OnlinerTracker.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
