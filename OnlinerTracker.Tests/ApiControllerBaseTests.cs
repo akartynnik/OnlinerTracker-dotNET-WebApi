@@ -1,5 +1,10 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 using OnlinerTracker.Api.Controllers;
+using OnlinerTracker.Interfaces;
+using OnlinerTracker.Security;
+using System;
+using System.Security.Principal;
 using System.Web.Http.Results;
 
 namespace OnlinerTracker.Api.Tests
@@ -27,6 +32,19 @@ namespace OnlinerTracker.Api.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual("Duplicate", result.Content);
+        }
+
+        [Test]
+        public void User_CheckIfUserIdExist_ShouldBeNotEmptyGuid()
+        {
+            var userId = Guid.NewGuid();
+            var fakePrincipalService = Substitute.For<IPrincipalService>();
+            fakePrincipalService.GetSessionUser().Returns(new Principal(null) { Id = userId});
+            var controller = new ApiControllerBase(fakePrincipalService);
+
+            var result = controller.User;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(userId, result.Id);
         }
     }
 }

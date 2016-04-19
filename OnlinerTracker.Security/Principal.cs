@@ -11,8 +11,8 @@ namespace OnlinerTracker.Security
             this.Identity = identity;
         }
 
-        public IIdentity Identity { get; private set; }
 
+        public IIdentity Identity { get; private set; }
         public bool IsInRole(string role) { return false; }
 
         public Guid Id { get; set; }

@@ -7,7 +7,7 @@ namespace OnlinerTracker.Api.Controllers
     public class ApiControllerBase : ApiController
     {
         private readonly IPrincipalService _principalService;
-        protected virtual new Principal User => _principalService.GetSessionUser();
+        public virtual new Principal User => _principalService.GetSessionUser();
 
         public ApiControllerBase()
         {
