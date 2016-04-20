@@ -73,9 +73,10 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ProductControllerTests.cs" />
-    <Compile Include="CurrencyControllerTests.cs" />
-    <Compile Include="ApiControllerBaseTests.cs" />
+    <Compile Include="Base\BaseTestsClass.cs" />
+    <Compile Include="Unit\ProductControllerTests.cs" />
+    <Compile Include="Unit\CurrencyControllerTests.cs" />
+    <Compile Include="Unit\ApiControllerBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
