@@ -29,7 +29,8 @@ namespace OnlinerTracker.Api.Controllers
 
         #region Constructor
 
-        public AccountController(IAuthorizationService authService)
+        public AccountController(IAuthorizationService authService,
+            IPrincipalService principalService) : base(principalService)
         {
             _repo = new SecurityRepository();
             _authService = authService;

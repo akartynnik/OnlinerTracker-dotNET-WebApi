@@ -5,14 +5,14 @@ using System.Linq;
 
 namespace OnlinerTracker.Api
 {
-    public class AutomapperConig
+    public class AutomapperMappingProfile : Profile
     {
-        public static void Register()
+        protected override void Configure()
         {
-            Mapper.CreateMap<ProductFollowModel, Product>();
-            Mapper.CreateMap<ProductFollowModel, Cost>()
+            CreateMap<ProductFollowModel, Product>();
+            CreateMap<ProductFollowModel, Cost>()
                 .ForMember(x => x.Value, x => x.MapFrom(m => m.Cost));
-            Mapper.CreateMap<Product, ExternalProduct>()
+            CreateMap<Product, ExternalProduct>()
                 .ForMember(x => x.CurrentCost, x => x.MapFrom(m => m.Costs.OrderByDescending(u => u.CratedAt).FirstOrDefault().Value))
                 .ForMember(x => x.UpdatedAt, x => x.MapFrom(m => m.Costs.OrderByDescending(u => u.CratedAt).FirstOrDefault().CratedAt));
         }

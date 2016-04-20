@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using AutoMapper;
+using AutoMapper.Mappers;
 using Microsoft.AspNet.SignalR;
 using OnlinerTracker.Api.Jobs;
 using OnlinerTracker.Data;
@@ -9,8 +11,11 @@ using OnlinerTracker.Proxies;
 using OnlinerTracker.Security;
 using OnlinerTracker.Services;
 using OnlinerTracker.Services.Contexts;
+using System;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using System.Web;
 using System.Web.Http;
 
 namespace OnlinerTracker.Api
@@ -38,6 +43,9 @@ namespace OnlinerTracker.Api
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>()))
                 .As<IExternalProductService>()
                 .InstancePerLifetimeScope();
+            builder.Register(c => new PrincipalService(HttpContext.Current))
+                .As<IPrincipalService>()
+                .InstancePerRequest();
             builder.Register(
                 c =>
                     new TrackingService(c.Resolve<IProductService>(), c.Resolve<IExternalProductService>(),
@@ -86,6 +94,22 @@ namespace OnlinerTracker.Api
                         .InstancePerLifetimeScope();
                     break;
             }
+
+            /* Register and resolve Automapper*/
+            var profiles =
+                from t in typeof(AutomapperMappingProfile).Assembly.GetTypes()
+                where typeof(Profile).IsAssignableFrom(t)
+                select (Profile)Activator.CreateInstance(t);
+
+            builder.Register(ctx => new MapperConfiguration(cfg =>
+            {
+                foreach (var profile in profiles)
+                {
+                    cfg.AddProfile(profile);
+                }
+            }));
+
+            builder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();
 
             #endregion
 

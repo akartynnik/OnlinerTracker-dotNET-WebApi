@@ -47,11 +47,9 @@ namespace OnlinerTracker.Api
             app.UseAutofacMiddleware(iocContainer);
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
-
-            AutomapperConig.Register();
+            
             JobManager.JobFactory = new JobFactory(config);
             JobManager.Initialize(new FluentSchedulerConfig());
-            //ZeroMqConfig.Initialize();
         }
 
         public void ConfigureOAuth(IAppBuilder app)

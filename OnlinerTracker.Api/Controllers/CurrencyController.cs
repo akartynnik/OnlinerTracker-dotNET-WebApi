@@ -12,7 +12,8 @@ namespace OnlinerTracker.Api.Controllers
     {
         private readonly ICurrencyService _currencyService;
 
-        public CurrencyController(ICurrencyService currencyService)
+        public CurrencyController(ICurrencyService currencyService,
+            IPrincipalService principalService) : base(principalService)
         {
             _currencyService = currencyService;
         }
