@@ -4,26 +4,26 @@ using System.Web.Http;
 
 namespace OnlinerTracker.Api.Controllers
 {
-    public class ApiControllerBase : ApiController
+    public abstract class ApiControllerBase : ApiController
     {
         private readonly IPrincipalService _principalService;
         public virtual new Principal User => _principalService.GetSessionUser();
 
-        public ApiControllerBase()
+        protected ApiControllerBase()
         {
         }
 
-        public ApiControllerBase(IPrincipalService principalService)
+        protected ApiControllerBase(IPrincipalService principalService)
         {
             _principalService = principalService;
         }
 
-        public IHttpActionResult Successful()
+        protected IHttpActionResult Successful()
         {
             return Ok("OK");
         }
 
-        public IHttpActionResult Duplicate()
+        protected IHttpActionResult Duplicate()
         {
             return Ok("Duplicate");
         }

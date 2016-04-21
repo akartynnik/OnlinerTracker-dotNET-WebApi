@@ -73,10 +73,11 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Base\BaseTestsClass.cs" />
+    <Compile Include="Base\ControllersFactory.cs" />
+    <Compile Include="Base\TestsClassBase.cs" />
+    <Compile Include="Base\TestsConstants.cs" />
     <Compile Include="Unit\ProductControllerTests.cs" />
     <Compile Include="Unit\CurrencyControllerTests.cs" />
-    <Compile Include="Unit\ApiControllerBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

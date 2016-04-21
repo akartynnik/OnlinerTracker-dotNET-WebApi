@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
-using OnlinerTracker.Services;
 
 namespace OnlinerTracker.Api.Controllers
 {
@@ -143,14 +142,6 @@ namespace OnlinerTracker.Api.Controllers
             _productService.Delete(obj.Id);
             _dialogService.SendInPopupForUser(PopupType.Warning,
                     string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.DialogConnectionId);
-            return Successful();
-        }
-
-        [Route("test", Name = "test t")]
-        [HttpGet]
-        public IHttpActionResult Test(string msg)
-        {
-            _dialogService.SendInPopupForUser(PopupType.Warning, msg, User.DialogConnectionId);
             return Successful();
         }
     }

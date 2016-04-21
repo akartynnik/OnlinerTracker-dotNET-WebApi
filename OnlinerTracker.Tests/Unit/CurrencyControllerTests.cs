@@ -10,25 +10,20 @@ using System.Web.Http.Results;
 namespace OnlinerTracker.Api.Tests.Unit
 {
     [TestFixture]
-    public class CurrencyControllerTests : BaseTestsClass
+    public class CurrencyControllerTests : TestsClassBase
     {
         [Test]
-        public async Task Get_ReturnValue_ShouldBeOkHttpStatusWithCurrencyValueLikeCurrencyValueFromCurerncyServiceResponse()
+        public async Task Get_Return_OkHttpStatusWithCurrencyValueLikeCurrencyValueFromCurerncyServiceResponse()
         {
-            var fakeCurency = new Currency
-            {
-                Type = CurrencyType.USD,
-                Value = 20000
-            };
-            var stubPrincipleService = GetStubForPrincipalService();
-            var stubCurrancyService = Substitute.For<ICurrencyService>();
-            stubCurrancyService.GetCurrent(Arg.Any<CurrencyType>()).Returns(fakeCurency);
-            var testedController = new CurrencyController(stubCurrancyService, stubPrincipleService);
+           
+            ICurrencyService stubCurrancyService;
+            CurrencyController testedController = ControllersFactory.GetCurrencyController(out stubCurrancyService);
+            stubCurrancyService.GetCurrent(Arg.Any<CurrencyType>()).Returns(DefaultCurrency);
 
             var result = await testedController.Get(CurrencyType.USD) as OkNegotiatedContentResult<Currency>;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(fakeCurency.Value, result.Content.Value);
+            Assert.AreEqual(DefaultCurrency.Value, result.Content.Value);
         }
     }
 }
