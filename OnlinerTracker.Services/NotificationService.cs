@@ -1,129 +1,61 @@
-﻿using OnlinerTracker.Data;
+﻿using OnlinerTracker.Core;
+using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
-using OnlinerTracker.Security;
+using OnlinerTracker.Services.Configs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace OnlinerTracker.Services
 {
     public class NotificationService : INotificationService
     {
-        #region Fields and Properties
+        private readonly NotificationServiceConfig _config;
 
-        private readonly string HtmlTemplite = "<html><body>{0}</body></html>";
-
-        private readonly SmtpClient _defaultServiceClient;
-
-        private readonly SecurityRepository _securityRepository;
-
-        private readonly IProductService _productService;
-
-        private readonly ILogService _logService;
-
-        private readonly NotificationConfig _notificationConfig;
-
-        public string EmailSenderName { get; set; }
-
-        public string HourInWhichSendingStart { get; set; }
-
-        #endregion
-
-        #region Constructor
-
-        public NotificationService(IProductService productService, ILogService logService,
-            SecurityRepository securityRepository, NotificationConfig notificationConfig)
+        public NotificationService(NotificationServiceConfig config)
         {
-            int smtpPort;
-            int.TryParse(notificationConfig.SmtpPortString, out smtpPort);
-            _defaultServiceClient = new SmtpClient
-            {
-                Host = notificationConfig.SmtpHost,
-                Port = smtpPort,
-                EnableSsl = true,
-                Credentials = new NetworkCredential(notificationConfig.SmtpAccount, notificationConfig.SmtpPassword)
-            };
-            _securityRepository = securityRepository;
-            _notificationConfig = notificationConfig;
-            _productService = productService;
-            _logService = logService;
+            _config = config;
         }
 
-        #endregion
-
-        #region INotificationService methods
-
-        public async Task CheckNotifications()
+        public void SendNotifications(int hourInWhichSendingStart)
         {
-            var hourInWhichSendingStart = 0;
-            if (int.TryParse(HourInWhichSendingStart, out hourInWhichSendingStart))
+            var lastSuccessLog = _config.LogService.GetLastSuccessLog(JobType.EmailSend);
+            if (((lastSuccessLog != null &&
+                  lastSuccessLog.CheckedAt.ToString("yy-MM-dd") != SystemTime.Now.ToString("yy-MM-dd"))
+                 || (lastSuccessLog == null))
+                && SystemTime.Now.Hour == hourInWhichSendingStart)
             {
-                var lastSuccessLog = _logService.GetLastSuccessLog(JobType.EmailSend);
-                if ((lastSuccessLog != null && lastSuccessLog.CheckedAt.Hour == hourInWhichSendingStart) ||
-                    DateTime.Now.Hour != hourInWhichSendingStart)
-                {
-                    StartSend();
-                }
+                SendNotifications();
             }
         }
 
-        #endregion
-
-        #region Additional methods
-
-        private void StartSend()
+        public void SendNotifications()
         {
             try
             {
                 var usersWithUpdateCount = 0;
-                foreach (var user in _securityRepository.GetAllUsers())
+                foreach (var user in _config.SecurityRepository.GetAllUsers())
                 {
-                    if (!string.IsNullOrEmpty(user.Email))
+                    var products = _config.ProductService.GetAllChanges(Guid.Parse(user.Id));
+                    if (products.Any())
                     {
-                        var products = _productService.GetAllChanges(Guid.Parse(user.Id));
-                        if (products.Any())
+                        if (!string.IsNullOrEmpty(user.Email))
                         {
-                            EmailSend("Updates for you", NotificationBodyGenerator(products), user.Email);
+                            _config.MessageSender.SendEmail("Updates for you",
+                                _config.StringComposer.GetUserNotificationHtmlString(products), user.Email);
                             usersWithUpdateCount++;
                         }
                     }
                 }
-                if(usersWithUpdateCount > 0)
+                if (usersWithUpdateCount > 0)
                 {
-                    _logService.AddJobLog(JobType.EmailSend, string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
+                    _config.LogService.AddJobLog(JobType.EmailSend,
+                        string.Format("Users number, who gets updates: {0}", usersWithUpdateCount));
                 }
             }
             catch (Exception ex)
             {
-                _logService.AddJobLog(JobType.EmailSend, ex.Message, false);
+                _config.LogService.AddJobLog(JobType.EmailSend, ex.Message, false);
             }
         }
-
-        private void EmailSend(string subject, string body, string recipientEmail)
-        {
-            var message = new MailMessage
-            {
-                From = new MailAddress(_notificationConfig.SmtpAccount, EmailSenderName),
-                Subject = subject,
-                Body = string.Format(HtmlTemplite, body),
-                IsBodyHtml = true
-            };
-            message.To.Add(new MailAddress(recipientEmail));
-            message.ReplyToList.Add(new MailAddress(_notificationConfig.SmtpAccount, EmailSenderName));
-            _defaultServiceClient.SendAsync(message, null);
-        }
-
-        private string NotificationBodyGenerator(IEnumerable<ProductForNotification> products)
-        {
-            return products.Aggregate(string.Empty,
-                (current, product) =>
-                    current +
-                    (product.Name + " <b>" + product.CurrentCost + "</b> ( old:" + product.DayAgoCost + ")<br/>"));
-        }
-
-        #endregion
     }
 }

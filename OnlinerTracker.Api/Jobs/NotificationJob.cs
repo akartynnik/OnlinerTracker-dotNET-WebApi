@@ -1,5 +1,6 @@
 ﻿using FluentScheduler;
 using OnlinerTracker.Interfaces;
+using System.Configuration;
 
 namespace OnlinerTracker.Api.Jobs
 {
@@ -18,7 +19,8 @@ namespace OnlinerTracker.Api.Jobs
         {
             lock (_lock)
             {
-                _notificationService.CheckNotifications();
+                var hourInWhichSendingStart = int.Parse(ConfigurationManager.AppSettings["schedulerConfig:hourInWhichSendingStart"]);
+                _notificationService.SendNotifications(hourInWhichSendingStart);
             }
         }
     }

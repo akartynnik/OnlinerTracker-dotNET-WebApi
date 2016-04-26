@@ -1,6 +1,5 @@
 ﻿using OnlinerTracker.Data;
 using OnlinerTracker.Security;
-using System;
 
 namespace OnlinerTracker.Api.Tests.Base
 {

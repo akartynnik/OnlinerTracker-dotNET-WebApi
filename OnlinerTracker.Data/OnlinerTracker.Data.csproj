@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="Currency.cs" />
     <Compile Include="CurrencyType.cs" />
-    <Compile Include="NotificationConfig.cs" />
+    <Compile Include="MessageSenderConfig.cs" />
     <Compile Include="PopupType.cs" />
     <Compile Include="JobsLog.cs" />
     <Compile Include="Cost.cs" />

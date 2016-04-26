@@ -99,6 +99,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseServices\MessageSender.cs" />
+    <Compile Include="Configs\NotificationServiceConfig.cs" />
+    <Compile Include="Configs\MessageSenderConfig.cs" />
     <Compile Include="Contexts\SignalRDialogHub.cs" />
     <Compile Include="Contexts\NetMqDialogContext.cs" />
     <Compile Include="NetMqService.cs" />
@@ -106,6 +109,7 @@
     <Compile Include="SignalRService.cs" />
     <Compile Include="NotificationService.cs" />
     <Compile Include="LogService.cs" />
+    <Compile Include="BaseServices\StringComposer.cs" />
     <Compile Include="TrackingService.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="AuthorizationService.cs" />

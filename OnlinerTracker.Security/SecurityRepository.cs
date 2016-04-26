@@ -52,7 +52,7 @@ namespace OnlinerTracker.Security
             return result;
         }
 
-        public IEnumerable<ApplicationUser> GetAllUsers()
+        public virtual IEnumerable<ApplicationUser> GetAllUsers()
         {
             return _ctx.Users;
         }
