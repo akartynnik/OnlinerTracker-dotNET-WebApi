@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
 using OnlinerTracker.Data.SecurityModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnlinerTracker.Security
 {
-    public interface ISecurityRepository
+    public interface ISecurityRepository : IDisposable
     {
         Client FindClient(string clientId);
 

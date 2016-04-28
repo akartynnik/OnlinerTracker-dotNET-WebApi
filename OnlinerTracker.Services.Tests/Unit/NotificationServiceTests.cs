@@ -1,4 +1,5 @@
 ﻿using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using OnlinerTracker.Core;
@@ -9,13 +10,23 @@ using OnlinerTracker.Services.Configs;
 using OnlinerTracker.Services.Tests.Base;
 using System;
 using System.Collections.Generic;
-using NSubstitute.ExceptionExtensions;
+using System.IO;
+using System.Web;
 
 namespace OnlinerTracker.Services.Tests.Unit
 {
     [TestFixture]
     public class NotificationServiceTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            HttpContext.Current = new HttpContext(
+                new HttpRequest("", "http://test.test", ""),
+                new HttpResponse(new StringWriter())
+            );
+        }
+
         [Test]
         public void SendNotifications_With_HourInWhichSendingStart_Parameter_IfNowHourInWhichSendingShouldStartAndLastSuccessLogWasNotEqualsNowaday_ShouldCallMessageSender()
         {
@@ -47,6 +58,22 @@ namespace OnlinerTracker.Services.Tests.Unit
             notificationService.SendNotifications(hourInWhichSendingStart);
 
             mockMessageSender.Received().SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Test]
+        public void SendNotifications_With_HourInWhichSendingStart_Parameter_IfCurrentHttpContextIsNull_ShouldNotCallMessageSender()
+        {
+            NotificationServiceConfig fakeConfig;
+            NotificationService notificationService = ServicesFactory.GetNotificationService(out fakeConfig);
+            IMessageSender mockMessageSender = fakeConfig.MessageSender;
+            var hourInWhichSendingStart = 16;
+            SystemTime.Set(new DateTime(2016, 4, 20, 16, 30, 0));
+            fakeConfig.LogService.GetLastSuccessLog(Arg.Any<JobType>()).ReturnsNull();
+            HttpContext.Current = null;
+
+            notificationService.SendNotifications(hourInWhichSendingStart);
+
+            mockMessageSender.DidNotReceive().SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Test]
@@ -137,6 +164,7 @@ namespace OnlinerTracker.Services.Tests.Unit
         public void TearDown()
         {
             SystemTime.Reset();
+            HttpContext.Current = null;
         }
     }
 }

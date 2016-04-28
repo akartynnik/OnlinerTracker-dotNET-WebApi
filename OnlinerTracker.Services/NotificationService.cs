@@ -4,6 +4,7 @@ using OnlinerTracker.Interfaces;
 using OnlinerTracker.Services.Configs;
 using System;
 using System.Linq;
+using System.Web;
 
 namespace OnlinerTracker.Services
 {
@@ -18,6 +19,8 @@ namespace OnlinerTracker.Services
 
         public void SendNotifications(int hourInWhichSendingStart)
         {
+            if(HttpContext.Current == null)
+                return;
             var lastSuccessLog = _config.LogService.GetLastSuccessLog(JobType.EmailSend);
             if (((lastSuccessLog != null &&
                   lastSuccessLog.CheckedAt.ToString("yy-MM-dd") != SystemTime.Now.ToString("yy-MM-dd"))

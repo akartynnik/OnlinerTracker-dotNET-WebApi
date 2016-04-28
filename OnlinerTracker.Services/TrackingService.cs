@@ -23,7 +23,10 @@ namespace OnlinerTracker.Services
 
         #region Constructors
 
-        public TrackingService(IProductService productService, IExternalProductService externalProductService, ILogService logService)
+        public TrackingService(
+            IProductService productService, 
+            IExternalProductService externalProductService, 
+            ILogService logService)
         {
             _productService = productService;
             _externalProductService = externalProductService;

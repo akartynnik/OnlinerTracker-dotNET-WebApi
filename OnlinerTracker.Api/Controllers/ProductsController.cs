@@ -18,10 +18,11 @@ namespace OnlinerTracker.Api.Controllers
     {
         private ProductsControllerConfig _config;
 
-        public ProductsController(ProductsControllerConfig config,
+        public ProductsController(
+            ProductsControllerConfig config,
             IPrincipalService principalService) : base (principalService)
         {
-            _config = config;;
+            _config = config;
         }
 
         [Route("GetAll", Name = "Get all products for current user")]

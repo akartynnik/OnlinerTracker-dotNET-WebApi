@@ -13,8 +13,8 @@ namespace OnlinerTracker.Services
 {
     public class AuthorizationService: IAuthorizationService
     {
-        private readonly SecurityRepository _repo;
-        public AuthorizationService(SecurityRepository securityRepository)
+        private readonly ISecurityRepository _repo;
+        public AuthorizationService(ISecurityRepository securityRepository)
         {
             _repo = securityRepository;
         }

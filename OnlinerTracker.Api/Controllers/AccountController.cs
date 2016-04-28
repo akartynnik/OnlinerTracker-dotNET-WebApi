@@ -20,8 +20,8 @@ namespace OnlinerTracker.Api.Controllers
     {
         #region Fields and Properties
 
-        private readonly SecurityRepository _repo;
-        private IAuthorizationService _authService;
+        private readonly ISecurityRepository _repo;
+        private readonly IAuthorizationService _authService;
 
         private IAuthenticationManager Authentication => Request.GetOwinContext().Authentication;
 
@@ -29,10 +29,12 @@ namespace OnlinerTracker.Api.Controllers
 
         #region Constructor
 
-        public AccountController(IAuthorizationService authService,
+        public AccountController(
+            IAuthorizationService authService, 
+            ISecurityRepository repo,
             IPrincipalService principalService) : base(principalService)
         {
-            _repo = new SecurityRepository();
+            _repo = repo;
             _authService = authService;
         }
 

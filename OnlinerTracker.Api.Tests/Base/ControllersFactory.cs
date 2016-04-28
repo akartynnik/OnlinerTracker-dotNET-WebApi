@@ -11,7 +11,7 @@ namespace OnlinerTracker.Api.Tests.Base
 {
     public class ControllersFactory
     {
-        public static ProductsController GetProductController(out ProductsControllerConfig fakeConfig, Principal sessionUser = null)
+        public static ProductsController GetProductsController(out ProductsControllerConfig fakeConfig, Principal sessionUser = null)
         {
             var fakeDialogService = Substitute.For<IDialogService>();
             var fakeProductService = Substitute.For<IProductService>();

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using OnlinerTracker.Data.SecurityModels;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnlinerTracker.Security
 {
-    public class SecurityRepository : ISecurityRepository, IDisposable
+    public class SecurityRepository : ISecurityRepository
     {
         #region Fields and Properties
 

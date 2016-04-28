@@ -18,6 +18,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using OnlinerTracker.Api.Controllers;
+using OnlinerTracker.Api.Models.Configs;
 using MessageSenderConfig = OnlinerTracker.Data.MessageSenderConfig;
 
 namespace OnlinerTracker.Api
@@ -45,7 +47,7 @@ namespace OnlinerTracker.Api
                 .InstancePerLifetimeScope();
             builder.Register(c => new PrincipalService(HttpContext.Current))
                 .As<IPrincipalService>()
-                .InstancePerRequest();
+                .InstancePerLifetimeScope();
             builder.Register(
                 c =>
                     new TrackingService(c.Resolve<IProductService>(), c.Resolve<IExternalProductService>(),
@@ -82,9 +84,9 @@ namespace OnlinerTracker.Api
                     new NotificationService( 
                         new NotificationServiceConfig()
                         {
-                           ProductService = c.Resolve<IProductService>(),
+                            ProductService = c.Resolve<IProductService>(),
                             LogService = c.Resolve<ILogService>(),
-                            SecurityRepository = c.Resolve<SecurityRepository>(),
+                            SecurityRepository = c.Resolve<ISecurityRepository>(),
                             StringComposer = c.Resolve<IStringComposer>(),
                             MessageSender = c.Resolve<IMessageSender>()
                         }
@@ -116,7 +118,8 @@ namespace OnlinerTracker.Api
 
             #endregion
 
-            #region Automapperregister
+            #region Automapper register
+
             var profiles =
                 from t in typeof (AutomapperMappingProfile).Assembly.GetTypes()
                 where typeof (Profile).IsAssignableFrom(t)
@@ -131,8 +134,22 @@ namespace OnlinerTracker.Api
             }));
 
             builder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();
+
             #endregion
 
+            builder.Register(
+                c =>
+                    new ProductsController(
+                        new ProductsControllerConfig
+                        {
+                            ProductService = c.Resolve<IProductService>(),
+                            DialogService = c.Resolve<IDialogService>(),
+                            ExternalProductService = c.Resolve<IExternalProductService>(),
+                            Mapper = c.Resolve<IMapper>()
+                        }, c.Resolve<IPrincipalService>()
+                        ))
+                .As<ProductsController>()
+                .InstancePerLifetimeScope();
 
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);

@@ -15,7 +15,6 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Get_Return_OkHttpStatusWithCurrencyValueLikeCurrencyValueFromCurerncyServiceResponse()
         {
-           
             ICurrencyService stubCurrancyService;
             CurrencyController testedController = ControllersFactory.GetCurrencyController(out stubCurrancyService);
             stubCurrancyService.GetCurrent(Arg.Any<CurrencyType>()).Returns(DefaultCurrency);
