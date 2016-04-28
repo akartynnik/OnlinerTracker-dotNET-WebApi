@@ -1,7 +1,7 @@
 ﻿using Autofac.Integration.WebApi;
-using AutoMapper;
 using OnlinerTracker.Api.ApiViewModels;
 using OnlinerTracker.Api.Models;
+using OnlinerTracker.Api.Models.Configs;
 using OnlinerTracker.Api.Resources;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
@@ -16,44 +16,35 @@ namespace OnlinerTracker.Api.Controllers
     [RoutePrefix("api/Product")]
     public class ProductsController : ApiControllerBase
     {
-        private IProductService _productService;
-        private IDialogService _dialogService;
-        private IExternalProductService _externalPproductService;
-        private IMapper _mapper;
+        private ProductsControllerConfig _config;
 
-        public ProductsController(IProductService productService, 
-            IExternalProductService externalPproductService, 
-            IDialogService dialogService,
-            IMapper mapper,
+        public ProductsController(ProductsControllerConfig config,
             IPrincipalService principalService) : base (principalService)
         {
-            _productService = productService;
-            _dialogService = dialogService;
-            _externalPproductService = externalPproductService;
-            _mapper = mapper;
+            _config = config;;
         }
 
         [Route("GetAll", Name = "Get all products for current user")]
         [HttpGet]
         public async Task<IHttpActionResult> Get()
         {
-            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(_productService.GetAll(User.Id)));
+            return Ok(_config.Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(_config.ProductService.GetAll(User.Id)));
         }
 
         [Route("GetAllCompared", Name = "Get product by id with costs")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCompared()
         {
-            var products = _productService.GetAllCompared();
-            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(products));
+            var products = _config.ProductService.GetAllCompared();
+            return Ok(_config.Mapper.Map<IEnumerable<Product>, IEnumerable<ExternalProduct>>(products));
         }
 
         [Route("GetFromExternalServer", Name = "Get products from external server (proxy)")]
         [HttpGet]
         public async Task<IHttpActionResult> GetExternal(string searchQuery, int page)
         {
-            var jsonProductsString = _externalPproductService.Get(searchQuery, page);
-            return Ok(_externalPproductService.ConvertJsonToProducts(jsonProductsString, User.Id));
+            var jsonProductsString = _config.ExternalProductService.Get(searchQuery, page);
+            return Ok(_config.ExternalProductService.ConvertJsonToProducts(jsonProductsString, User.Id));
         }
 
         [Route("Follow", Name = "Follow product")]
@@ -62,32 +53,32 @@ namespace OnlinerTracker.Api.Controllers
         {
             try
             {
-                var product = _mapper.Map<ProductFollowModel, Product>(model);
+                var product = _config.Mapper.Map<ProductFollowModel, Product>(model);
                 product.Id = Guid.NewGuid();
                 product.UserId = User.Id;
                 product.Tracking = true;
 
-                if (_productService.GetBy(product.OnlinerId, product.UserId) != null)
+                if (_config.ProductService.GetBy(product.OnlinerId, product.UserId) != null)
                 {
-                    _dialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.DialogConnectionId);
+                    _config.DialogService.SendInPopupForUser(PopupType.Warning, DialogResources.Warning_DuplicateTracking, User.DialogConnectionId);
                     return Duplicate();
                 }
 
-                var cost = _mapper.Map<ProductFollowModel, Cost>(model);
+                var cost = _config.Mapper.Map<ProductFollowModel, Cost>(model);
                 cost.Id = Guid.NewGuid();
                 cost.ProductId = product.Id;
                 cost.CratedAt = DateTime.Now;
                 product.Costs = new List<Cost> {cost};
 
-                _productService.Insert(product);
+                _config.ProductService.Insert(product);
 
-                _dialogService.SendInPopupForUser(PopupType.Success,
+                _config.DialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_StartFollowProduct, product.Name), User.DialogConnectionId);
                 return Successful();
             }
             catch (Exception ex)
             {
-                _dialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.DialogConnectionId);
+                _config.DialogService.SendInPopupForUser(PopupType.Error, DialogResources.Error_ServerError, User.DialogConnectionId);
                 return InternalServerError(ex);
             }
 
@@ -97,17 +88,17 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public IHttpActionResult ChangeTrackingStatus(Guid id, bool tracking)
         {
-            var product = _productService.GetById(id);
+            var product = _config.ProductService.GetById(id);
             product.Tracking = tracking;
-            _productService.Update(product);
+            _config.ProductService.Update(product);
             if (product.Tracking)
             {
-                _dialogService.SendInPopupForUser(PopupType.Success,
+                _config.DialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_TrackingStarted, product.Name), User.DialogConnectionId);
             }
             else
             {
-                _dialogService.SendInPopupForUser(PopupType.Warning,
+                _config.DialogService.SendInPopupForUser(PopupType.Warning,
                    string.Format(DialogResources.Warning_TrackingStoped, product.Name), User.DialogConnectionId);
             }
             return Successful();
@@ -118,17 +109,17 @@ namespace OnlinerTracker.Api.Controllers
         public IHttpActionResult ChangeComparedStatus(Guid id, bool compared)
         {
 
-            var product = _productService.GetById(id);
+            var product = _config.ProductService.GetById(id);
             product.Compared = compared;
-            _productService.Update(product);
+            _config.ProductService.Update(product);
             if (product.Compared)
             {
-                _dialogService.SendInPopupForUser(PopupType.Success,
+                _config.DialogService.SendInPopupForUser(PopupType.Success,
                     string.Format(DialogResources.Success_ComparedStarted, product.Name), User.DialogConnectionId);
             }
             else
             {
-                _dialogService.SendInPopupForUser(PopupType.Warning,
+                _config.DialogService.SendInPopupForUser(PopupType.Warning,
                    string.Format(DialogResources.Warning_ComparedStoped, product.Name), User.DialogConnectionId);
             }
             return Successful();
@@ -139,8 +130,8 @@ namespace OnlinerTracker.Api.Controllers
         [HttpPost]
         public IHttpActionResult Remove(DeletedObject obj)
         {
-            _productService.Delete(obj.Id);
-            _dialogService.SendInPopupForUser(PopupType.Warning,
+            _config.ProductService.Delete(obj.Id);
+            _config.DialogService.SendInPopupForUser(PopupType.Warning,
                     string.Format(DialogResources.Warning_ProductDeleted, obj.Name), User.DialogConnectionId);
             return Successful();
         }

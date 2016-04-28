@@ -4,12 +4,13 @@ using AutoMapper;
 using AutoMapper.Mappers;
 using Microsoft.AspNet.SignalR;
 using OnlinerTracker.Api.Jobs;
-using OnlinerTracker.Data;
 using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Proxies;
 using OnlinerTracker.Security;
 using OnlinerTracker.Services;
+using OnlinerTracker.Services.BaseServices;
+using OnlinerTracker.Services.Configs;
 using OnlinerTracker.Services.Contexts;
 using System;
 using System.Configuration;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using MessageSenderConfig = OnlinerTracker.Data.MessageSenderConfig;
 
 namespace OnlinerTracker.Api
 {
@@ -27,18 +29,16 @@ namespace OnlinerTracker.Api
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            #region Dependensies
-
-            builder.RegisterType<SecurityRepository>().As<SecurityRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<TrackerContext>().As<TrackerContext>().InstancePerLifetimeScope();
-
             builder.RegisterType<TrackingJob>().As<TrackingJob>().InstancePerLifetimeScope();
             builder.RegisterType<NotificationJob>().As<NotificationJob>().InstancePerLifetimeScope();
 
+            builder.RegisterType<TrackerContext>().As<TrackerContext>().InstancePerLifetimeScope();
+            builder.RegisterType<SecurityRepository>().As<ISecurityRepository>().InstancePerLifetimeScope();
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().InstancePerLifetimeScope();
             builder.RegisterType<NbrbProxy>().As<ICurrencyService>().InstancePerLifetimeScope();
+            builder.RegisterType<StringComposer>().As<IStringComposer>().InstancePerLifetimeScope();
 
             builder.Register(c => new OnlinerProxy(c.Resolve<IProductService>()))
                 .As<IExternalProductService>()
@@ -56,28 +56,46 @@ namespace OnlinerTracker.Api
                 .As<ITrackingService>()
                 .InstancePerLifetimeScope();
 
+            #region IMessager register
+
             builder.Register(
                 c =>
-                    new NotificationService(c.Resolve<IProductService>(), c.Resolve<ILogService>(),
-                        c.Resolve<SecurityRepository>(),
-                        new NotificationConfig()
+                    new MessageSender(
+                        new MessageSenderConfig
                         {
+                            SmtpAccount = ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
+                            EmailSenderName = ConfigurationManager.AppSettings["notifConfig:emailSenderName"],
                             SmtpHost = ConfigurationManager.AppSettings["notifConfig:smtpServer"],
                             SmtpPortString = ConfigurationManager.AppSettings["notifConfig:smtpPort"],
-                            SmtpAccount = ConfigurationManager.AppSettings["notifConfig:smtpAccount"],
                             SmtpPassword = ConfigurationManager.AppSettings["notifConfig:smtpPassword"]
                         }
-                        )
-                    {
-                        EmailSenderName = ConfigurationManager.AppSettings["notifConfig:emailSenderName"],
-                        HourInWhichSendingStart =
-                            ConfigurationManager.AppSettings["schedulerConfig:hourInWhichSendingStart"]
-                    })
+                        ))
+                .As<IMessageSender>()
+                .InstancePerLifetimeScope();
+
+            #endregion
+
+            #region Notification service register
+
+            builder.Register(
+                c =>
+                    new NotificationService( 
+                        new NotificationServiceConfig()
+                        {
+                           ProductService = c.Resolve<IProductService>(),
+                            LogService = c.Resolve<ILogService>(),
+                            SecurityRepository = c.Resolve<SecurityRepository>(),
+                            StringComposer = c.Resolve<IStringComposer>(),
+                            MessageSender = c.Resolve<IMessageSender>()
+                        }
+                        ))
                 .As<INotificationService>()
                 .InstancePerLifetimeScope();
-            
 
-            /* Register and resolve dialog service */
+            #endregion
+
+            #region Dialog service register
+
             switch (ConfigurationManager.AppSettings["dialogServiceProvider"])
             {
                 case "zeromq":
@@ -89,17 +107,20 @@ namespace OnlinerTracker.Api
                         .InstancePerLifetimeScope();
                     break;
                 default: //signalr
-                    builder.Register(c => new SignalRService(GlobalHost.ConnectionManager.GetHubContext<SignalRDialogHub>()))
+                    builder.Register(
+                        c => new SignalRService(GlobalHost.ConnectionManager.GetHubContext<SignalRDialogHub>()))
                         .As<IDialogService>()
                         .InstancePerLifetimeScope();
                     break;
             }
 
-            /* Register and resolve Automapper*/
+            #endregion
+
+            #region Automapperregister
             var profiles =
-                from t in typeof(AutomapperMappingProfile).Assembly.GetTypes()
-                where typeof(Profile).IsAssignableFrom(t)
-                select (Profile)Activator.CreateInstance(t);
+                from t in typeof (AutomapperMappingProfile).Assembly.GetTypes()
+                where typeof (Profile).IsAssignableFrom(t)
+                select (Profile) Activator.CreateInstance(t);
 
             builder.Register(ctx => new MapperConfiguration(cfg =>
             {
@@ -110,8 +131,8 @@ namespace OnlinerTracker.Api
             }));
 
             builder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();
-
             #endregion
+
 
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);

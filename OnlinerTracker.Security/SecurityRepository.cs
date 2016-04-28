@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlinerTracker.Security
 {
-    public class SecurityRepository : IDisposable
+    public class SecurityRepository : ISecurityRepository, IDisposable
     {
         #region Fields and Properties
 
@@ -52,7 +52,7 @@ namespace OnlinerTracker.Security
             return result;
         }
 
-        public IEnumerable<ApplicationUser> GetAllUsers()
+        public virtual IEnumerable<ApplicationUser> GetAllUsers()
         {
             return _ctx.Users;
         }

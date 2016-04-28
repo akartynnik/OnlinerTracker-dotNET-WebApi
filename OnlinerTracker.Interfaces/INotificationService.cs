@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-
-namespace OnlinerTracker.Interfaces
+﻿namespace OnlinerTracker.Interfaces
 {
     public interface INotificationService
     {
-        Task CheckNotifications();
+        void SendNotifications(int hourInWhichSendingStart);
+
+        void SendNotifications();
     }
 }
