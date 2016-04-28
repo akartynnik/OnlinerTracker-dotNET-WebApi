@@ -59,6 +59,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ServicesFactory.cs" />
     <Compile Include="Unit\BaseServices\MessageSenderTests.cs" />
     <Compile Include="Unit\BaseServices\StringComposerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

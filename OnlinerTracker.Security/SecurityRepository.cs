@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlinerTracker.Security
 {
-    public class SecurityRepository : IDisposable
+    public class SecurityRepository : ISecurityRepository, IDisposable
     {
         #region Fields and Properties
 

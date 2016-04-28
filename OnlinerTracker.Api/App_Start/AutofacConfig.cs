@@ -29,12 +29,11 @@ namespace OnlinerTracker.Api
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterType<SecurityRepository>().As<SecurityRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<TrackerContext>().As<TrackerContext>().InstancePerLifetimeScope();
-
             builder.RegisterType<TrackingJob>().As<TrackingJob>().InstancePerLifetimeScope();
             builder.RegisterType<NotificationJob>().As<NotificationJob>().InstancePerLifetimeScope();
 
+            builder.RegisterType<TrackerContext>().As<TrackerContext>().InstancePerLifetimeScope();
+            builder.RegisterType<SecurityRepository>().As<ISecurityRepository>().InstancePerLifetimeScope();
             builder.RegisterType<AuthorizationService>().As<IAuthorizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.RegisterType<LogService>().As<ILogService>().InstancePerLifetimeScope();

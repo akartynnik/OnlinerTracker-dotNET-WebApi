@@ -5,7 +5,7 @@ namespace OnlinerTracker.Services.Configs
 {
     public class NotificationServiceConfig
     {
-        public SecurityRepository SecurityRepository { get; set; }
+        public ISecurityRepository SecurityRepository { get; set; }
 
         public IProductService ProductService { get; set; }
 

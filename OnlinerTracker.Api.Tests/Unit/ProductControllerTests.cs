@@ -4,6 +4,7 @@ using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using OnlinerTracker.Api.ApiViewModels;
 using OnlinerTracker.Api.Controllers;
+using OnlinerTracker.Api.Models.Configs;
 using OnlinerTracker.Api.Tests.Base;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
@@ -20,10 +21,10 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Follow_IfProductAlreadyBeingTracked_ThenShouldCallDialogServiseWithWarningMessage()
         {
-            IProductService stubProductService;
-            IDialogService mockDialogService;
-            ProductsController testedController = ControllersFactory.GetProductController(out stubProductService, out mockDialogService);
-            stubProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Returns(new Product());
+            ProductsControllerConfig fakeConfig;
+            ProductsController testedController = ControllersFactory.GetProductController(out fakeConfig);
+            IDialogService mockDialogService = fakeConfig.DialogService;
+            fakeConfig.ProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Returns(new Product());
             
             await testedController.Follow(new ProductFollowModel());
 
@@ -38,10 +39,10 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Follow_IfProductAreFollow_ThenShouldCallDialogServiceWithSuccessMessage()
         {
-            IProductService stubProductService;
-            IDialogService mockDialogService;
-            ProductsController testedController = ControllersFactory.GetProductController(out stubProductService, out mockDialogService);
-            stubProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).ReturnsNull();
+            ProductsControllerConfig fakeConfig;
+            ProductsController testedController = ControllersFactory.GetProductController(out fakeConfig);
+            IDialogService mockDialogService = fakeConfig.DialogService;
+            fakeConfig.ProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).ReturnsNull();
 
             await testedController.Follow(new ProductFollowModel());
 
@@ -56,10 +57,10 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Follow_IfThrowException_ThenShouldCallDialogServiceWithErrorMessage()
         {
-            IProductService stubProductService;
-            IDialogService mockDialogService;
-            ProductsController testedController = ControllersFactory.GetProductController(out stubProductService, out mockDialogService);
-            stubProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Throws(new Exception());
+            ProductsControllerConfig fakeConfig;
+            ProductsController testedController = ControllersFactory.GetProductController(out fakeConfig);
+            IDialogService mockDialogService = fakeConfig.DialogService;
+            fakeConfig.ProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Throws(new Exception());
 
             await testedController.Follow(new ProductFollowModel());
 
@@ -74,9 +75,9 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Follow_IfSuccessful_ThenShouldReturnOkHttpStatusWithOkMessage()
         {
-            IProductService stubProductService;
-            ProductsController testedController = ControllersFactory.GetProductController(out stubProductService);
-            stubProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).ReturnsNull();
+            ProductsControllerConfig fakeConfig;
+            ProductsController testedController = ControllersFactory.GetProductController(out fakeConfig);
+            fakeConfig.ProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).ReturnsNull();
 
             var result = await testedController.Follow(new ProductFollowModel()) as OkNegotiatedContentResult<string>;
 
@@ -87,9 +88,9 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Follow_IfProductAlreadyBeingTracked_ThenShouldReturnOkHttpStatusWithDuplicateMessage()
         {
-            IProductService stubProductService;
-            ProductsController testedController = ControllersFactory.GetProductController(out stubProductService);
-            stubProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Returns(new Product());
+            ProductsControllerConfig fakeConfig;
+            ProductsController testedController = ControllersFactory.GetProductController(out fakeConfig);
+            fakeConfig.ProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Returns(new Product());
 
             var result = await testedController.Follow(new ProductFollowModel()) as OkNegotiatedContentResult<string>;
 
@@ -100,9 +101,9 @@ namespace OnlinerTracker.Api.Tests.Unit
         [Test]
         public async Task Follow_IfThrowException_ThenShouldReturnExceptionResult()
         {
-            IProductService stubProductService;
-            ProductsController testedController = ControllersFactory.GetProductController(out stubProductService);
-            stubProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Throws(new Exception());
+            ProductsControllerConfig fakeConfig;
+            ProductsController testedController = ControllersFactory.GetProductController(out fakeConfig);
+            fakeConfig.ProductService.GetBy(Arg.Any<string>(), Arg.Any<Guid>()).Throws(new Exception());
 
             var result = await testedController.Follow(new ProductFollowModel()) as ExceptionResult;
 

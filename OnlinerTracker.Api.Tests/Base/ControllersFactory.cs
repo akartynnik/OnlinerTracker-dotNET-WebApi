@@ -2,55 +2,33 @@
 using NSubstitute;
 using OnlinerTracker.Api.ApiViewModels;
 using OnlinerTracker.Api.Controllers;
+using OnlinerTracker.Api.Models.Configs;
 using OnlinerTracker.Data;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Security;
 
 namespace OnlinerTracker.Api.Tests.Base
 {
-    public static class ControllersFactory
+    public class ControllersFactory
     {
-        public static ProductsController GetProductController(out IProductService fakeProductService, Principal sessionUser = null)
+        public static ProductsController GetProductController(out ProductsControllerConfig fakeConfig, Principal sessionUser = null)
         {
-            IMapper fakeMapper;
-            IExternalProductService fakeExternalProductService;
-            IPrincipalService fakePrincipleService;
-            IDialogService fakeDialogService;
-            return GetProductController(out fakeExternalProductService, out fakeDialogService, out fakeMapper,
-                out fakePrincipleService, out fakeProductService, sessionUser);
-        }
-
-        public static ProductsController GetProductController(
-            out IProductService fakeProductService,
-            out IDialogService fakeDialogService,
-            Principal sessionUser = null)
-        {
-            IMapper fakeMapper;
-            IExternalProductService fakeExternalProductService;
-            IPrincipalService fakePrincipleService;
-            return GetProductController(out fakeExternalProductService, out fakeDialogService, out fakeMapper,
-                out fakePrincipleService, out fakeProductService, sessionUser);
-        }
-
-        public static ProductsController GetProductController(
-            out IExternalProductService fakeExternalProductService,
-            out IDialogService fakeDialogService,
-            out IMapper fakeMapper,
-            out IPrincipalService fakePrincipleService,
-            out IProductService fakeProductService,
-            Principal sessionUser)
-        {
-            fakeDialogService = Substitute.For<IDialogService>();
-            fakeProductService = Substitute.For<IProductService>();
-            fakePrincipleService = Substitute.For<IPrincipalService>();
-            fakeExternalProductService = Substitute.For<IExternalProductService>();
-            fakeMapper = Substitute.For<IMapper>();
+            var fakeDialogService = Substitute.For<IDialogService>();
+            var fakeProductService = Substitute.For<IProductService>();
+            var fakeExternalProductService = Substitute.For<IExternalProductService>();
+            var fakeMapper = Substitute.For<IMapper>();
+            var fakePrincipleService = Substitute.For<IPrincipalService>();
 
             SetDefaultMapperConfiguration(ref fakeMapper);
             SetDefaultPrincipalConfiguration(ref fakePrincipleService, sessionUser);
-
-            return new ProductsController(fakeProductService, fakeExternalProductService,
-                fakeDialogService, fakeMapper, fakePrincipleService);
+            fakeConfig = new ProductsControllerConfig
+            {
+                DialogService = fakeDialogService,
+                ProductService = fakeProductService,
+                ExternalProductService = fakeExternalProductService,
+                Mapper = fakeMapper
+            };
+            return new ProductsController(fakeConfig, fakePrincipleService);
         }
 
         public static CurrencyController GetCurrencyController(out ICurrencyService fakeCurrancyService, Principal sessionUser = null)
