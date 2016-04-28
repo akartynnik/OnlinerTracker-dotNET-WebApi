@@ -59,6 +59,7 @@
     <Compile Include="HashGenerator.cs" />
     <Compile Include="HttpRequestMessageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemThread.cs" />
     <Compile Include="SystemTime.cs" />
   </ItemGroup>
   <ItemGroup>

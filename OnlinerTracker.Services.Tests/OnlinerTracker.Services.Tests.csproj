@@ -64,6 +64,7 @@
     <Compile Include="Unit\BaseServices\MessageSenderTests.cs" />
     <Compile Include="Unit\BaseServices\StringComposerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit\TrackingServiceTests.cs" />
     <Compile Include="Unit\NotificationServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>

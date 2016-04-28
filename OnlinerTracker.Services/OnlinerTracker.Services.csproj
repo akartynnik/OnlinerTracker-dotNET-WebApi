@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseServices\MessageSender.cs" />
+    <Compile Include="Configs\TrackingServiceConfig.cs" />
     <Compile Include="Configs\NotificationServiceConfig.cs" />
     <Compile Include="Configs\MessageSenderConfig.cs" />
     <Compile Include="Contexts\SignalRDialogHub.cs" />

@@ -1,5 +1,6 @@
 ﻿using FluentScheduler;
 using OnlinerTracker.Interfaces;
+using System.Configuration;
 
 namespace OnlinerTracker.Api.Jobs
 {
@@ -16,7 +17,8 @@ namespace OnlinerTracker.Api.Jobs
         {
             lock (_lock)
             {
-                _trackingService.CheckProducts();
+                var minutesBeforeCheckCost = int.Parse(ConfigurationManager.AppSettings["schedulerConfig:minutesBeforeCheckCost"]);
+                _trackingService.CheckProducts(minutesBeforeCheckCost);
             }
         }
     }

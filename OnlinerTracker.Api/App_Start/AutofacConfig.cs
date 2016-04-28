@@ -3,7 +3,9 @@ using Autofac.Integration.WebApi;
 using AutoMapper;
 using AutoMapper.Mappers;
 using Microsoft.AspNet.SignalR;
+using OnlinerTracker.Api.Controllers;
 using OnlinerTracker.Api.Jobs;
+using OnlinerTracker.Api.Models.Configs;
 using OnlinerTracker.Data.Context;
 using OnlinerTracker.Interfaces;
 using OnlinerTracker.Proxies;
@@ -18,8 +20,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
-using OnlinerTracker.Api.Controllers;
-using OnlinerTracker.Api.Models.Configs;
 using MessageSenderConfig = OnlinerTracker.Data.MessageSenderConfig;
 
 namespace OnlinerTracker.Api
@@ -50,11 +50,12 @@ namespace OnlinerTracker.Api
                 .InstancePerLifetimeScope();
             builder.Register(
                 c =>
-                    new TrackingService(c.Resolve<IProductService>(), c.Resolve<IExternalProductService>(),
-                        c.Resolve<ILogService>())
+                    new TrackingService(new TrackingServiceConfig
                     {
-                        MinutesBeforeCheck = ConfigurationManager.AppSettings["schedulerConfig:minutesBeforeCheckCost"]
-                    })
+                        ProductService = c.Resolve<IProductService>(),
+                        ExternalProductService = c.Resolve<IExternalProductService>(),
+                        LogService = c.Resolve<ILogService>()
+                    }))
                 .As<ITrackingService>()
                 .InstancePerLifetimeScope();
 
